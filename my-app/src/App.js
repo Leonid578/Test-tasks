@@ -1,23 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Suspense } from "react";
+import { Routes, Route } from "react-router-dom";
+import LinksPrograss from "./component/LinksPrograss/Link";
+import Calculator from "./component/Calculator/Calculator";
+// import Header from "./component/Header/HeaderMenu";
+import "./App.css";
 
 function App() {
+  function Loading() {
+    return <h2>🌀 Loading...</h2>;
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {/* <Header /> */}
+      <Suspense fallback={<Loading />}>
+        <Routes>
+          <Route path="/" element={<LinksPrograss />}></Route>
+          <Route path="/calculator" element={<Calculator />}></Route>
+        </Routes>
+      </Suspense>
     </div>
   );
 }
