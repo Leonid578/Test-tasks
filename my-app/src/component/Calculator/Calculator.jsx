@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./Calculator.style.css";
 // import { Container, Display, Buttons, Button, Zero } from "./Calculator.style";
+import { IoArrowBack } from "react-icons/io5";
 
 function Calculator() {
   const [display, setDisplay] = useState("0");
@@ -13,7 +14,11 @@ function Calculator() {
       setDisplay(number);
       setCurrentValue(number);
     } else {
-      setDisplay(currentValue + number);
+      setDisplay(() => {
+        const newResult = (currentValue + number).replace(/,/g, "");
+        return newResult.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      });
+
       setCurrentValue(currentValue + number);
     }
   }
@@ -31,19 +36,38 @@ function Calculator() {
 
   function calculateResult() {
     let result;
-    // if(previousValue === "") previousValue=currentValue;
+
     switch (operator) {
       case "+":
-        result = parseFloat(previousValue) + parseFloat(currentValue);
+        result = (
+          parseFloat(previousValue) + parseFloat(currentValue)
+        ).toString();
+        result = result.replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         break;
       case "-":
-        result = parseFloat(previousValue) - parseFloat(currentValue);
+        result = (
+          parseFloat(previousValue) - parseFloat(currentValue)
+        ).toString();
+        result = result.replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         break;
       case "*":
-        result = parseFloat(previousValue) * parseFloat(currentValue);
+        result = (
+          parseFloat(previousValue) * parseFloat(currentValue)
+        ).toString();
+        result = result.replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         break;
       case "/":
-        result = parseFloat(previousValue) / parseFloat(currentValue);
+        if (currentValue === "0") {
+          setDisplay("Ошибка");
+          setCurrentValue("");
+          setPreviousValue("");
+          setOperator("");
+          return;
+        }
+        result = (
+          parseFloat(previousValue) / parseFloat(currentValue)
+        ).toString();
+        result = result.replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         break;
       default:
         return;
@@ -63,7 +87,19 @@ function Calculator() {
 
   function handleEqualsClick() {
     calculateResult();
+    // setCurrentValue('0')
   }
+
+  const deleteLastDigit = () => {
+    setCurrentValue(currentValue.slice(0, -1)); // Удаляем последний символ
+    setDisplay(prevDisplay => {
+      const newDisplay = currentValue.slice(0, -1);
+      if (newDisplay === "") {
+        return "0";
+      }
+      return newDisplay;
+    });
+};
 
   return (
     <div className="calculator">
@@ -71,9 +107,12 @@ function Calculator() {
       <div className="buttons">
         <div className="row">
           <button className="clear operator" onClick={handleClearClick}>
-            C
+            AC
           </button>
-          <button className="operator">+/-</button>
+
+          <button className="operator" onClick={deleteLastDigit}>
+            <IoArrowBack />
+          </button>
           <button className="operator">%</button>
           <button className="operator" onClick={() => handleOperatorClick("/")}>
             /
@@ -81,35 +120,58 @@ function Calculator() {
         </div>
 
         <div className="row">
-          <button onClick={() => handleNumberClick("7")}>7</button>
-          <button onClick={() => handleNumberClick("8")}>8</button>
-          <button onClick={() => handleNumberClick("9")}>9</button>
+          <button className="button" onClick={() => handleNumberClick("7")}>
+            7
+          </button>
+          <button className="button" onClick={() => handleNumberClick("8")}>
+            8
+          </button>
+          <button className="button" onClick={() => handleNumberClick("9")}>
+            9
+          </button>
           <button className="operator" onClick={() => handleOperatorClick("*")}>
             x
           </button>
         </div>
         <div className="row">
-          <button onClick={() => handleNumberClick("4")}>4</button>
-          <button onClick={() => handleNumberClick("5")}>5</button>
-          <button onClick={() => handleNumberClick("6")}>6</button>
+          <button className="button" onClick={() => handleNumberClick("4")}>
+            4
+          </button>
+          <button className="button" onClick={() => handleNumberClick("5")}>
+            5
+          </button>
+          <button className="button" onClick={() => handleNumberClick("6")}>
+            6
+          </button>
           <button className="operator" onClick={() => handleOperatorClick("-")}>
             -
           </button>
         </div>
         <div className="row">
-          <button onClick={() => handleNumberClick("1")}>1</button>
-          <button onClick={() => handleNumberClick("2")}>2</button>
-          <button onClick={() => handleNumberClick("3")}>3</button>
+          <button className="button" onClick={() => handleNumberClick("1")}>
+            1
+          </button>
+          <button className="button" onClick={() => handleNumberClick("2")}>
+            2
+          </button>
+          <button className="button" onClick={() => handleNumberClick("3")}>
+            3
+          </button>
           <button className="operator" onClick={() => handleOperatorClick("+")}>
             +
           </button>
         </div>
         <div className="row">
-          <button className="zero" onClick={() => handleNumberClick("0")}>
+          <button
+            className="zero button"
+            onClick={() => handleNumberClick("0")}
+          >
             0
           </button>
 
-          <button onClick={() => handleNumberClick(".")}>.</button>
+          <button className="button" onClick={() => handleNumberClick(".")}>
+            .
+          </button>
           <button className="calculate" onClick={handleEqualsClick}>
             =
           </button>

@@ -14,7 +14,7 @@ const Link = () => {
     <>
       <Item>
         <List>
-          <TestOne href="/calculator">text1</TestOne>
+          <TestOne href="/calculator">Calculator</TestOne>
         </List>
         <List>
           <TestTwo href="/TestTwo">text2</TestTwo>
