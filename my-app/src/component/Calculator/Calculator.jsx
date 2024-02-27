@@ -8,65 +8,22 @@ function Calculator() {
   const [currentValue, setCurrentValue] = useState(0);
   const [previousValue, setPreviousValue] = useState(null);
   const [operator, setOperator] = useState(null);
-  const [accumulator, setAccumulator] = useState(0);
+  const [accumulator, setAccumulator] = useState(null);
 
-  //  const [accumulator, setAccumulator] = useState({});
+  function resultDisplay(result) {
+    if (accumulator !== "0" && accumulator !== null) {
+      console.log("accumulator !== 0", accumulator);
 
-  // const [currentValue, setCurrentValue] = useState('');
-  // const [previousValue, setPreviousValue] = useState('');
-  // const [operator, setOperator] = useState('');
-  // const [display, setDisplay] = useState('0');
-  // const [accumulator, setAccumulator] = useState({});
+      resultDisplay = accumulator - result;
+    } else {
+      console.log("accumulator === null!!");
+      resultDisplay =  result;
+      console.log("resultDisplay", resultDisplay);
+    }
+  }
 
-  // const calculateResult = () => {
-  //   let result;
-
-  //   switch (operator) {
-  //     case "+":
-  //       if (currentValue === "" && accumulator['+'] || 0) {
-
-  //                 result = parseFloat(previousValue) + parseFloat(previousValue);
-  //                 accumulator['+'] = result;
-  //                 console.log("accumulator1", result);
-  //               } else if (currentValue === "" && accumulator !== 0) {
-  //                 result = accumulator + parseFloat(previousValue);
-  //                 console.log("accumulator2", result);
-  //               } else {
-  //                 result = parseFloat(previousValue) + parseFloat(currentValue);
-  //                 setAccumulator(parseFloat(currentValue));
-  //                 console.log("accumulator3", accumulator);
-  //               }
-  //       result = (accumulator['+'] || 0) + parseFloat(currentValue);
-  //       accumulator['+'] = result;
-  //       console.log("accumulator+", accumulator);
-  //       break;
-  //     case "-":
-  //       result = (accumulator['-'] || 0) - parseFloat(currentValue);
-  //       accumulator['-'] = result;
-  //       break;
-  //     case "*":
-  //       result = (accumulator['*'] || 1) * parseFloat(currentValue);
-  //       accumulator['*'] = result;
-  //       break;
-  //     case "/":
-  //       result = (accumulator['/'] || 1) / parseFloat(currentValue);
-  //       accumulator['/'] = result;
-  //       break;
-  //     default:
-  //       return;
-  //   }
-
-  //   if (!isNaN(result)) {
-  //     result = result.toString().replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, "");
-  //   }
-
-  //   setDisplay(result.toString());
-  //   setCurrentValue(result.toString());
-  //   setOperator("");
-  //   setPreviousValue("");
-  // };
   function calculateResult() {
-    let result = 0;
+    let result = "0";
 
     switch (operator) {
       case "+":
@@ -92,11 +49,34 @@ function Calculator() {
         break;
 
       case "-":
-        result = (
-          parseFloat(previousValue) - parseFloat(currentValue)
-        ).toString();
+        console.log("case '-' ");
+        if (currentValue === "") {
+          result = (
+            parseFloat(previousValue) - parseFloat(previousValue)
+          ).toString();
+          console.log("previousValue - previousValue", result);
+        } else if(currentValue === "" && accumulator !== 0){
+          result = (
+            parseFloat(accumulator) - parseFloat(currentValue)
+          ).toString();
+          console.log("accumulator - currentValue", result);
+        } else if(accumulator !== 0 && accumulator !== null){
+          result = (
+            parseFloat(accumulator) - parseFloat(currentValue)
+          ).toString();
+          console.log("accumulator - currentValue", result);
+        } else {
+          result = (
+            parseFloat(previousValue) - parseFloat(currentValue)
+          ).toString();
+          console.log("previousValue - currentValue", result);
+        }
+
         result = result.replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+        resultDisplay(result);
         break;
+
       case "*":
         result = (
           parseFloat(previousValue) * parseFloat(currentValue)
@@ -128,17 +108,21 @@ function Calculator() {
         .replace(/\B(?=(\d{3})+(?!\d))/g, "");
     } else {
       // Если результат не является числом, отображаем "Ошибка"
-      setDisplay("Ошибка");
+      setDisplay("результат не является числом");
       setCurrentValue("");
       setPreviousValue("");
       setOperator("");
       return;
     }
+    console.log("previousValue", previousValue);
     console.log("CurrentValue", currentValue);
-    setDisplay(result.toString());
-    setCurrentValue(result.toString());
-    setOperator("");
-    setPreviousValue("");
+    
+    // setDisplay(result.toString());
+    setDisplay(accumulator);
+    setAccumulator(result.toString());
+    // setCurrentValue(result.toString());
+    // setOperator("");
+    // setPreviousValue("");
   }
 
   function handleNumberClick(number) {
@@ -173,15 +157,6 @@ function Calculator() {
       setCurrentValue(""); // Сбрасываем текущее значение для нового ввода
       console.log("Оператор уже нажат");
     }
-
-    // if (operator !== "") {
-    //   calculateResult();
-    // }
-
-    // setOperator(operator);
-    // setPreviousValue(currentValue);
-    // setCurrentValue("");
-    // setDisplay(operator);
   }
 
   function handleClearClick() {
