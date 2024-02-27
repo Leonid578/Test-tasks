@@ -10,14 +10,26 @@ function Calculator() {
   const [operator, setOperator] = useState(null);
   const [accumulator, setAccumulator] = useState(null);
 
-  function resultDisplay(result) {
-    if (accumulator !== "0" && accumulator !== null) {
-      console.log("accumulator !== 0", accumulator);
+  // function toNumber(str) {
+  //   return +str;
+  // }
 
-      resultDisplay = accumulator - result;
+  //   let a = "123"
+  //   console.log("a", a);
+  //   let b = +a;
+  //   console.log("b", b);
+
+  function resultDisplay(result) {
+    
+    if (accumulator !== null) {
+      console.log("accumulator !== null", accumulator);
+
+      resultDisplay = +accumulator + +result;
+      console.log("resultDisplay", resultDisplay);
     } else {
       console.log("accumulator === null!!");
-      resultDisplay =  result;
+
+      resultDisplay =  result.toString();
       console.log("resultDisplay", resultDisplay);
     }
   }
@@ -54,21 +66,25 @@ function Calculator() {
           result = (
             parseFloat(previousValue) - parseFloat(previousValue)
           ).toString();
+
           console.log("previousValue - previousValue", result);
         } else if(currentValue === "" && accumulator !== 0){
           result = (
             parseFloat(accumulator) - parseFloat(currentValue)
           ).toString();
-          console.log("accumulator - currentValue", result);
+
+          console.log("accumulator - currentValue1", result);
         } else if(accumulator !== 0 && accumulator !== null){
           result = (
             parseFloat(accumulator) - parseFloat(currentValue)
           ).toString();
-          console.log("accumulator - currentValue", result);
+
+          console.log("accumulator - currentValue2", result);
         } else {
           result = (
             parseFloat(previousValue) - parseFloat(currentValue)
           ).toString();
+
           console.log("previousValue - currentValue", result);
         }
 
@@ -117,8 +133,7 @@ function Calculator() {
     console.log("previousValue", previousValue);
     console.log("CurrentValue", currentValue);
     
-    // setDisplay(result.toString());
-    setDisplay(accumulator);
+    setDisplay(result.toString());
     setAccumulator(result.toString());
     // setCurrentValue(result.toString());
     // setOperator("");
