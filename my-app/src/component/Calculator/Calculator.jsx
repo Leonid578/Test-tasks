@@ -8,6 +8,7 @@ function Calculator() {
   const [currentValue, setCurrentValue] = useState(0);
   const [previousValue, setPreviousValue] = useState(null);
   const [operator, setOperator] = useState(null);
+  const [PreviousOperator, setPreviousOperator] = useState(null);
   const [accumulator, setAccumulator] = useState(null);
 
   // function toNumber(str) {
@@ -19,78 +20,95 @@ function Calculator() {
   //   let b = +a;
   //   console.log("b", b);
 
-  function resultDisplay(result) {
-    
-    if (accumulator !== null) {
-      console.log("accumulator !== null", accumulator);
+  // function resultDisplay(result) {
 
-      resultDisplay = +accumulator + +result;
-      console.log("resultDisplay", resultDisplay);
-    } else {
-      console.log("accumulator === null!!");
+  //   if (accumulator !== null) {
 
-      resultDisplay =  result.toString();
-      console.log("resultDisplay", resultDisplay);
-    }
-  }
+  //     console.log("accumulator !== null", accumulator);
+  //     // resultDisplay = +accumulator + +result; // преобразование строки к числу
+  //     resultDisplay = accumulator + result; 
+  //     console.log("resultDisplay", resultDisplay);
+  //   } else {
+
+  //     console.log("accumulator === null!! ");
+  //     resultDisplay =  result.toString();
+  //     console.log("resultDisplay", resultDisplay);
+  //   }
+  // }
 
   function calculateResult() {
     let result = "0";
 
     switch (operator) {
       case "+":
-        if (currentValue === "" && accumulator === 0 && operator === "+") {
+        setAccumulator(null)
+        if (currentValue === "" && accumulator === null) {
           setAccumulator(parseFloat(previousValue));
           result = parseFloat(previousValue) + parseFloat(previousValue);
           console.log("accumulator1", result);
           console.log("accumulator1", operator);
         } else if (
           currentValue === "" &&
-          accumulator !== 0 &&
-          operator === "+"
+          accumulator !== 0
         ) {
-          result = accumulator + parseFloat(previousValue);
+          result = +accumulator + +previousValue;
           console.log("accumulator2", result.toString());
-          console.log("accumulator1", operator);
-        } else {
-          result = parseFloat(previousValue) + parseFloat(currentValue);
-          setAccumulator(parseFloat(currentValue));
-          console.log("accumulator3", accumulator);
-          console.log("accumulator1", operator);
+          console.log("operator", operator);
+        }
+        else if (
+          previousValue !== 0 &&
+          currentValue !== 0 &&
+          accumulator !== null
+        ) {
+          result = +accumulator + +currentValue;
+          setAccumulator(result);
+        }
+        else {
+          result = +previousValue + +currentValue;
+          setAccumulator(+currentValue);
         }
         break;
 
       case "-":
+        setAccumulator(null)
         console.log("case '-' ");
-        if (currentValue === "") {
+        if (currentValue === "" && accumulator === null) {
           result = (
             parseFloat(previousValue) - parseFloat(previousValue)
           ).toString();
 
-          console.log("previousValue - previousValue", result);
-        } else if(currentValue === "" && accumulator !== 0){
+          console.log("previousValue - previousValue =", result);
+          console.log("accumulator1", accumulator);
+        } else if (
+          currentValue === "" &&
+          accumulator !== 0)
+          {
           result = (
-            parseFloat(accumulator) - parseFloat(currentValue)
+            result = +accumulator - +previousValue
           ).toString();
 
-          console.log("accumulator - currentValue1", result);
-        } else if(accumulator !== 0 && accumulator !== null){
+          console.log("accumulator - previousValue =", result);
+          console.log("accumulator1", accumulator);
+        } else if (previousValue !== 0 &&
+          currentValue !== 0 &&
+          accumulator !== null) {
           result = (
-            parseFloat(accumulator) - parseFloat(currentValue)
+            result = +accumulator - +currentValue
           ).toString();
+          setAccumulator(result);
 
-          console.log("accumulator - currentValue2", result);
+          console.log("accumulator - currentValue2 =", result);
+          console.log("accumulator1", accumulator);
         } else {
           result = (
-            parseFloat(previousValue) - parseFloat(currentValue)
+            result = +previousValue - +currentValue
           ).toString();
-
-          console.log("previousValue - currentValue", result);
+          setAccumulator(+currentValue);
         }
 
         result = result.replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-        resultDisplay(result);
+        // resultDisplay(result);
         break;
 
       case "*":
@@ -132,7 +150,7 @@ function Calculator() {
     }
     console.log("previousValue", previousValue);
     console.log("CurrentValue", currentValue);
-    
+
     setDisplay(result.toString());
     setAccumulator(result.toString());
     // setCurrentValue(result.toString());
@@ -179,7 +197,8 @@ function Calculator() {
     setCurrentValue("");
     setOperator("");
     setPreviousValue("");
-    setAccumulator(0);
+    setAccumulator(null);
+    setPreviousOperator("null")
   }
 
   function handleEqualsClick() {
