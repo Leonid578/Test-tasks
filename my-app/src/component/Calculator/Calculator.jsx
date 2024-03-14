@@ -64,7 +64,7 @@ function Calculator() {
           // при первом действии слажения
           previousValue !== 0 &&
           currentValue !== 0 &&
-          accumulator !== null 
+          accumulator !== null
         ) {
           result = (
             result = +accumulator + +currentValue
@@ -103,7 +103,7 @@ function Calculator() {
         } else if (previousValue !== 0 &&
           currentValue !== 0 &&
           accumulator !== null
-          ) {
+        ) {
           result = (
             result = +accumulator - +currentValue
           ).toString()
@@ -186,7 +186,7 @@ function Calculator() {
         console.log("нажата цифра ", number);
         console.log("происходит добавлиние справа", currentValue + number);
         return newResult.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-        
+
       });
 
       setCurrentValue(currentValue + number);
@@ -195,7 +195,7 @@ function Calculator() {
 
   function handleOperatorClick(operatorValue) {
     if (operator) {
-      console.log("operator", operator)
+      console.log("operator", operator ,previousValue,currentValue)
       // Проверяем, был ли уже установлен оператор
       if (operatorValue !== operator && operator !== "") {
         // Если новый оператор отличается от предыдущего:
@@ -206,7 +206,7 @@ function Calculator() {
         console.log("Оператор был изменен на ", operator);
         console.log("не первая операция");
       }
-    } else if(operator === "") {
+    } else if (operator === "") {
       // Если оператор еще не был установлен (первая операция):
       console.log("operator", operator)
       setPreviousValue(currentValue); // Устанавливаем предыдущее значение
@@ -214,15 +214,20 @@ function Calculator() {
       setCurrentValue(""); // Сбрасываем текущее значение для нового ввода
       console.log("Оператор нажат на ", operator);
       console.log("первая операция");
-    } 
-    // else if (operatorValue !== "") {
-
-    // } 
-    else
-     {
+    }
+    // else if (
+    //   operator === "+"
+    //   && previousValue !== 0
+    //   && currentValue !== 0) {
+    //   console.log("operator === " + " && previousValue !== 0 && currentValue !== 0");
+    //   calculateResult()
+    //   setPreviousValue(currentValue); // Устанавливаем предыдущее значение
+    //   setCurrentValue(""); // Сбрасываем текущее значение для нового ввода
+    // }
+    else {
       console.log("error", operator)
     }
-    
+
   }
 
   function handleClearClick() {
