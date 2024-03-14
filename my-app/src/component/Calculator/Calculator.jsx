@@ -5,10 +5,10 @@ import { IoArrowBack } from "react-icons/io5";
 
 function Calculator() {
   const [display, setDisplay] = useState("0");
-  const [currentValue, setCurrentValue] = useState(0);
-  const [previousValue, setPreviousValue] = useState(null);
-  const [operator, setOperator] = useState(null);
-  const [PreviousOperator, setPreviousOperator] = useState(null);
+  const [currentValue, setCurrentValue] = useState(0); // второй символ
+  const [previousValue, setPreviousValue] = useState(null); // первый символ
+  const [operator, setOperator] = useState("");
+  // const [accumulator2, setAccumulator2] = useState(false);
   const [accumulator, setAccumulator] = useState(null);
 
   // function toNumber(str) {
@@ -41,60 +41,72 @@ function Calculator() {
 
     switch (operator) {
       case "+":
-        setAccumulator(null)
+        console.log("case '+'");
+
         if (currentValue === "" && accumulator === null) {
           setAccumulator(parseFloat(previousValue));
-          result = parseFloat(previousValue) + parseFloat(previousValue);
+          result = (
+            result = +previousValue + +previousValue
+          ).toString()
           console.log("accumulator1", result);
           console.log("accumulator1", operator);
         } else if (
           currentValue === "" &&
           accumulator !== 0
         ) {
-          result = +accumulator + +previousValue;
-          console.log("accumulator2", result.toString());
+          result = (
+            result = +accumulator + +previousValue
+          ).toString()
+          console.log("accumulator2", result);
           console.log("operator", operator);
         }
         else if (
+          // при первом действии слажения
           previousValue !== 0 &&
           currentValue !== 0 &&
-          accumulator !== null
+          accumulator !== null 
         ) {
-          result = +accumulator + +currentValue;
+          result = (
+            result = +accumulator + +currentValue
+          ).toString()
           setAccumulator(result);
         }
         else {
-          result = +previousValue + +currentValue;
+          // при первом действии слажения
+          result = (
+            result = +previousValue + +currentValue
+          ).toString();
           setAccumulator(+currentValue);
         }
+
         break;
 
       case "-":
-        setAccumulator(null)
         console.log("case '-' ");
+
         if (currentValue === "" && accumulator === null) {
           result = (
             parseFloat(previousValue) - parseFloat(previousValue)
-          ).toString();
+          ).toString()
 
           console.log("previousValue - previousValue =", result);
           console.log("accumulator1", accumulator);
         } else if (
           currentValue === "" &&
-          accumulator !== 0)
-          {
+          accumulator !== 0) {
           result = (
             result = +accumulator - +previousValue
-          ).toString();
+          ).toString()
 
           console.log("accumulator - previousValue =", result);
           console.log("accumulator1", accumulator);
         } else if (previousValue !== 0 &&
           currentValue !== 0 &&
-          accumulator !== null) {
+          accumulator !== null
+          ) {
           result = (
             result = +accumulator - +currentValue
-          ).toString();
+          ).toString()
           setAccumulator(result);
 
           console.log("accumulator - currentValue2 =", result);
@@ -102,11 +114,16 @@ function Calculator() {
         } else {
           result = (
             result = +previousValue - +currentValue
-          ).toString();
+          ).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
           setAccumulator(+currentValue);
         }
 
-        result = result.replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        // if (+accumulator2 === "-") {
+        //   console.log("accumulator2 !== "-"", accumulator2);
+        //   setAccumulator2(null)
+        // }
+
+        result = result.replace(/,/g, "")
 
         // resultDisplay(result);
         break;
@@ -138,10 +155,10 @@ function Calculator() {
       // Если результат - число, отображаем его с разделителями
       result = result
         .toString()
-        .replace(/,/g, "")
-        .replace(/\B(?=(\d{3})+(?!\d))/g, "");
+        // .replace(/,/g, "")
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     } else {
-      // Если результат не является числом, отображаем "Ошибка"
+      // Если результат не является числом
       setDisplay("результат не является числом");
       setCurrentValue("");
       setPreviousValue("");
@@ -164,8 +181,12 @@ function Calculator() {
       setCurrentValue(number);
     } else {
       setDisplay(() => {
-        const newResult = (currentValue + number).replace(/,/g, "");
-        return newResult.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        // setCurrentValue(number);
+        const newResult = (currentValue + number);
+        console.log("нажата цифра ", number);
+        console.log("происходит добавлиние справа", currentValue + number);
+        return newResult.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        
       });
 
       setCurrentValue(currentValue + number);
@@ -174,22 +195,34 @@ function Calculator() {
 
   function handleOperatorClick(operatorValue) {
     if (operator) {
+      console.log("operator", operator)
       // Проверяем, был ли уже установлен оператор
       if (operatorValue !== operator && operator !== "") {
         // Если новый оператор отличается от предыдущего:
-        calculateResult(); // Выполняем вычисления с предыдущим оператором
+
         setPreviousValue(currentValue); // Устанавливаем предыдущее значение
         setOperator(operatorValue); // Устанавливаем новый оператор
         setCurrentValue(""); // Сбрасываем текущее значение для нового ввода
-        console.log("Оператор был изменен");
+        console.log("Оператор был изменен на ", operator);
+        console.log("не первая операция");
       }
-    } else {
+    } else if(operator === "") {
       // Если оператор еще не был установлен (первая операция):
+      console.log("operator", operator)
       setPreviousValue(currentValue); // Устанавливаем предыдущее значение
       setOperator(operatorValue); // Устанавливаем оператор
       setCurrentValue(""); // Сбрасываем текущее значение для нового ввода
-      console.log("Оператор уже нажат");
+      console.log("Оператор нажат на ", operator);
+      console.log("первая операция");
+    } 
+    // else if (operatorValue !== "") {
+
+    // } 
+    else
+     {
+      console.log("error", operator)
     }
+    
   }
 
   function handleClearClick() {
@@ -198,7 +231,7 @@ function Calculator() {
     setOperator("");
     setPreviousValue("");
     setAccumulator(null);
-    setPreviousOperator("null")
+    // setPreviousOperator("null")
   }
 
   function handleEqualsClick() {
