@@ -20,17 +20,17 @@ function Calculator() {
         if (currentValue === "" && accumulator === null) {
           // при повторном нажатии на +
           setAccumulator(previousValue);
-          result = (
-            result = +previousValue + +previousValue
-          )
+
+          result = +previousValue + +previousValue
+
           console.log("1+", result);
         } else if (
           currentValue === "" &&
           accumulator !== null
         ) {
-          console.log(" aad ", accumulator, previousValue );
+          // console.log(" aad ", accumulator, previousValue );
           result = (+accumulator + +previousValue).toString();
-          result = result.replace(/\./g, "");
+          result = (+accumulator + +previousValue).toString();
           console.log("2", result);
         }
         else if (
@@ -39,71 +39,59 @@ function Calculator() {
           currentValue !== 0 &&
           accumulator !== null
         ) {
-          result = (
-            result = +accumulator + +currentValue
-          ).toString()
+          result = +accumulator + +currentValue
+
           setAccumulator(result);
           console.log("3", result);
         }
         else {
           // при первом действии слажения
-          result = (
-            result = +previousValue + +currentValue
-          ).toString();
+          result = +previousValue + +currentValue
+
           setAccumulator(currentValue);
           // setCurrentValue("");
           console.log(" '4' при первом действии слажения", result);
         }
-
-        // result = result.replace(/\./g, "")
-
         break;
 
       case "-":
         console.log("case '-' ");
 
         if (currentValue === "" && accumulator === null) {
-          result = (
-            parseFloat(previousValue) - parseFloat(previousValue)
-          ).toString()
+          // при повторном нажатии на -
+          setAccumulator(previousValue);
 
-          console.log("previousValue - previousValue =", result);
-          console.log("accumulator1", accumulator);
+          result = +previousValue - +previousValue
+
           console.log("1-", result);
         } else if (
           currentValue === "" &&
-          accumulator !== 0) {
-          result = (
-            result = +accumulator - +previousValue
-          ).toString()
+          accumulator !== null
+        ) {
+          // console.log(" aad ", accumulator, previousValue );
+          result = (+accumulator - +previousValue).toString();
+          result = (+accumulator + +previousValue).toString();
 
-          console.log("accumulator - previousValue =", result);
-          console.log("accumulator1", accumulator);
           console.log("2-", result);
-        } else if (previousValue !== 0 &&
+        } else if (
+          // при втором действии вычитания
+          previousValue !== 0 &&
           currentValue !== 0 &&
           accumulator !== null
         ) {
-          result = (
-            result = +accumulator - +currentValue
-          ).toString()
+          result = +accumulator - +currentValue
+
           setAccumulator(result);
-
-          console.log("accumulator - currentValue2 =", result);
-          console.log("accumulator1", accumulator);
           console.log("3-", result);
+
         } else {
-          
-          result = (
-            result = +previousValue - +currentValue)
-            // .toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+           // при первом действии вычитания
+          result = +previousValue - +currentValue
+
           setAccumulator(currentValue);
-          setCurrentValue("");
-          console.log(" '4-' при первом действии слажения", result);
+          // setCurrentValue("");
+          console.log(" '4-' при первом действии вычитания", result);
         }
-
-        // result = result.replace(/\./g, "")
-
         break;
 
       case "*":
@@ -130,11 +118,9 @@ function Calculator() {
     }
 
     if (!isNaN(result)) {
-      // Если результат - число, отображаем его с разделителями
+      // Если результат - число, отображаем его в виде строки
       result = result
         .toString()
-        // .replace(/./g, "")
-        // .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     } else {
       // Если результат не является числом
       setDisplay("результат не является числом");
@@ -156,11 +142,8 @@ function Calculator() {
       setCurrentValue(number);
     } else {
       setDisplay(() => {
-        // setCurrentValue(number);
         const newResult = (currentValue + number);
         setCurrentValue(currentValue + number);
-        // console.log("нажата цифра ", number);
-        // console.log("происходит добавлиние справа", currentValue + number);
         return newResult.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
       });
       setCurrentValue(currentValue + number);
