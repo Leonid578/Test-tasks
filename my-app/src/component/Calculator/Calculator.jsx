@@ -44,7 +44,7 @@ function Calculator() {
         console.log("case '+'");
 
         if (currentValue === "" && accumulator === null) {
-          setAccumulator(parseFloat(previousValue));
+          setAccumulator(+previousValue);
           result = (
             result = +previousValue + +previousValue
           ).toString()
@@ -116,6 +116,7 @@ function Calculator() {
           console.log("accumulator1", accumulator);
           console.log("3-", result);
         } else {
+          
           result = (
             result = +previousValue - +currentValue
           ).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -189,8 +190,9 @@ function Calculator() {
       setDisplay(() => {
         // setCurrentValue(number);
         const newResult = (currentValue + number);
-        console.log("нажата цифра ", number);
-        console.log("происходит добавлиние справа", currentValue + number);
+        setCurrentValue(currentValue + number);
+        // console.log("нажата цифра ", number);
+        // console.log("происходит добавлиние справа", currentValue + number);
         return newResult.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
       });
       setCurrentValue(currentValue + number);
@@ -198,9 +200,7 @@ function Calculator() {
   }
   
   function handleOperatorClick(operatorValue) {
-      if (operator) {
         console.log("Нажата кнопка оператора", operator, previousValue, currentValue)
-        // Проверяем, был ли уже установлен оператор
         if (operatorValue !== operator && operator !== "") {
           // Если новый оператор отличается от предыдущего:
           setPreviousValue(currentValue); // Устанавливаем предыдущее значение
@@ -223,7 +223,6 @@ function Calculator() {
         } else {
           console.log("error", operator)
         }
-      }
     }
 
     function handleClearClick() {
