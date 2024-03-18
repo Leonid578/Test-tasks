@@ -92,6 +92,7 @@ function Calculator() {
 
           console.log("previousValue - previousValue =", result);
           console.log("accumulator1", accumulator);
+          console.log("1-", result);
         } else if (
           currentValue === "" &&
           accumulator !== 0) {
@@ -101,6 +102,7 @@ function Calculator() {
 
           console.log("accumulator - previousValue =", result);
           console.log("accumulator1", accumulator);
+          console.log("2-", result);
         } else if (previousValue !== 0 &&
           currentValue !== 0 &&
           accumulator !== null
@@ -112,11 +114,14 @@ function Calculator() {
 
           console.log("accumulator - currentValue2 =", result);
           console.log("accumulator1", accumulator);
+          console.log("3-", result);
         } else {
           result = (
             result = +previousValue - +currentValue
           ).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
           setAccumulator(+currentValue);
+          setCurrentValue("");
+          console.log(" '4-' при первом действии слажения", result);
         }
 
         // if (+accumulator2 === "-") {
@@ -188,149 +193,141 @@ function Calculator() {
         console.log("происходит добавлиние справа", currentValue + number);
         return newResult.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
       });
-
       setCurrentValue(currentValue + number);
     }
   }
-
   function handleOperatorClick(operatorValue) {
     if (operator) {
-      
       console.log("Нажата кнопка оператора", operator, previousValue, currentValue)
       // Проверяем, был ли уже установлен оператор
       if (operatorValue !== operator && operator !== "") {
         // Если новый оператор отличается от предыдущего:
-
         setPreviousValue(currentValue); // Устанавливаем предыдущее значение
         setOperator(operatorValue); // Устанавливаем новый оператор
         setCurrentValue(""); // Сбрасываем текущее значение для нового ввода
         console.log("Оператор был изменен на ", operator);
         console.log("не первая операция");
+      } else if (operator !== "" && previousValue !== 0 && currentValue !== 0) {
+        console.log("previousValue !== 0 && currentValue !== 0");
+        calculateResult()
+        setPreviousValue(currentValue); // Устанавливаем предыдущее значение
+        setCurrentValue(""); // Сбрасываем текущее значение для нового ввода
+      } else if (operator === "") {
+        // Если оператор еще не был установлен (первая операция):
+        console.log("первая операция");
+        console.log("устаовили оператор = ", operator)
+        setPreviousValue(currentValue); // Устанавливаем предыдущее значение
+        setOperator(operatorValue); // Устанавливаем оператор
+        setCurrentValue(""); // Сбрасываем текущее значение для нового ввода
+      } else {
+        console.log("error", operator)
       }
-    } else if (operator === "") {
-      // Если оператор еще не был установлен (первая операция):
-      console.log("operator 123", operator)
-      setPreviousValue(currentValue); // Устанавливаем предыдущее значение
-      setOperator(operatorValue); // Устанавливаем оператор
-      setCurrentValue(""); // Сбрасываем текущее значение для нового ввода
-      console.log("Оператор нажат на ", operator);
-      console.log("первая операция");
+
     }
-    // else {
-    //   console.log("operator === "+" && previousValue !== 0 && currentValue !== 0");
-    //   calculateResult()
-    //   setPreviousValue(currentValue); // Устанавливаем предыдущее значение
-    //   setCurrentValue(""); // Сбрасываем текущее значение для нового ввода
-    // }
-    // else {
-    //   console.log("error", operator)
-    // }
 
-  }
+    function handleClearClick() {
+      setDisplay("0");
+      setCurrentValue("");
+      setOperator("");
+      setPreviousValue("");
+      setAccumulator(null);
+      // setPreviousOperator("null")
+    }
 
-  function handleClearClick() {
-    setDisplay("0");
-    setCurrentValue("");
-    setOperator("");
-    setPreviousValue("");
-    setAccumulator(null);
-    // setPreviousOperator("null")
-  }
+    function handleEqualsClick() {
+      calculateResult();
+      // setCurrentValue('0')
+    }
 
-  function handleEqualsClick() {
-    calculateResult();
-    // setCurrentValue('0')
-  }
+    const deleteLastDigit = () => {
+      setCurrentValue(currentValue.slice(0, -1)); // Удаляем последний символ
+      setDisplay((prevDisplay) => {
+        const newDisplay = currentValue.slice(0, -1);
+        if (newDisplay === "") {
+          return "0";
+        }
+        return newDisplay;
+      });
+    };
 
-  const deleteLastDigit = () => {
-    setCurrentValue(currentValue.slice(0, -1)); // Удаляем последний символ
-    setDisplay((prevDisplay) => {
-      const newDisplay = currentValue.slice(0, -1);
-      if (newDisplay === "") {
-        return "0";
-      }
-      return newDisplay;
-    });
-  };
+    return (
+      <div className="calculator">
+        <div className="display">{display}</div>
+        <div className="buttons">
+          <div className="row">
+            <button className="clear operator" onClick={handleClearClick}>
+              AC
+            </button>
 
-  return (
-    <div className="calculator">
-      <div className="display">{display}</div>
-      <div className="buttons">
-        <div className="row">
-          <button className="clear operator" onClick={handleClearClick}>
-            AC
-          </button>
+            <button className="operator" onClick={deleteLastDigit}>
+              <IoArrowBack />
+            </button>
+            <button className="operator">%</button>
+            <button className="operator" onClick={() => handleOperatorClick("/")}>
+              /
+            </button>
+          </div>
 
-          <button className="operator" onClick={deleteLastDigit}>
-            <IoArrowBack />
-          </button>
-          <button className="operator">%</button>
-          <button className="operator" onClick={() => handleOperatorClick("/")}>
-            /
-          </button>
-        </div>
+          <div className="row">
+            <button className="button" onClick={() => handleNumberClick("7")}>
+              7
+            </button>
+            <button className="button" onClick={() => handleNumberClick("8")}>
+              8
+            </button>
+            <button className="button" onClick={() => handleNumberClick("9")}>
+              9
+            </button>
+            <button className="operator" onClick={() => handleOperatorClick("*")}>
+              x
+            </button>
+          </div>
+          <div className="row">
+            <button className="button" onClick={() => handleNumberClick("4")}>
+              4
+            </button>
+            <button className="button" onClick={() => handleNumberClick("5")}>
+              5
+            </button>
+            <button className="button" onClick={() => handleNumberClick("6")}>
+              6
+            </button>
+            <button className="operator" onClick={() => handleOperatorClick("-")}>
+              -
+            </button>
+          </div>
+          <div className="row">
+            <button className="button" onClick={() => handleNumberClick("1")}>
+              1
+            </button>
+            <button className="button" onClick={() => handleNumberClick("2")}>
+              2
+            </button>
+            <button className="button" onClick={() => handleNumberClick("3")}>
+              3
+            </button>
+            <button className="operator" onClick={() => handleOperatorClick("+")}>
+              +
+            </button>
+          </div>
+          <div className="row">
+            <button
+              className="zero button"
+              onClick={() => handleNumberClick("0")}
+            >
+              0
+            </button>
 
-        <div className="row">
-          <button className="button" onClick={() => handleNumberClick("7")}>
-            7
-          </button>
-          <button className="button" onClick={() => handleNumberClick("8")}>
-            8
-          </button>
-          <button className="button" onClick={() => handleNumberClick("9")}>
-            9
-          </button>
-          <button className="operator" onClick={() => handleOperatorClick("*")}>
-            x
-          </button>
-        </div>
-        <div className="row">
-          <button className="button" onClick={() => handleNumberClick("4")}>
-            4
-          </button>
-          <button className="button" onClick={() => handleNumberClick("5")}>
-            5
-          </button>
-          <button className="button" onClick={() => handleNumberClick("6")}>
-            6
-          </button>
-          <button className="operator" onClick={() => handleOperatorClick("-")}>
-            -
-          </button>
-        </div>
-        <div className="row">
-          <button className="button" onClick={() => handleNumberClick("1")}>
-            1
-          </button>
-          <button className="button" onClick={() => handleNumberClick("2")}>
-            2
-          </button>
-          <button className="button" onClick={() => handleNumberClick("3")}>
-            3
-          </button>
-          <button className="operator" onClick={() => handleOperatorClick("+")}>
-            +
-          </button>
-        </div>
-        <div className="row">
-          <button
-            className="zero button"
-            onClick={() => handleNumberClick("0")}
-          >
-            0
-          </button>
-
-          <button className="button" onClick={() => handleNumberClick(".")}>
-            .
-          </button>
-          <button className="calculate" onClick={handleEqualsClick}>
-            =
-          </button>
+            <button className="button" onClick={() => handleNumberClick(".")}>
+              .
+            </button>
+            <button className="calculate" onClick={handleEqualsClick}>
+              =
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
-export default Calculator;
+  export default Calculator;
