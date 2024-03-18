@@ -196,6 +196,7 @@ function Calculator() {
       setCurrentValue(currentValue + number);
     }
   }
+  
   function handleOperatorClick(operatorValue) {
     if (operator) {
       console.log("Нажата кнопка оператора", operator, previousValue, currentValue)
