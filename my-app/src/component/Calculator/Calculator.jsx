@@ -198,32 +198,32 @@ function Calculator() {
   }
   
   function handleOperatorClick(operatorValue) {
-    if (operator) {
-      console.log("Нажата кнопка оператора", operator, previousValue, currentValue)
-      // Проверяем, был ли уже установлен оператор
-      if (operatorValue !== operator && operator !== "") {
-        // Если новый оператор отличается от предыдущего:
-        setPreviousValue(currentValue); // Устанавливаем предыдущее значение
-        setOperator(operatorValue); // Устанавливаем новый оператор
-        setCurrentValue(""); // Сбрасываем текущее значение для нового ввода
-        console.log("Оператор был изменен на ", operator);
-        console.log("не первая операция");
-      } else if (operator !== "" && previousValue !== 0 && currentValue !== 0) {
-        console.log("previousValue !== 0 && currentValue !== 0");
-        calculateResult()
-        setPreviousValue(currentValue); // Устанавливаем предыдущее значение
-        setCurrentValue(""); // Сбрасываем текущее значение для нового ввода
-      } else if (operator === "") {
-        // Если оператор еще не был установлен (первая операция):
-        console.log("первая операция");
-        console.log("устаовили оператор = ", operator)
-        setPreviousValue(currentValue); // Устанавливаем предыдущее значение
-        setOperator(operatorValue); // Устанавливаем оператор
-        setCurrentValue(""); // Сбрасываем текущее значение для нового ввода
-      } else {
-        console.log("error", operator)
+      if (operator) {
+        console.log("Нажата кнопка оператора", operator, previousValue, currentValue)
+        // Проверяем, был ли уже установлен оператор
+        if (operatorValue !== operator && operator !== "") {
+          // Если новый оператор отличается от предыдущего:
+          setPreviousValue(currentValue); // Устанавливаем предыдущее значение
+          setOperator(operatorValue); // Устанавливаем новый оператор
+          setCurrentValue(""); // Сбрасываем текущее значение для нового ввода
+          console.log("Оператор был изменен на ", operator);
+          console.log("не первая операция");
+        } else if (operator !== "" && previousValue !== 0 && currentValue !== 0) {
+          console.log("previousValue !== 0 && currentValue !== 0");
+          calculateResult()
+          setPreviousValue(currentValue); // Устанавливаем предыдущее значение
+          setCurrentValue(""); // Сбрасываем текущее значение для нового ввода
+        } else if (operator === "") {
+          // Если оператор еще не был установлен (первая операция):
+          console.log("первая операция");
+          console.log("устаовили оператор = ", operator)
+          setPreviousValue(currentValue); // Устанавливаем предыдущее значение
+          setOperator(operatorValue); // Устанавливаем оператор
+          setCurrentValue(""); // Сбрасываем текущее значение для нового ввода
+        } else {
+          console.log("error", operator)
+        }
       }
-
     }
 
     function handleClearClick() {
@@ -330,6 +330,5 @@ function Calculator() {
       </div>
     );
   }
-}
 
   export default Calculator;
