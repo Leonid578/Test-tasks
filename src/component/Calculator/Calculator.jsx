@@ -12,7 +12,9 @@ function Calculator() {
 
   function calculateResult() {
     let result = "0";
-
+    // https://www.npmjs.com/package/decimal.js?activeTab=readme
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math
+    // https://jsexpert.net/handbook/javascript/chislo-number/tofixed/
     switch (operator) {
       case "+":
         console.log("case '+'");
@@ -26,7 +28,7 @@ function Calculator() {
           console.log("1+", result);
         } else if (currentValue === "" && accumulator !== null) {
           result = (+accumulator + +previousValue).toString();
-          result = (+accumulator + +previousValue).toString();
+          // result = (+accumulator + +previousValue).toString();
           console.log("2", result);
         } else if (
           // при втором действии слажения
@@ -40,8 +42,11 @@ function Calculator() {
           console.log("3", result);
         } else {
           // при первом действии слажения
+          console.log("previousValue", previousValue);
+          console.log("CurrentValue", currentValue);
           result = +previousValue + +currentValue;
-
+          console.log("previousValue", +previousValue);
+          console.log("CurrentValue", +currentValue);
           setAccumulator(currentValue);
           console.log(" '4' при первом действии слажения", result);
         }
@@ -59,7 +64,7 @@ function Calculator() {
           console.log("1-", result);
         } else if (currentValue === "" && accumulator !== null) {
           result = (+accumulator - +previousValue).toString();
-          result = (+accumulator + +previousValue).toString();
+          // result = (+accumulator + +previousValue).toString();
 
           console.log("2-", result);
         } else if (
@@ -171,8 +176,7 @@ function Calculator() {
       setOperator("");
       return;
     }
-    console.log("previousValue", previousValue);
-    console.log("CurrentValue", currentValue);
+    
 
     setDisplay(result.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " "));
     setAccumulator(result);
@@ -181,49 +185,58 @@ function Calculator() {
   function formatNumber(newResult) {
     // Преобразуем число в строку и разделяем его на целую и дробную части
     const parts = newResult.toString().split('.');
+    let isNegative
     
     // Получаем целую и дробную части
     let integerPart = parts[0];
     const decimalPart = parts[1] ? '.' + parts[1] : '';
-  
+    // console.log("parts[0]" , parts[0], "parts[1]" , parts[1]);
+
     // Форматируем целую часть
     if (integerPart.includes('-')) {
       // Если целая часть содержит знак минуса, удаляем его и помечаем, что число отрицательное
       integerPart = integerPart.replace('-', '');
-      var isNegative = true;
+      isNegative = true;
     } else {
-      var isNegative = false;
+      isNegative = false;
     }
     
-    // Если абсолютное значение целой части больше или равно 1000, добавляем пробелы между каждыми тремя цифрами
-    if (Math.abs(parseInt(integerPart)) >= 1000) {
-      integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-    }
+    // // Если абсолютное значение целой части больше или равно 1000, добавляем пробелы между каждыми тремя цифрами
+    // if (Math.abs(parseInt(integerPart)) >= 1000) {
+    //   integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    // }
   
     // Собираем число с учетом знака и дробной части
     let formattedNumber = (isNegative ? '-' : '') + integerPart + decimalPart;
   
-    // Округляем до 6 знаков после запятой только если количество знаков превышает 6
-    if (decimalPart.length > 4) {
-      formattedNumber = (Math.round(parseFloat(formattedNumber) * 1e4) / 1e4).toFixed(4);
-    }
+    // Округляем до 4 знаков после запятой только если количество знаков превышает 4
+    // if (decimalPart.length > 4) {
+    //   formattedNumber = (Math.round(parseFloat(formattedNumber) * 1e4) / 1e4).toFixed(4);
+    // }
     
     return formattedNumber;
   }
 
-  function handleNumberClick(number) {
-    if (display === "0" || currentValue === "0") {
+  function handleNumberClick(number, formattedNumber) {
+    // console.log("previousValue", previousValue);
+    // console.log("CurrentValue", currentValue);
+    if ((display === "0" && number === ".") || (number === "." && currentValue !== "0")) {
+      setDisplay("0.");
+      setCurrentValue("0.");
+      // console.log("ошибка??");
+    } else if (display === "0" || currentValue === "0") {
       setDisplay(number);
       setCurrentValue(number);
+      // console.log("ошибка??");
     } else {
       setDisplay(() => {
-       
         const newResult = currentValue + number;
-        setCurrentValue(currentValue + number);
+        setCurrentValue(newResult);
         
         return formatNumber(newResult);
       });
-      setCurrentValue(currentValue + number);
+      // setCurrentValue(currentValue + number);
+      setCurrentValue(formattedNumber);
     }
   }
 
@@ -256,7 +269,7 @@ function Calculator() {
       setOperator(operatorValue); // Устанавливаем оператор
       setCurrentValue(""); // Сбрасываем текущее значение для нового ввода
     } else {
-      console.log("qeqwe", previousValue, currentValue);
+      // console.log("qeqwe", previousValue, currentValue);
       console.log("error", operator);
     }
   }
