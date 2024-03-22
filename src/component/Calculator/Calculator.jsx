@@ -12,9 +12,7 @@ function Calculator() {
 
   function calculateResult() {
     let result = "0";
-    // https://www.npmjs.com/package/decimal.js?activeTab=readme
-    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math
-    // https://jsexpert.net/handbook/javascript/chislo-number/tofixed/
+    
     switch (operator) {
       case "+":
         console.log("case '+'");
@@ -27,7 +25,7 @@ function Calculator() {
 
           console.log("1+", result);
         } else if (currentValue === "" && accumulator !== null) {
-          result = (+accumulator + +previousValue).toString();
+          result = (+accumulator + +previousValue).toString()
           // result = (+accumulator + +previousValue).toString();
           console.log("2", result);
         } else if (
@@ -37,16 +35,17 @@ function Calculator() {
           accumulator !== null
         ) {
           result = +accumulator + +currentValue;
-
+          result = parseFloat(result)
+          // .toFixed(6)
           setAccumulator(result);
+          
           console.log("3", result);
         } else {
           // при первом действии слажения
-          console.log("previousValue", previousValue);
-          console.log("CurrentValue", currentValue);
           result = +previousValue + +currentValue;
           console.log("previousValue", +previousValue);
           console.log("CurrentValue", +currentValue);
+
           setAccumulator(currentValue);
           console.log(" '4' при первом действии слажения", result);
         }
@@ -74,7 +73,8 @@ function Calculator() {
           accumulator !== null
         ) {
           result = +accumulator - +currentValue;
-
+          result = parseFloat(result)
+          // .toFixed(6)
           setAccumulator(result);
           console.log("3-", result);
         } else {
@@ -106,7 +106,7 @@ function Calculator() {
           accumulator !== null
         ) {
           result = +accumulator * +currentValue;
-
+          result = parseFloat(result).toFixed(6)
           setAccumulator(result);
           console.log("3*", result);
         } else {
@@ -148,16 +148,13 @@ function Calculator() {
           accumulator !== null
         ) {
           const roundedNumber = +accumulator / +currentValue;
-          result = Math.round(roundedNumber * 1e4) / 1e4;
-
-          setAccumulator(result);
-          console.log("3/", result);
+          setAccumulator(roundedNumber);
+          console.log("3/", roundedNumber);
         } else {
           // при первом действии /
           const roundedNumber = +previousValue / +currentValue;
-          result = Math.round(roundedNumber * 1e4) / 1e4;
           setAccumulator(currentValue);
-          console.log(" '4/' при первом действии /", result);
+          console.log(" '4/' при первом действии /", roundedNumber);
         }
         break;
      
@@ -167,7 +164,7 @@ function Calculator() {
 
     if (!isNaN(result)) {
       // Если результат - число, отображаем его в виде строки
-      result = result.toString();
+      result = result.toFixed(6).toString().replace(/\.?0+$/, '');
     } else {
       // Если результат не является числом
       setDisplay("результат не является числом");
@@ -177,13 +174,16 @@ function Calculator() {
       return;
     }
     
-
-    setDisplay(result.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " "));
+    setDisplay(result.replace(/\B(?=(\d{3})+(?!\d))/g, " ")
+    // .replace(/\.?0+$/, '')
+    );
     setAccumulator(result);
   }
 
   function formatNumber(newResult) {
     // Преобразуем число в строку и разделяем его на целую и дробную части
+    
+
     const parts = newResult.toString().split('.');
     let isNegative
     
@@ -208,35 +208,46 @@ function Calculator() {
   
     // Собираем число с учетом знака и дробной части
     let formattedNumber = (isNegative ? '-' : '') + integerPart + decimalPart;
-  
+    const returnFormattedNumber = parseFloat(formattedNumber).toFixed(6).replace(/\.?0+$/, '');
     // Округляем до 4 знаков после запятой только если количество знаков превышает 4
     // if (decimalPart.length > 4) {
     //   formattedNumber = (Math.round(parseFloat(formattedNumber) * 1e4) / 1e4).toFixed(4);
     // }
     
-    return formattedNumber;
+    return returnFormattedNumber;
   }
 
-  function handleNumberClick(number, formattedNumber) {
+  function handleNumberClick(number, formattedNumber, returnFormattedNumber) {
     // console.log("previousValue", previousValue);
     // console.log("CurrentValue", currentValue);
-    if ((display === "0" && number === ".") || (number === "." && currentValue !== "0")) {
+    // console.log(returnFormattedNumber);
+    // console.log(formattedNumber);
+    const proverka = display.includes('.')
+
+    if (display === "0" && number === "." ) {
       setDisplay("0.");
       setCurrentValue("0.");
-      // console.log("ошибка??");
-    } else if (display === "0" || currentValue === "0") {
-      setDisplay(number);
+      console.log("previousValue", previousValue);
+      console.log("CurrentValue", currentValue);
+    } else if ( proverka && currentValue !== "0" && number === ".") {
+      console.log("previousValue", previousValue);
+      console.log("CurrentValue", currentValue);
+      console.log("выходим парни");
+      return 
+    } else if ( proverka && currentValue === "0" && number === ".") {
+      setDisplay("0.444");
+      return 
+    }else if (display === "0" || currentValue === "0") {
+      setDisplay(number.replace(/\.?0+$/, ''));
       setCurrentValue(number);
-      // console.log("ошибка??");
     } else {
       setDisplay(() => {
         const newResult = currentValue + number;
         setCurrentValue(newResult);
-        
         return formatNumber(newResult);
       });
       // setCurrentValue(currentValue + number);
-      setCurrentValue(formattedNumber);
+      setCurrentValue(returnFormattedNumber);
     }
   }
 
