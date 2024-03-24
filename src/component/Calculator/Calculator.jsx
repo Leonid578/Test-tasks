@@ -12,7 +12,7 @@ function Calculator() {
 
   function calculateResult() {
     let result = "0";
-    
+
     switch (operator) {
       case "+":
         console.log("case '+'");
@@ -25,7 +25,7 @@ function Calculator() {
 
           console.log("1+", result);
         } else if (currentValue === "" && accumulator !== null) {
-          result = (+accumulator + +previousValue).toString()
+          result = (+accumulator + +previousValue).toString();
           // result = (+accumulator + +previousValue).toString();
           console.log("2", result);
         } else if (
@@ -35,10 +35,10 @@ function Calculator() {
           accumulator !== null
         ) {
           result = +accumulator + +currentValue;
-          result = parseFloat(result)
+          result = parseFloat(result);
           // .toFixed(6)
           setAccumulator(result);
-          
+
           console.log("3", result);
         } else {
           // при первом действии слажения
@@ -73,7 +73,7 @@ function Calculator() {
           accumulator !== null
         ) {
           result = +accumulator - +currentValue;
-          result = parseFloat(result)
+          result = parseFloat(result);
           // .toFixed(6)
           setAccumulator(result);
           console.log("3-", result);
@@ -106,7 +106,7 @@ function Calculator() {
           accumulator !== null
         ) {
           result = +accumulator * +currentValue;
-          result = parseFloat(result).toFixed(6)
+          result = parseFloat(result).toFixed(6);
           setAccumulator(result);
           console.log("3*", result);
         } else {
@@ -133,7 +133,7 @@ function Calculator() {
           setAccumulator(previousValue);
 
           const roundedNumber = +previousValue / +previousValue;
-          result = Math.round(roundedNumber * 1e4)/ 1e4;
+          result = Math.round(roundedNumber * 1e4) / 1e4;
 
           console.log("1/", result);
         } else if (currentValue === "" && accumulator !== null) {
@@ -157,14 +157,17 @@ function Calculator() {
           console.log(" '4/' при первом действии /", roundedNumber);
         }
         break;
-     
+
       default:
         return;
     }
 
     if (!isNaN(result)) {
       // Если результат - число, отображаем его в виде строки
-      result = result.toFixed(6).toString().replace(/\.?0+$/, '');
+      result = result
+        .toFixed(6)
+        .toString()
+        .replace(/\.?0+$/, "");
     } else {
       // Если результат не является числом
       setDisplay("результат не является числом");
@@ -173,47 +176,49 @@ function Calculator() {
       setOperator("");
       return;
     }
-    
-    setDisplay(result.replace(/\B(?=(\d{3})+(?!\d))/g, " ")
-    // .replace(/\.?0+$/, '')
+
+    setDisplay(
+      result.replace(/\B(?=(\d{3})+(?!\d))/g, " ")
+      // .replace(/\.?0+$/, '')
     );
     setAccumulator(result);
   }
 
   function formatNumber(newResult) {
     // Преобразуем число в строку и разделяем его на целую и дробную части
-    
 
-    const parts = newResult.toString().split('.');
-    let isNegative
-    
+    const parts = newResult.toString().split(".");
+    let isNegative;
+
     // Получаем целую и дробную части
     let integerPart = parts[0];
-    const decimalPart = parts[1] ? '.' + parts[1] : '';
+    const decimalPart = parts[1] ? "." + parts[1] : "";
     // console.log("parts[0]" , parts[0], "parts[1]" , parts[1]);
 
     // Форматируем целую часть
-    if (integerPart.includes('-')) {
+    if (integerPart.includes("-")) {
       // Если целая часть содержит знак минуса, удаляем его и помечаем, что число отрицательное
-      integerPart = integerPart.replace('-', '');
+      integerPart = integerPart.replace("-", "");
       isNegative = true;
     } else {
       isNegative = false;
     }
-    
+
     // // Если абсолютное значение целой части больше или равно 1000, добавляем пробелы между каждыми тремя цифрами
     // if (Math.abs(parseInt(integerPart)) >= 1000) {
     //   integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
     // }
-  
+
     // Собираем число с учетом знака и дробной части
-    let formattedNumber = (isNegative ? '-' : '') + integerPart + decimalPart;
-    const returnFormattedNumber = parseFloat(formattedNumber).toFixed(6).replace(/\.?0+$/, '');
+    let formattedNumber = (isNegative ? "-" : "") + integerPart + decimalPart;
+    const returnFormattedNumber = parseFloat(formattedNumber)
+      .toFixed(6)
+      .replace(/\.?0+$/, "");
     // Округляем до 4 знаков после запятой только если количество знаков превышает 4
     // if (decimalPart.length > 4) {
     //   formattedNumber = (Math.round(parseFloat(formattedNumber) * 1e4) / 1e4).toFixed(4);
     // }
-    
+
     return returnFormattedNumber;
   }
 
@@ -222,23 +227,23 @@ function Calculator() {
     // console.log("CurrentValue", currentValue);
     // console.log(returnFormattedNumber);
     // console.log(formattedNumber);
-    const proverka = display.includes('.')
+    const proverka = display.includes(".");
 
-    if (display === "0" && number === "." ) {
+    if (display === "0" && number === ".") {
       setDisplay("0.");
       setCurrentValue("0.");
       console.log("previousValue", previousValue);
       console.log("CurrentValue", currentValue);
-    } else if ( proverka && currentValue !== "0" && number === ".") {
+    } else if (proverka && currentValue !== "0" && number === ".") {
       console.log("previousValue", previousValue);
       console.log("CurrentValue", currentValue);
       console.log("выходим парни");
-      return 
-    } else if ( proverka && currentValue === "0" && number === ".") {
+      return;
+    } else if (proverka && currentValue === "0" && number === ".") {
       setDisplay("0.444");
-      return 
-    }else if (display === "0" || currentValue === "0") {
-      setDisplay(number.replace(/\.?0+$/, ''));
+      return;
+    } else if (display === "0" || currentValue === "0") {
+      setDisplay(number.replace(/\.?0+$/, ""));
       setCurrentValue(number);
     } else {
       setDisplay(() => {
@@ -310,7 +315,14 @@ function Calculator() {
 
   return (
     <div className="calculator">
-      <div className="display">{display}</div>
+      <div>
+        <div className="generalBtn">
+          <div className="btn">1</div>
+          <div className="btn">2</div>
+          <div className="btn">3</div>
+        </div>
+        <div className="display">{display}</div>
+      </div>
       <div className="buttons">
         <div className="row">
           <button className="clear operator" onClick={handleClearClick}>
@@ -320,12 +332,14 @@ function Calculator() {
           <button className="operator" onClick={deleteLastDigit}>
             <IoArrowBack />
           </button>
-          <button className="operator">%</button>
+
           <button className="operator" onClick={() => handleOperatorClick("/")}>
             /
           </button>
+          <button className="operator" onClick={() => handleOperatorClick("*")}>
+            x
+          </button>
         </div>
-
         <div className="row">
           <button className="button" onClick={() => handleNumberClick("7")}>
             7
@@ -336,10 +350,11 @@ function Calculator() {
           <button className="button" onClick={() => handleNumberClick("9")}>
             9
           </button>
-          <button className="operator" onClick={() => handleOperatorClick("*")}>
-            x
+          <button className="operator" onClick={() => handleOperatorClick("-")}>
+            -
           </button>
         </div>
+
         <div className="row">
           <button className="button" onClick={() => handleNumberClick("4")}>
             4
@@ -350,38 +365,36 @@ function Calculator() {
           <button className="button" onClick={() => handleNumberClick("6")}>
             6
           </button>
-          <button className="operator" onClick={() => handleOperatorClick("-")}>
-            -
-          </button>
-        </div>
-        <div className="row">
-          <button className="button" onClick={() => handleNumberClick("1")}>
-            1
-          </button>
-          <button className="button" onClick={() => handleNumberClick("2")}>
-            2
-          </button>
-          <button className="button" onClick={() => handleNumberClick("3")}>
-            3
-          </button>
           <button className="operator" onClick={() => handleOperatorClick("+")}>
             +
           </button>
         </div>
-        <div className="row">
-          <button
-            className="zero button"
-            onClick={() => handleNumberClick("0")}
-          >
-            0
-          </button>
-
-          <button className="button" onClick={() => handleNumberClick(".")}>
-            .
-          </button>
-          <button className="calculate" onClick={handleEqualsClick}>
-            =
-          </button>
+        <div className="container">
+          <div>
+            <div className="row">
+              <button className="button" onClick={() => handleNumberClick("1")}>
+                1
+              </button>
+              <button className="button" onClick={() => handleNumberClick("2")}>
+                2
+              </button>
+              <button className="button" onClick={() => handleNumberClick("3")}>
+                3
+              </button>
+            </div>
+            <div className="row">
+              <button className="operator">%</button>
+              <button className="button" onClick={() => handleNumberClick("0")}>
+                0
+              </button>
+              <button className="button" onClick={() => handleNumberClick(".")}>
+                .
+              </button>
+            </div>
+          </div>
+            <button className="calculate" onClick={handleEqualsClick}>
+              =
+            </button>
         </div>
       </div>
     </div>

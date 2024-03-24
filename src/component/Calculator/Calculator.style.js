@@ -2,15 +2,19 @@ import styled from "styled-components";
 // import { NavLink } from "react-router-dom";
 
 export const Container = styled.div`
-  // display: block;
   display: flex;
   flex-wrap: wrap;
-  height: 540px;
-  width: 240px;
-  background: black;
-  // justify-content:center;
+  height: 667px;
+  width: 375px;
+  background: rgba(15, 23, 42, 1);
+  color: rgba(154, 154, 154, 1);
+  // height: 540px;
+  // width: 240px;
+  // background: black;
   border-radius: 18px;
-  color: white;
+  // color: white;
+
+  // justify-content:center;
 `;
 
 export const Display = styled.div`
