@@ -2,6 +2,10 @@ import { useState } from "react";
 import "./Calculator.style.css";
 // import { Container, Display, Buttons, Button, Zero } from "./Calculator.style";
 import { IoArrowBack } from "react-icons/io5";
+import question from "../image/png/question.png";
+import sun from "../image/png/sun.png";
+import tooth from "../image/png/tooth.png";
+import { number } from "prop-types";
 
 function Calculator() {
   const [display, setDisplay] = useState("0");
@@ -9,6 +13,15 @@ function Calculator() {
   const [previousValue, setPreviousValue] = useState(null); // первый символ
   const [operator, setOperator] = useState("");
   const [accumulator, setAccumulator] = useState(null);
+
+  const [history, setHistory] = useState([]); // Состояние для хранения истории
+  const [isHistoryVisible, setIsHistoryVisible] = useState(false); // Состояние для отображения истории
+
+  // Функция для добавления записи в историю
+  function addToHistory(entry) {
+    setHistory([...history, entry]);
+    setIsHistoryVisible(true); // Показываем историю после добавления записи
+  }
 
   function calculateResult() {
     let result = "0";
@@ -19,11 +32,13 @@ function Calculator() {
 
         if (currentValue === "" && accumulator === null) {
           // при повторном нажатии на +
-          setAccumulator(previousValue);
 
-          result = +previousValue + +previousValue;
+          return;
+          // setAccumulator(previousValue);
 
-          console.log("1+", result);
+          // result = +previousValue + +previousValue;
+
+          // console.log("1+", result);
         } else if (currentValue === "" && accumulator !== null) {
           result = (+accumulator + +previousValue).toString();
           // result = (+accumulator + +previousValue).toString();
@@ -56,11 +71,13 @@ function Calculator() {
 
         if (currentValue === "" && accumulator === null) {
           // при повторном нажатии на -
-          setAccumulator(previousValue);
 
-          result = +previousValue - +previousValue;
+          return;
+          // setAccumulator(previousValue);
 
-          console.log("1-", result);
+          // result = +previousValue - +previousValue;
+
+          // console.log("1-", result);
         } else if (currentValue === "" && accumulator !== null) {
           result = (+accumulator - +previousValue).toString();
           // result = (+accumulator + +previousValue).toString();
@@ -91,11 +108,12 @@ function Calculator() {
 
         if (currentValue === "" && accumulator === null) {
           // при повторном нажатии на *
-          setAccumulator(previousValue);
+          return;
+          // setAccumulator(previousValue);
 
-          result = +previousValue * +previousValue;
+          // result = +previousValue * +previousValue;
 
-          console.log("1*", result);
+          // console.log("1*", result);
         } else if (currentValue === "" && accumulator !== null) {
           result = (+accumulator * +previousValue).toString();
           console.log("2*", result);
@@ -119,6 +137,8 @@ function Calculator() {
         break;
 
       case "/":
+        console.log("case '/'");
+
         if (currentValue === "0") {
           setDisplay("Ошибка");
           setCurrentValue("");
@@ -126,16 +146,16 @@ function Calculator() {
           setOperator("");
           return;
         }
-        console.log("case '/'");
 
         if (currentValue === "" && accumulator === null) {
           // при повторном нажатии на /
-          setAccumulator(previousValue);
+          return;
+          // setAccumulator(previousValue);
 
-          const roundedNumber = +previousValue / +previousValue;
-          result = Math.round(roundedNumber * 1e4) / 1e4;
+          // const roundedNumber = +previousValue / +previousValue;
+          // result = Math.round(roundedNumber * 1e4) / 1e4;
 
-          console.log("1/", result);
+          // console.log("1/", result);
         } else if (currentValue === "" && accumulator !== null) {
           const roundedNumber = (+accumulator / +previousValue).toString();
           result = Math.round(roundedNumber * 1e4) / 1e4;
@@ -182,6 +202,11 @@ function Calculator() {
       // .replace(/\.?0+$/, '')
     );
     setAccumulator(result);
+
+    addToHistory({
+      expression: `${previousValue} ${operator} ${currentValue}`,
+      result: result,
+    });
   }
 
   function formatNumber(newResult) {
@@ -222,7 +247,7 @@ function Calculator() {
     return returnFormattedNumber;
   }
 
-  function handleNumberClick(number, formattedNumber, returnFormattedNumber) {
+  function handleNumberClick(number, returnFormattedNumber) {
     // console.log("previousValue", previousValue);
     // console.log("CurrentValue", currentValue);
     // console.log(returnFormattedNumber);
@@ -254,39 +279,93 @@ function Calculator() {
       // setCurrentValue(currentValue + number);
       setCurrentValue(returnFormattedNumber);
     }
+
+    // if (currentValue === 0) {
+    //   console.log(
+    //     "previousValue1",
+    //     previousValue,
+    //     "operator",
+    //     operator,
+    //     "currentValue",
+    //     currentValue
+    //   );
+    //   setDisplay(`0 ${operator}`);
+    // } else if (previousValue !== "") {
+    //   console.log(
+    //     "previousValue2",
+    //     previousValue,
+    //     "operator",
+    //     operator,
+    //     "currentValue",
+    //     currentValue
+    //   );
+    //   setDisplay(`${previousValue} ${operator}`);
+    // } else {
+    //   console.log(
+    //     "previousValue3",
+    //     previousValue,
+    //     "operator",
+    //     operator,
+    //     "currentValue",
+    //     currentValue
+    //   );
+    //   setDisplay(`${previousValue} ${operator} ${currentValue}`);
+    // }
   }
 
   function handleOperatorClick(operatorValue) {
-    console.log(
-      "Нажата кнопка оператора",
-      operator,
-      previousValue,
-      currentValue
-    );
-    if (operatorValue !== operator && operator !== "") {
-      // Если новый оператор отличается от предыдущего:
-      setPreviousValue(currentValue); // Устанавливаем предыдущее значение
-      setOperator(operatorValue); // Устанавливаем новый оператор
-      setCurrentValue(""); // Сбрасываем текущее значение для нового ввода
-      console.log("Оператор был изменен на ", operator);
-      console.log("не первая операция");
-    } else if (operator !== "" && previousValue !== 0 && currentValue !== 0) {
-      // console.log(
-      //   "previousValue !== 0 && currentValue !== 0",
-      //   previousValue,
-      //   currentValue
-      // );
-      calculateResult();
-    } else if (operator === "") {
+    if (operator === "") {
       // Если оператор еще не был установлен (первая операция):
-      console.log("первая операция");
-      console.log("устаовили оператор = ", operator);
-      setPreviousValue(currentValue); // Устанавливаем предыдущее значение
       setOperator(operatorValue); // Устанавливаем оператор
+      console.log("первая операция, устаовили оператор");
+
+      setPreviousValue(currentValue); // Устанавливаем предыдущее значение
       setCurrentValue(""); // Сбрасываем текущее значение для нового ввода
+    } else if (operatorValue !== operator && operator !== "") {
+      // Если новый оператор отличается от предыдущего:
+      setOperator(operatorValue); // Устанавливаем новый оператор
+      console.log("не первая операция, Оператор был изменен ");
+
+      setPreviousValue(currentValue); // Устанавливаем предыдущее значение
+      setCurrentValue(""); // Сбрасываем текущее значение для нового ввода
+    } else if (operator !== "" && previousValue !== 0 && currentValue !== 0) {
+      // calculateResult();
+      return;
     } else {
-      // console.log("qeqwe", previousValue, currentValue);
       console.log("error", operator);
+      return;
+    }
+
+    if (currentValue === 0) {
+      console.log(
+        "previousValue1",
+        previousValue,
+        "operator",
+        operator,
+        "currentValue",
+        currentValue
+      );
+      setDisplay(`0 ${operatorValue}`);
+    } else if (previousValue !== "") {
+      console.log(
+        "previousValue2",
+        previousValue,
+        "operator",
+        operator,
+        "currentValue",
+        currentValue
+      );
+      setDisplay(`${previousValue} ${operator}`);
+    } else {
+      console.log(
+        "previousValue3",
+        previousValue,
+        "operator",
+        operator,
+        "currentValue",
+        currentValue
+      );
+      setDisplay(`${previousValue} ${operator} ${currentValue}`);
     }
   }
 
@@ -296,6 +375,8 @@ function Calculator() {
     setOperator("");
     setPreviousValue("");
     setAccumulator(null);
+    setIsHistoryVisible(false);
+    setHistory([]);
   }
 
   function handleEqualsClick() {
@@ -315,14 +396,32 @@ function Calculator() {
 
   return (
     <div className="calculator">
-      <div>
-        <div className="generalBtn">
-          <div className="btn">1</div>
-          <div className="btn">2</div>
-          <div className="btn">3</div>
+      <div className="generalBtn">
+        <div className="btn">
+          <img src={question} alt="Question" />
         </div>
-        <div className="display">{display}</div>
+        <div className="btn">
+          <img src={sun} alt="Sun" />
+        </div>
+        <div className="btn">
+          <img src={tooth} alt="Tooth" />
+        </div>
       </div>
+      <div className="history">
+        {isHistoryVisible && (
+          <div>
+            <ul>
+              {history.map((entry, index) => (
+                <li key={index}>
+                  <span>{entry.expression}</span> = <span>{entry.result}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+
+      <div className="display">{display}</div>
       <div className="buttons">
         <div className="row">
           <button className="clear operator" onClick={handleClearClick}>
@@ -392,9 +491,9 @@ function Calculator() {
               </button>
             </div>
           </div>
-            <button className="calculate" onClick={handleEqualsClick}>
-              =
-            </button>
+          <button className="calculate" onClick={handleEqualsClick}>
+            =
+          </button>
         </div>
       </div>
     </div>

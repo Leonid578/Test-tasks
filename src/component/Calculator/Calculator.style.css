@@ -12,6 +12,10 @@
   width: 375px;
 }
 
+.history{
+  height: 169px;
+}
+
 .display {
   text-align: right;
   font-size: 40px;
@@ -41,6 +45,10 @@
   display: flex;
   cursor: pointer;
   margin-left: 5px;
+}
+
+.btn:hover{
+  color:white;
 }
 
 .container {
