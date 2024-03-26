@@ -23,6 +23,10 @@ function Calculator() {
     setIsHistoryVisible(true); // Показываем историю после добавления записи
   }
 
+  function directInput(keyOperator) {
+    setOperator(keyOperator);
+  }
+
   function calculateResult() {
     let result = "0";
 
@@ -201,12 +205,16 @@ function Calculator() {
       result.replace(/\B(?=(\d{3})+(?!\d))/g, " ")
       // .replace(/\.?0+$/, '')
     );
+
     setAccumulator(result);
 
     addToHistory({
-      expression: `${previousValue} ${operator} ${currentValue}`,
+      expression: `${
+        accumulator ? accumulator : previousValue
+      } ${operator} ${currentValue}`,
       result: result,
     });
+    setPreviousValue(null);
   }
 
   function formatNumber(newResult) {
@@ -268,7 +276,9 @@ function Calculator() {
       setDisplay("0.444");
       return;
     } else if (display === "0" || currentValue === "0") {
-      setDisplay(number.replace(/\.?0+$/, ""));
+      // console.log("number", number);
+      setDisplay(number);
+      // setDisplay(number.replace(/\.?0+$/, ""));
       setCurrentValue(number);
     } else {
       setDisplay(() => {
@@ -314,20 +324,30 @@ function Calculator() {
   }
 
   function handleOperatorClick(operatorValue) {
+    console.log("operatorValue ", operatorValue);
     if (operator === "") {
       // Если оператор еще не был установлен (первая операция):
       setOperator(operatorValue); // Устанавливаем оператор
-      console.log("первая операция, устаовили оператор");
-
+      console.log("первая операция, установили оператор", operator);
+      console.log("currentValue + operatorValue", currentValue + operatorValue);
       setPreviousValue(currentValue); // Устанавливаем предыдущее значение
       setCurrentValue(""); // Сбрасываем текущее значение для нового ввода
-    } else if (operatorValue !== operator && operator !== "") {
+    } else if (
+      operatorValue !== operator
+      //  && operator !== ""
+    ) {
       // Если новый оператор отличается от предыдущего:
-      setOperator(operatorValue); // Устанавливаем новый оператор
-      console.log("не первая операция, Оператор был изменен ");
-
-      setPreviousValue(currentValue); // Устанавливаем предыдущее значение
-      setCurrentValue(""); // Сбрасываем текущее значение для нового ввода
+      if (previousValue !== "") {
+        setOperator(operatorValue);
+        setDisplay(`${previousValue} ${operatorValue}`);
+        console.log("previousValue !== '' ", operatorValue);
+        return;
+      } else {
+        setOperator(operatorValue); // Устанавливаем новый оператор
+        console.log("не первая операция, Оператор был изменен ", operatorValue);
+        setPreviousValue(currentValue); // Устанавливаем предыдущее значение
+        setCurrentValue(""); // Сбрасываем текущее значение для нового ввода
+      }
     } else if (operator !== "" && previousValue !== 0 && currentValue !== 0) {
       // calculateResult();
       return;
@@ -336,7 +356,7 @@ function Calculator() {
       return;
     }
 
-    if (currentValue === 0) {
+    if (currentValue !== "") {
       console.log(
         "previousValue1",
         previousValue,
@@ -345,7 +365,17 @@ function Calculator() {
         "currentValue",
         currentValue
       );
-      setDisplay(`0 ${operatorValue}`);
+      setDisplay(`${currentValue} ${operatorValue}`);
+    } else if (operatorValue !== operator) {
+      console.log(
+        "previousValue22",
+        previousValue,
+        "operator",
+        operator,
+        "currentValue",
+        currentValue
+      );
+      setDisplay(`${previousValue} ${operatorValue}`);
     } else if (previousValue !== "") {
       console.log(
         "previousValue2",
@@ -355,7 +385,7 @@ function Calculator() {
         "currentValue",
         currentValue
       );
-      setDisplay(`${previousValue} ${operator}`);
+      setDisplay(`${previousValue} ${operatorValue}`);
     } else {
       console.log(
         "previousValue3",
@@ -365,15 +395,16 @@ function Calculator() {
         "currentValue",
         currentValue
       );
+      // setDisplay(`${previousValue} ${operatorValue}`);
       setDisplay(`${previousValue} ${operator} ${currentValue}`);
     }
   }
 
   function handleClearClick() {
     setDisplay("0");
-    setCurrentValue("");
+    setCurrentValue(0);
     setOperator("");
-    setPreviousValue("");
+    setPreviousValue(null);
     setAccumulator(null);
     setIsHistoryVisible(false);
     setHistory([]);

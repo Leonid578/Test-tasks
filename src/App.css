@@ -4,6 +4,8 @@
   text-align: center;
   height: 100vh;
   width: 100%;
-  background: linear-gradient(to bottom, #0099ff 0%, #00cc66 50%);
+  background: linear-gradient(115.19deg, #FFCDD7 -13.95%, #A5F3FC 6.75%, #BBF7D0 31.04%, #B0C8FF 55.3%, #E9D5FF 71.97%, #FFC5CC 89.99%);
+
+  /* background: linear-gradient(to bottom, #0099ff 0%, #00cc66 50%); */
    /* background: linear-gradient(to bottom, #00ff99 0%, #336600 100%); */
 }
