@@ -5,7 +5,7 @@ import { IoArrowBack } from "react-icons/io5";
 import question from "../image/png/question.png";
 import sun from "../image/png/sun.png";
 import tooth from "../image/png/tooth.png";
-import { number } from "prop-types";
+// import { number } from "prop-types";
 
 function Calculator() {
   const [display, setDisplay] = useState("0");
@@ -16,16 +16,17 @@ function Calculator() {
 
   const [history, setHistory] = useState([]); // Состояние для хранения истории
   const [isHistoryVisible, setIsHistoryVisible] = useState(false); // Состояние для отображения истории
+  const limitedHistory = history.slice(0, 5);
 
   // Функция для добавления записи в историю
   function addToHistory(entry) {
-    setHistory([...history, entry]);
+    setHistory([entry, ...history]);
     setIsHistoryVisible(true); // Показываем историю после добавления записи
   }
 
-  function directInput(keyOperator) {
-    setOperator(keyOperator);
-  }
+  // function directInput(keyOperator) {
+  //   setOperator(keyOperator);
+  // }
 
   function calculateResult() {
     let result = "0";
@@ -256,10 +257,6 @@ function Calculator() {
   }
 
   function handleNumberClick(number, returnFormattedNumber) {
-    // console.log("previousValue", previousValue);
-    // console.log("CurrentValue", currentValue);
-    // console.log(returnFormattedNumber);
-    // console.log(formattedNumber);
     const proverka = display.includes(".");
 
     if (display === "0" && number === ".") {
@@ -273,54 +270,37 @@ function Calculator() {
       console.log("выходим парни");
       return;
     } else if (proverka && currentValue === "0" && number === ".") {
-      setDisplay("0.444");
+      setDisplay("хмммммм]");
       return;
     } else if (display === "0" || currentValue === "0") {
-      // console.log("number", number);
-      setDisplay(number);
-      // setDisplay(number.replace(/\.?0+$/, ""));
+      // setDisplay(number);
+      setDisplay(number.replace(/\.?0+$/, ""));
       setCurrentValue(number);
+    } else if(previousValue !== null){
+      setDisplay(() => {
+        const newResult = currentValue + number;
+        setCurrentValue(newResult);
+        return formatNumber(newResult);
+      });
+      setCurrentValue(returnFormattedNumber);
+      setDisplay(`${previousValue} ${operator} ${currentValue + number}`);
     } else {
       setDisplay(() => {
         const newResult = currentValue + number;
         setCurrentValue(newResult);
         return formatNumber(newResult);
       });
-      // setCurrentValue(currentValue + number);
       setCurrentValue(returnFormattedNumber);
-    }
 
-    // if (currentValue === 0) {
-    //   console.log(
-    //     "previousValue1",
-    //     previousValue,
-    //     "operator",
-    //     operator,
-    //     "currentValue",
-    //     currentValue
-    //   );
-    //   setDisplay(`0 ${operator}`);
-    // } else if (previousValue !== "") {
-    //   console.log(
-    //     "previousValue2",
-    //     previousValue,
-    //     "operator",
-    //     operator,
-    //     "currentValue",
-    //     currentValue
-    //   );
-    //   setDisplay(`${previousValue} ${operator}`);
-    // } else {
-    //   console.log(
-    //     "previousValue3",
-    //     previousValue,
-    //     "operator",
-    //     operator,
-    //     "currentValue",
-    //     currentValue
-    //   );
-    //   setDisplay(`${previousValue} ${operator} ${currentValue}`);
-    // }
+      console.log(
+        "previousValue1",
+        previousValue,
+        "operator",
+        operator,
+        "currentValue",
+        currentValue
+      );
+    }
   }
 
   function handleOperatorClick(operatorValue) {
@@ -438,20 +418,19 @@ function Calculator() {
           <img src={tooth} alt="Tooth" />
         </div>
       </div>
-      <div className="history">
-        {isHistoryVisible && (
-          <div>
-            <ul>
-              {history.map((entry, index) => (
-                <li key={index}>
+      <div className="containerHistory">
+        <div className="history">
+          {isHistoryVisible && (
+            <ul className="history-list">
+              {limitedHistory.reverse().map((entry, index) => (
+                <li key={index} className="history-item">
                   <span>{entry.expression}</span> = <span>{entry.result}</span>
                 </li>
               ))}
             </ul>
-          </div>
-        )}
+          )}
+        </div>
       </div>
-
       <div className="display">{display}</div>
       <div className="buttons">
         <div className="row">
