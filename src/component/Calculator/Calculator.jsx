@@ -24,10 +24,6 @@ function Calculator() {
     setIsHistoryVisible(true); // Показываем историю после добавления записи
   }
 
-  // function directInput(keyOperator) {
-  //   setOperator(keyOperator);
-  // }
-
   function calculateResult() {
     let result = "0";
 
@@ -37,17 +33,12 @@ function Calculator() {
 
         if (currentValue === "" && accumulator === null) {
           // при повторном нажатии на +
-
+          console.log("1+, выходим парни", result);
           return;
-          // setAccumulator(previousValue);
-
-          // result = +previousValue + +previousValue;
-
-          // console.log("1+", result);
         } else if (currentValue === "" && accumulator !== null) {
           result = (+accumulator + +previousValue).toString();
           // result = (+accumulator + +previousValue).toString();
-          console.log("2", result);
+          console.log("2+", result);
         } else if (
           // при втором действии слажения
           previousValue !== 0 &&
@@ -58,16 +49,15 @@ function Calculator() {
           result = parseFloat(result);
           // .toFixed(6)
           setAccumulator(result);
-
-          console.log("3", result);
+          console.log("3+", result);
         } else {
           // при первом действии слажения
           result = +previousValue + +currentValue;
-          console.log("previousValue", +previousValue);
-          console.log("CurrentValue", +currentValue);
+          // console.log("previousValue", +previousValue);
+          // console.log("CurrentValue", +currentValue);
 
           setAccumulator(currentValue);
-          console.log(" '4' при первом действии слажения", result);
+          console.log(" '4+' при первом действии слажения", result);
         }
         break;
 
@@ -76,17 +66,10 @@ function Calculator() {
 
         if (currentValue === "" && accumulator === null) {
           // при повторном нажатии на -
-
+          console.log("1-, выходим парни", result);
           return;
-          // setAccumulator(previousValue);
-
-          // result = +previousValue - +previousValue;
-
-          // console.log("1-", result);
         } else if (currentValue === "" && accumulator !== null) {
           result = (+accumulator - +previousValue).toString();
-          // result = (+accumulator + +previousValue).toString();
-
           console.log("2-", result);
         } else if (
           // при втором действии вычитания
@@ -94,10 +77,13 @@ function Calculator() {
           currentValue !== 0 &&
           accumulator !== null
         ) {
+          console.log("previousValue", previousValue);
+          console.log("currentValue", currentValue);
+          console.log("accumulator", accumulator);
           result = +accumulator - +currentValue;
-          result = parseFloat(result);
+          // result = parseFloat(result);
           // .toFixed(6)
-          setAccumulator(result);
+          setAccumulator(parseFloat(result));
           console.log("3-", result);
         } else {
           // при первом действии вычитания
@@ -270,13 +256,17 @@ function Calculator() {
       console.log("выходим парни");
       return;
     } else if (proverka && currentValue === "0" && number === ".") {
-      setDisplay("хмммммм]");
+      setDisplay("хмммммм");
       return;
     } else if (display === "0" || currentValue === "0") {
       // setDisplay(number);
+      // первое действие
       setDisplay(number.replace(/\.?0+$/, ""));
       setCurrentValue(number);
-    } else if(previousValue !== null){
+      console.log(
+        "1, первое действие",
+      );
+    } else if (previousValue !== null) {
       setDisplay(() => {
         const newResult = currentValue + number;
         setCurrentValue(newResult);
@@ -284,23 +274,30 @@ function Calculator() {
       });
       setCurrentValue(returnFormattedNumber);
       setDisplay(`${previousValue} ${operator} ${currentValue + number}`);
-    } else {
-      setDisplay(() => {
-        const newResult = currentValue + number;
-        setCurrentValue(newResult);
-        return formatNumber(newResult);
-      });
-      setCurrentValue(returnFormattedNumber);
-
       console.log(
-        "previousValue1",
-        previousValue,
-        "operator",
-        operator,
-        "currentValue",
-        currentValue
+        "2",
       );
+      console.log("currentValue", currentValue);
+    } else {
+      // setDisplay(() => {
+      //   const newResult = currentValue + number;
+      //   setCurrentValue(newResult);
+      //   console.log(
+      //     "3",
+      //   );
+      //   return formatNumber(newResult);
+      // });
+      setDisplay(`${accumulator} ${operator} ${number}`);
+      setCurrentValue(returnFormattedNumber);
     }
+    console.log(
+      "previousValue1",
+      previousValue,
+      "operator",
+      operator,
+      "currentValue",
+      currentValue
+    );
   }
 
   function handleOperatorClick(operatorValue) {
@@ -314,13 +311,22 @@ function Calculator() {
       setCurrentValue(""); // Сбрасываем текущее значение для нового ввода
     } else if (
       operatorValue !== operator
-      //  && operator !== ""
     ) {
       // Если новый оператор отличается от предыдущего:
       if (previousValue !== "") {
         setOperator(operatorValue);
-        setDisplay(`${previousValue} ${operatorValue}`);
+        setDisplay(`${accumulator} ${operatorValue}`);
         console.log("previousValue !== '' ", operatorValue);
+        // console.log(
+        //   "accumulator",
+        //   accumulator,
+        //   "previousValue1",
+        //   previousValue,
+        //   "operator",
+        //   operator,
+        //   "currentValue",
+        //   currentValue
+        // );
         return;
       } else {
         setOperator(operatorValue); // Устанавливаем новый оператор
@@ -329,10 +335,17 @@ function Calculator() {
         setCurrentValue(""); // Сбрасываем текущее значение для нового ввода
       }
     } else if (operator !== "" && previousValue !== 0 && currentValue !== 0) {
-      // calculateResult();
+      console.log("хммм ", operatorValue);
+      setCurrentValue("");
+      return;
+    } else if (operator !== null 
+      // && currentValue === ""
+      ) {
+      console.log("operator !== null ", operator);
+      setDisplay(`${accumulator} ${operator}`);
       return;
     } else {
-      console.log("error", operator);
+      console.log("error, парни! все сюда", operator);
       return;
     }
 
