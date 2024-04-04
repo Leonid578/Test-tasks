@@ -18,10 +18,10 @@ function Calculator() {
   const [isHistoryVisible, setIsHistoryVisible] = useState(false); // Состояние для отображения истории
   const limitedHistory = history.slice(0, 5);
 
-  // Функция для добавления записи в историю
   function addToHistory(entry) {
+    // Функция для добавления записи в историю
     setHistory([entry, ...history]);
-    setIsHistoryVisible(true); // Показываем историю после добавления записи
+    setIsHistoryVisible(true);
   }
 
   function calculateResult() {
@@ -29,15 +29,13 @@ function Calculator() {
 
     switch (operator) {
       case "+":
-        console.log("case '+'");
-
         if (currentValue === "" && accumulator === null) {
           // при повторном нажатии на +
           console.log("1+, выходим парни", result);
           return;
         } else if (currentValue === "" && accumulator !== null) {
-          result = (+accumulator + +previousValue).toString();
-          // result = (+accumulator + +previousValue).toString();
+          // при повторном дейстивии
+          result = +accumulator + +previousValue;
           console.log("2+", result);
         } else if (
           // при втором действии слажения
@@ -45,31 +43,37 @@ function Calculator() {
           currentValue !== 0 &&
           accumulator !== null
         ) {
-          result = +accumulator + +currentValue;
-          result = parseFloat(result);
-          // .toFixed(6)
-          setAccumulator(result);
+          console.log(
+            "accumulator",
+            accumulator,
+            "previousValue",
+            previousValue,
+            "operator",
+            operator,
+            "currentValue",
+            currentValue
+          );
+          result = parseFloat(+accumulator + +currentValue);
+          // setAccumulator(result);
           console.log("3+", result);
         } else {
           // при первом действии слажения
           result = +previousValue + +currentValue;
           // console.log("previousValue", +previousValue);
           // console.log("CurrentValue", +currentValue);
-
           setAccumulator(currentValue);
           console.log(" '4+' при первом действии слажения", result);
         }
         break;
 
       case "-":
-        console.log("case '-' ");
-
         if (currentValue === "" && accumulator === null) {
           // при повторном нажатии на -
           console.log("1-, выходим парни", result);
           return;
         } else if (currentValue === "" && accumulator !== null) {
-          result = (+accumulator - +previousValue).toString();
+          // при повторном дейстивии
+          result = +accumulator - +previousValue;
           console.log("2-", result);
         } else if (
           // при втором действии вычитания
@@ -77,13 +81,18 @@ function Calculator() {
           currentValue !== 0 &&
           accumulator !== null
         ) {
-          console.log("previousValue", previousValue);
-          console.log("currentValue", currentValue);
-          console.log("accumulator", accumulator);
-          result = +accumulator - +currentValue;
-          // result = parseFloat(result);
-          // .toFixed(6)
-          setAccumulator(parseFloat(result));
+          console.log(
+            "accumulator",
+            accumulator,
+            "previousValue",
+            previousValue,
+            "operator",
+            operator,
+            "currentValue",
+            currentValue
+          );
+          result = parseFloat(+accumulator - +currentValue);
+          // setAccumulator(parseFloat(result));
           console.log("3-", result);
         } else {
           // при первом действии вычитания
@@ -106,7 +115,7 @@ function Calculator() {
 
           // console.log("1*", result);
         } else if (currentValue === "" && accumulator !== null) {
-          result = (+accumulator * +previousValue).toString();
+          result = +accumulator * +previousValue;
           console.log("2*", result);
         } else if (
           // при втором действии *
@@ -148,7 +157,7 @@ function Calculator() {
 
           // console.log("1/", result);
         } else if (currentValue === "" && accumulator !== null) {
-          const roundedNumber = (+accumulator / +previousValue).toString();
+          const roundedNumber = +accumulator / +previousValue;
           result = Math.round(roundedNumber * 1e4) / 1e4;
 
           console.log("2/", result);
@@ -175,10 +184,8 @@ function Calculator() {
 
     if (!isNaN(result)) {
       // Если результат - число, отображаем его в виде строки
-      result = result
-        .toFixed(6)
-        .toString()
-        .replace(/\.?0+$/, "");
+      result = result.toFixed(6).toString()
+      .replace(/\.?0+$/, "");
     } else {
       // Если результат не является числом
       setDisplay("результат не является числом");
@@ -189,8 +196,7 @@ function Calculator() {
     }
 
     setDisplay(
-      result.replace(/\B(?=(\d{3})+(?!\d))/g, " ")
-      // .replace(/\.?0+$/, '')
+      result.replace(/\B(?=(\d{3})+(?!\d))/g, " ").replace(/\.?0+$/, "")
     );
 
     setAccumulator(result);
@@ -206,15 +212,14 @@ function Calculator() {
 
   function formatNumber(newResult) {
     // Преобразуем число в строку и разделяем его на целую и дробную части
-
-    const parts = newResult.toString().split(".");
     let isNegative;
-
+    const parts = newResult.toString().split(".");
     // Получаем целую и дробную части
     let integerPart = parts[0];
     const decimalPart = parts[1] ? "." + parts[1] : "";
-    // console.log("parts[0]" , parts[0], "parts[1]" , parts[1]);
 
+    console.log("parts[1]", parts[1]);
+    console.log("parts[0]", parts[0]);
     // Форматируем целую часть
     if (integerPart.includes("-")) {
       // Если целая часть содержит знак минуса, удаляем его и помечаем, что число отрицательное
@@ -223,7 +228,6 @@ function Calculator() {
     } else {
       isNegative = false;
     }
-
     // // Если абсолютное значение целой части больше или равно 1000, добавляем пробелы между каждыми тремя цифрами
     // if (Math.abs(parseInt(integerPart)) >= 1000) {
     //   integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
@@ -231,9 +235,9 @@ function Calculator() {
 
     // Собираем число с учетом знака и дробной части
     let formattedNumber = (isNegative ? "-" : "") + integerPart + decimalPart;
-    const returnFormattedNumber = parseFloat(formattedNumber)
-      .toFixed(6)
-      .replace(/\.?0+$/, "");
+    const returnFormattedNumber = parseFloat(formattedNumber).toFixed(6)
+    .replace(/\.?0+$/, "");
+
     // Округляем до 4 знаков после запятой только если количество знаков превышает 4
     // if (decimalPart.length > 4) {
     //   formattedNumber = (Math.round(parseFloat(formattedNumber) * 1e4) / 1e4).toFixed(4);
@@ -242,7 +246,7 @@ function Calculator() {
     return returnFormattedNumber;
   }
 
-  function handleNumberClick(number, returnFormattedNumber) {
+  function handleNumberClick(number) {
     const proverka = display.includes(".");
 
     if (display === "0" && number === ".") {
@@ -259,39 +263,44 @@ function Calculator() {
       setDisplay("хмммммм");
       return;
     } else if (display === "0" || currentValue === "0") {
-      // setDisplay(number);
       // первое действие
-      setDisplay(number.replace(/\.?0+$/, ""));
+      setDisplay(number);
       setCurrentValue(number);
-      console.log(
-        "1, первое действие",
+    } else if((previousValue === null || previousValue === "") && operator === ""){
+      const newResult = currentValue + number;
+      setCurrentValue(newResult);
+      setDisplay(
+        `${formatNumber(newResult).replace(
+          /\B(?=(\d{3})+(?!\d))/g,
+          " "
+        )}`
       );
     } else if (previousValue !== null) {
-      setDisplay(() => {
-        const newResult = currentValue + number;
-        setCurrentValue(newResult);
-        return formatNumber(newResult);
-      });
-      setCurrentValue(returnFormattedNumber);
-      setDisplay(`${previousValue} ${operator} ${currentValue + number}`);
-      console.log(
-        "2",
+      const newResult = currentValue + number;
+      setCurrentValue(newResult);
+      setDisplay(
+        `${
+          previousValue
+          // .replace(/\B(?=(\d{3})+(?!\d))/g, " " )
+        } ${operator} ${formatNumber(newResult).replace(
+          /\B(?=(\d{3})+(?!\d))/g,
+          " "
+        )}`
       );
-      console.log("currentValue", currentValue);
+      console.log("2 previousValue = ", previousValue);
+      console.log("2 currentValue = ", currentValue);
     } else {
-      // setDisplay(() => {
-      //   const newResult = currentValue + number;
-      //   setCurrentValue(newResult);
-      //   console.log(
-      //     "3",
-      //   );
-      //   return formatNumber(newResult);
-      // });
-      setDisplay(`${accumulator} ${operator} ${number}`);
-      setCurrentValue(returnFormattedNumber);
+      const newResult = currentValue + number;
+      setCurrentValue(newResult);
+      setDisplay(`${accumulator} ${operator} ${formatNumber(newResult)}`);
+      console.log("3");
     }
     console.log(
-      "previousValue1",
+      "NumberClick",
+      number,
+      "accumulator",
+      accumulator,
+      "previousValue",
       previousValue,
       "operator",
       operator,
@@ -301,36 +310,33 @@ function Calculator() {
   }
 
   function handleOperatorClick(operatorValue) {
-    console.log("operatorValue ", operatorValue);
     if (operator === "") {
-      // Если оператор еще не был установлен (первая операция):
-      setOperator(operatorValue); // Устанавливаем оператор
-      console.log("первая операция, установили оператор", operator);
-      console.log("currentValue + operatorValue", currentValue + operatorValue);
+      // первая операция, установили оператор
+      setOperator(operatorValue);
+      console.log(
+        "currentValue + operatorValue = ",
+        currentValue + operatorValue
+      );
       setPreviousValue(currentValue); // Устанавливаем предыдущее значение
       setCurrentValue(""); // Сбрасываем текущее значение для нового ввода
-    } else if (
-      operatorValue !== operator
-    ) {
+    } else if (operatorValue !== operator) {
       // Если новый оператор отличается от предыдущего:
+
       if (previousValue !== "") {
         setOperator(operatorValue);
         setDisplay(`${accumulator} ${operatorValue}`);
-        console.log("previousValue !== '' ", operatorValue);
-        // console.log(
-        //   "accumulator",
-        //   accumulator,
-        //   "previousValue1",
-        //   previousValue,
-        //   "operator",
-        //   operator,
-        //   "currentValue",
-        //   currentValue
-        // );
+        console.log("previousValue !== '' ");
+        console.log(
+          "не первая операция, Оператор был изменен на ",
+          operatorValue
+        );
         return;
       } else {
         setOperator(operatorValue); // Устанавливаем новый оператор
-        console.log("не первая операция, Оператор был изменен ", operatorValue);
+        console.log(
+          "не первая операция, Оператор был изменен на ",
+          operatorValue
+        );
         setPreviousValue(currentValue); // Устанавливаем предыдущее значение
         setCurrentValue(""); // Сбрасываем текущее значение для нового ввода
       }
@@ -338,9 +344,10 @@ function Calculator() {
       console.log("хммм ", operatorValue);
       setCurrentValue("");
       return;
-    } else if (operator !== null 
+    } else if (
+      operator !== null
       // && currentValue === ""
-      ) {
+    ) {
       console.log("operator !== null ", operator);
       setDisplay(`${accumulator} ${operator}`);
       return;
@@ -391,6 +398,17 @@ function Calculator() {
       // setDisplay(`${previousValue} ${operatorValue}`);
       setDisplay(`${previousValue} ${operator} ${currentValue}`);
     }
+
+    console.log(
+      "accumulator",
+      accumulator,
+      "currentValue",
+      currentValue,
+      "operator",
+      operatorValue,
+      "previousValue",
+      previousValue
+    );
   }
 
   function handleClearClick() {
