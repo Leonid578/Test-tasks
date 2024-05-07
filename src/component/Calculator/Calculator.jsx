@@ -29,59 +29,68 @@ function Calculator() {
 
     switch (operator) {
       case "+":
-        console.log(
-          "previousValue ",
-          previousValue,
-          "currentValue ",
-          currentValue,
-          "operator ",
-          operator,
-          "accumulator ",
-          accumulator
-        );
+        // console.log(
+        //   "previousValue ",
+        //   previousValue,
+        //   "currentValue ",
+        //   currentValue,
+        //   "operator ",
+        //   operator,
+        //   "accumulator ",
+        //   accumulator
+        // );
         if (currentValue === "" && accumulator === null) {
+          console.log("currentValue ", currentValue);
           return;
         } else if (currentValue === "" && accumulator !== null) {
+          console.log("currentValue ", currentValue);
           result = +accumulator + +previousValue;
         } else if (
           previousValue !== 0 &&
           currentValue !== 0 &&
           accumulator !== null
         ) {
+          console.log("currentValue ", currentValue);
           result = parseFloat(+accumulator + +currentValue);
-          setCurrentValue(null) // важно оставить, чтоб не добавл. 2я цифра при смене operator
+          // setCurrentValue(null) // важно оставить, чтоб не добавл. 2я цифра при смене operator
         } else {
+          console.log("currentValue ", currentValue);
           result = +previousValue + +currentValue;
-          setAccumulator(currentValue); 
+          setAccumulator(currentValue);
         }
         break;
 
       case "-":
-        console.log(
-          "previousValue ",
-          previousValue,
-          "currentValue ",
-          currentValue,
-          "operator ",
-          operator,
-          "accumulator ",
-          accumulator
-        );
+        // console.log(
+        //   "previousValue ",
+        //   previousValue,
+        //   "currentValue ",
+        //   currentValue,
+        //   "operator ",
+        //   operator,
+        //   "accumulator ",
+        //   accumulator
+        // );
+
         if (currentValue === "" && accumulator === null) {
+          console.log("currentValue ", currentValue);
           return;
         } else if (currentValue === "" && accumulator !== null) {
+          console.log("currentValue ", currentValue);
           result = +accumulator - +previousValue;
         } else if (
           previousValue !== 0 &&
           currentValue !== 0 &&
           accumulator !== null
         ) {
+          console.log("currentValue ", currentValue);
           result = parseFloat(+accumulator - +currentValue);
-          setCurrentValue(null) // важно оставить, чтоб не добавл. 2я цифра при смене operator
+          // setCurrentValue(null) // важно оставить, чтоб не добавл. 2я цифра при смене operator
         } else {
-          console.log("hshs")
-          result = +previousValue - +currentValue;
-          setAccumulator(currentValue); 
+          console.log("currentValue ", currentValue);
+          console.log("error");
+          // result = +previousValue - +currentValue;
+          // setAccumulator(currentValue);
         }
         break;
 
@@ -96,9 +105,9 @@ function Calculator() {
           accumulator !== null
         ) {
           result = parseFloat(+accumulator * +currentValue);
-          setAccumulator(result); 
+          setAccumulator(result);
         } else {
-          console.log("hshs")
+          console.log("hshs");
           result = +previousValue * +currentValue;
           setAccumulator(currentValue);
         }
@@ -124,7 +133,7 @@ function Calculator() {
           accumulator !== null
         ) {
           const roundedNumber = +accumulator / +currentValue;
-          setAccumulator(roundedNumber); 
+          setAccumulator(roundedNumber);
         } else {
           const roundedNumber = +previousValue / +currentValue;
           setAccumulator(currentValue);
@@ -254,16 +263,8 @@ function Calculator() {
           " "
         )}`
       );
-    } else if (currentValue === null) {
-      const newResult = number;
-      setCurrentValue(newResult);
-      setDisplay(
-        `${accumulator} ${operator} ${
-          // formatNumber(newResult)
-          newResult
-        }`
-      );
-    } else {
+    } else if (currentValue !== "") {
+      console.log("currentValue ", currentValue);
       const newResult = currentValue + number;
       setCurrentValue(newResult);
       setDisplay(
@@ -272,6 +273,13 @@ function Calculator() {
           newResult
         }`
       );
+    } else if (currentValue === "") {
+      console.log("currentValue ", currentValue);
+      setCurrentValue(number);
+      setDisplay(`${accumulator} ${operator} ${number}`);
+      return;
+    } else {
+      console.log("error");
       return;
     }
   }
