@@ -184,8 +184,15 @@ function Calculator() {
 
     if (!isNaN(result)) {
       // Если результат - число, отображаем его в виде строки
-      result = result.toFixed(6).toString()
-      .replace(/\.?0+$/, "");
+      // result = result.toFixed(6).toString()
+      // .replace(/\.?0+$/, "");
+
+      if (Number.isInteger(+result)) {
+        result = +result;
+      } else {
+        // Если результат - дробное число, форматируем его, чтобы убрать конечный ноль
+        result = result.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ").replace(/(\.\d*?)0+$/, "$1").replace(/\.$/, "");
+      }
     } else {
       // Если результат не является числом
       setDisplay("результат не является числом");
@@ -194,9 +201,9 @@ function Calculator() {
       setOperator("");
       return;
     }
-
-    setDisplay(
-      result.replace(/\B(?=(\d{3})+(?!\d))/g, " ").replace(/\.?0+$/, "")
+    
+    setDisplay(result.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")
+    // .replace(/\.?0+$/, "")
     );
 
     setAccumulator(result);
@@ -254,7 +261,18 @@ function Calculator() {
       setCurrentValue("0.");
       console.log("previousValue", previousValue);
       console.log("CurrentValue", currentValue);
-    } else if (proverka && currentValue !== "0" && number === ".") {
+    }else if (previousValue !== "" && number === ".") {
+      console.log("previousValue", previousValue);
+      console.log("CurrentValue", currentValue);
+    
+      const newResult = 0 + currentValue + number;
+      setDisplay(`${previousValue} ${operator} ${0 + number}`);
+      setCurrentValue(newResult);
+      // setAccumulator(newResult)
+      console.log("newResult", newResult);
+      return;
+    }
+     else if (proverka && currentValue !== "0" && number === ".") {
       console.log("previousValue", previousValue);
       console.log("CurrentValue", currentValue);
       console.log("выходим парни");
