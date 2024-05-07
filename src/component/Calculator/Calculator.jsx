@@ -26,7 +26,16 @@ function Calculator() {
 
   function calculateResult() {
     let result = "0";
-
+    // console.log(
+    //   "previousValue ",
+    //   previousValue,
+    //   "currentValue ",
+    //   currentValue,
+    //   "operator ",
+    //   operator,
+    //   "accumulator ",
+    //   accumulator
+    // );
     switch (operator) {
       case "+":
         // console.log(
@@ -52,26 +61,12 @@ function Calculator() {
         ) {
           console.log("currentValue ", currentValue);
           result = parseFloat(+accumulator + +currentValue);
-          // setCurrentValue(null) // важно оставить, чтоб не добавл. 2я цифра при смене operator
         } else {
-          console.log("currentValue ", currentValue);
           result = +previousValue + +currentValue;
-          setAccumulator(currentValue);
         }
         break;
 
       case "-":
-        // console.log(
-        //   "previousValue ",
-        //   previousValue,
-        //   "currentValue ",
-        //   currentValue,
-        //   "operator ",
-        //   operator,
-        //   "accumulator ",
-        //   accumulator
-        // );
-
         if (currentValue === "" && accumulator === null) {
           console.log("currentValue ", currentValue);
           return;
@@ -85,12 +80,8 @@ function Calculator() {
         ) {
           console.log("currentValue ", currentValue);
           result = parseFloat(+accumulator - +currentValue);
-          // setCurrentValue(null) // важно оставить, чтоб не добавл. 2я цифра при смене operator
         } else {
-          console.log("currentValue ", currentValue);
-          console.log("error");
-          // result = +previousValue - +currentValue;
-          // setAccumulator(currentValue);
+          result = +previousValue - +currentValue;
         }
         break;
 
@@ -219,16 +210,16 @@ function Calculator() {
 
   function handleNumberClick(number) {
     const proverka = display.includes(".");
-    console.log(
-      "previousValue ",
-      previousValue,
-      "currentValue ",
-      currentValue,
-      "operator ",
-      operator,
-      "accumulator ",
-      accumulator
-    );
+    // console.log(
+    //   "previousValue ",
+    //   previousValue,
+    //   "currentValue ",
+    //   currentValue,
+    //   "operator ",
+    //   operator,
+    //   "accumulator ",
+    //   accumulator
+    // );
     if (display === "0" && number === ".") {
       setDisplay("0.");
       setCurrentValue("0.");
@@ -294,14 +285,14 @@ function Calculator() {
     } else if (operatorValue !== operator) {
       // Если новый оператор отличается от предыдущего:
       setOperator(operatorValue);
-
-      if (currentValue !== "") {
+      setCurrentValue("");
+      if (accumulator !== null) {
         setDisplay(`${accumulator} ${operatorValue}`);
         return;
       } else {
-        setPreviousValue(currentValue); // Устанавливаем предыдущее значение
-        setCurrentValue(""); // Сбрасываем текущее значение для нового ввода
+        setDisplay(`${previousValue} ${operatorValue}`);
       }
+      return;
     } else if (operator !== "" && previousValue !== 0 && currentValue !== 0) {
       setCurrentValue("");
       return;
