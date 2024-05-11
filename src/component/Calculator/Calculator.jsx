@@ -210,16 +210,9 @@ function Calculator() {
 
   function handleNumberClick(number) {
     const proverka = display.includes(".");
-    // console.log(
-    //   "previousValue ",
-    //   previousValue,
-    //   "currentValue ",
-    //   currentValue,
-    //   "operator ",
-    //   operator,
-    //   "accumulator ",
-    //   accumulator
-    // );
+
+    if (display.length >= 50) return; // Проверка на максимальную длину ввода
+
     if (display === "0" && number === ".") {
       setDisplay("0.");
       setCurrentValue("0.");
@@ -241,6 +234,7 @@ function Calculator() {
       operator === ""
     ) {
       const newResult = currentValue + number;
+      // if (newResult.length >= 16) return; // Проверка на максимальную длину ввода
       setCurrentValue(newResult);
       setDisplay(
         `${formatNumber(newResult).replace(/\B(?=(\d{3})+(?!\d))/g, " ")}`
@@ -282,41 +276,31 @@ function Calculator() {
 
       setPreviousValue(currentValue); // Устанавливаем предыдущее значение
       setCurrentValue(""); // Сбрасываем текущее значение для нового ввода
+
+      if (currentValue !== "") {
+        setDisplay(`${currentValue} ${operatorValue}`);
+      }
     } else if (operatorValue !== operator) {
       // Если новый оператор отличается от предыдущего:
       setOperator(operatorValue);
-      setCurrentValue("");
       if (accumulator !== null) {
         setDisplay(`${accumulator} ${operatorValue}`);
-        return;
       } else {
         setDisplay(`${previousValue} ${operatorValue}`);
       }
-      return;
-    } else if (operator !== "" && previousValue !== 0 && currentValue !== 0) {
-      setCurrentValue("");
-      return;
-    } else if (
-      operator !== null
-      // && currentValue === ""
-    ) {
+    } else if (operatorValue === operator) {
+      if (accumulator !== null) {
+        setDisplay(`${accumulator} ${operatorValue}`);
+      } else {
+        setDisplay(`${previousValue} ${operatorValue}`);
+      }
+    } else if (operator !== null) {
       setDisplay(`${accumulator} ${operator}`);
-      return;
     } else {
       console.log("error, парни! все сюда", operator);
-      return;
     }
-
-    if (currentValue !== "") {
-      setDisplay(`${currentValue} ${operatorValue}`);
-    } else if (operatorValue !== operator) {
-      setDisplay(`${previousValue} ${operatorValue}`);
-    } else if (previousValue !== "") {
-      setDisplay(`${previousValue} ${operatorValue}`);
-    } else {
-      // setDisplay(`${previousValue} ${operatorValue}`);
-      setDisplay(`${previousValue} ${operator} ${currentValue}`);
-    }
+    setCurrentValue("");
+    return;
   }
 
   function handleClearClick() {
@@ -344,6 +328,20 @@ function Calculator() {
     });
   };
 
+  function getFontSizeClass(textLength) {
+    if (textLength > 21) {
+      return "sMOLL ";
+    } else if (textLength > 19) {
+      return "extra-small-font";
+    } else if (textLength > 17) {
+      return "smaller-font";
+    } else if (textLength > 15) {
+      return "small-font";
+    } else {
+      return ""; // Базовый размер шрифта
+    }
+  }
+
   return (
     <div className="calculator">
       <div className="generalBtn">
@@ -362,7 +360,10 @@ function Calculator() {
           {isHistoryVisible && (
             <ul className="history-list">
               {limitedHistory.reverse().map((entry, index) => (
-                <li key={index} className="history-item">
+                <li
+                  key={index}
+                  className="{`history-item ${getFontSizeClass(entry.expression.length)}`}"
+                >
                   <span>{entry.expression}</span> = <span>{entry.result}</span>
                 </li>
               ))}
@@ -370,7 +371,9 @@ function Calculator() {
           )}
         </div>
       </div>
-      <div className="display">{display}</div>
+      <div className={`display ${getFontSizeClass(display.length)}`}>
+        {display}
+      </div>
       <div className="buttons">
         <div className="row">
           <button className="clear operator" onClick={handleClearClick}>
