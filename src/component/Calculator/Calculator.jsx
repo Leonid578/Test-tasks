@@ -208,6 +208,8 @@ function Calculator() {
     return returnFormattedNumber;
   }
 
+  // ss
+
   function handleNumberClick(number) {
     const proverka = display.includes(".");
 
