@@ -208,44 +208,6 @@ function Calculator() {
     return returnFormattedNumber;
   }
 
-  // ss
-  function formatNumber(newResult) {
-    // Преобразуем число в строку и разделяем его на целую и дробную части
-    let isNegative;
-    const parts = newResult.toString().split(".");
-    // Получаем целую и дробную части
-    let integerPart = parts[0];
-    const decimalPart = parts[1] ? "." + parts[1] : "";
-
-    // console.log("parts[1]", parts[1]);
-    // console.log("parts[0]", parts[0]);
-    // Форматируем целую часть
-    if (integerPart.includes("-")) {
-      // Если целая часть содержит знак минуса, удаляем его и помечаем, что число отрицательное
-      integerPart = integerPart.replace("-", "");
-      isNegative = true;
-    } else {
-      isNegative = false;
-    }
-    // // Если абсолютное значение целой части больше или равно 1000, добавляем пробелы между каждыми тремя цифрами
-    // if (Math.abs(parseInt(integerPart)) >= 1000) {
-    //   integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-    // }
-
-    // Собираем число с учетом знака и дробной части
-    let formattedNumber = (isNegative ? "-" : "") + integerPart + decimalPart;
-    const returnFormattedNumber = parseFloat(formattedNumber)
-      .toFixed(6)
-      .replace(/\.?0+$/, "");
-
-    // Округляем до 4 знаков после запятой только если количество знаков превышает 4
-    // if (decimalPart.length > 4) {
-    //   formattedNumber = (Math.round(parseFloat(formattedNumber) * 1e4) / 1e4).toFixed(4);
-    // }
-
-    return returnFormattedNumber;
-  }
-
   function handleNumberClick(number) {
     const proverka = display.includes(".");
 
