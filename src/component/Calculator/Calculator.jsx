@@ -2,10 +2,14 @@ import { useState } from "react";
 import "./Calculator.style.css";
 // import { Container, Display, Buttons, Button, Zero } from "./Calculator.style";
 import { IoArrowBack } from "react-icons/io5";
-import question from "../image/png/question.png";
-import sun from "../image/png/sun.png";
-import tooth from "../image/png/tooth.png";
-import moon from "../image/png";
+import questionDark from "../image/png/question.png";
+import sunDark from "../image/png/sun.png";
+import toothDark from "../image/png/tooth.png";
+import moonSun from "../image/png/moon.png";
+import toothSun from "../image/png/tooth.png";
+import questionSun from "../image/png/question.png";
+
+
 // import { number } from "prop-types";
 
 function Calculator() {
@@ -18,6 +22,7 @@ function Calculator() {
   const [history, setHistory] = useState([]); // Состояние для хранения истории
   const [isHistoryVisible, setIsHistoryVisible] = useState(false); // Состояние для отображения истории
   const limitedHistory = history.slice(0, 5);
+  const [theme, setTheme] = useState(true); // Состояние для хранения истории
 
   function addToHistory(entry) {
     // Функция для добавления записи в историю
@@ -311,30 +316,36 @@ function Calculator() {
   };
 
   function getFontSizeClass(textLength) {
-    if (textLength > 21) {
+    if (textLength > 20) {
       return "sMOLL ";
-    } else if (textLength > 19) {
+    } else if (textLength > 16) {
       return "extra-small-font";
-    } else if (textLength > 17) {
+    } else if (textLength > 14) {
       return "smaller-font";
-    } else if (textLength > 15) {
+    } else if (textLength > 12) {
       return "small-font";
     } else {
       return ""; // Базовый размер шрифта
     }
   }
 
+  function switchTheme() {
+    setTheme(false)
+    return
+  }
+
+
   return (
     <div className="calculator">
       <div className="generalBtn">
         <div className="btn">
-          <img src={question} alt="Question" />
+          <img src={theme ? questionDark : questionSun} alt="Question" />
+        </div>
+        <div className="btn" onClick={switchTheme}>
+          <img src={theme ? sunDark : moonSun} alt="Sun" />
         </div>
         <div className="btn">
-          <img src={sun} alt="Sun" />
-        </div>
-        <div className="btn">
-          <img src={tooth} alt="Tooth" />
+          <img src={theme ? toothDark : toothSun} alt="Tooth" />
         </div>
       </div>
       <div className="containerHistory">

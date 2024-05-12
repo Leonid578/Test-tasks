@@ -1,25 +1,34 @@
 :root {
-  /* --accent-dark: #3ca654;
-  --accent-light: #4b66eb;
-  --bg-dark: #060606;
-  --bg-light: #fff; */
-
-
   --numbers-dark: rgba(154, 154, 154, 1);
+  --bgNumbers-dark: linear-gradient(180deg, #0f172a 0%, #334155 100%);
   --accentLight-dark: white;
   --background-dark: rgba(15, 23, 42, 1);
-  --numbers-dark: ;
+  
+
+  --numbers-light: rgba(0, 0, 0, 1);
+  --bgNumbers-light: linear-gradient(180deg, #FFFFFF 0%, #C4C4C4 100%);
+  --accentdark-light: black;
+  --background-light: rgba(247, 247, 248, 1);
+}
+
+.layout {
+  background-color: var(--bg-light);
+  color: #222;
+  height: 100%;
+}
+
+.layout.dark {
+  background-color: var(--bg-dark);
+  color: #fff;
 }
 
 body {
   margin: 0;
-  /* padding-top: 92px; */
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* background: linear-gradient(to bottom, #00ffcc 0%, #33cc33 100%); */
 }
 
 code {
