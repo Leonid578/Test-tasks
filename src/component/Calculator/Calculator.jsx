@@ -5,6 +5,7 @@ import { IoArrowBack } from "react-icons/io5";
 import question from "../image/png/question.png";
 import sun from "../image/png/sun.png";
 import tooth from "../image/png/tooth.png";
+import moon from "../image/png";
 // import { number } from "prop-types";
 
 function Calculator() {
@@ -26,28 +27,8 @@ function Calculator() {
 
   function calculateResult() {
     let result = "0";
-    // console.log(
-    //   "previousValue ",
-    //   previousValue,
-    //   "currentValue ",
-    //   currentValue,
-    //   "operator ",
-    //   operator,
-    //   "accumulator ",
-    //   accumulator
-    // );
     switch (operator) {
       case "+":
-        // console.log(
-        //   "previousValue ",
-        //   previousValue,
-        //   "currentValue ",
-        //   currentValue,
-        //   "operator ",
-        //   operator,
-        //   "accumulator ",
-        //   accumulator
-        // );
         if (currentValue === "" && accumulator === null) {
           console.log("currentValue ", currentValue);
           return;
@@ -211,7 +192,7 @@ function Calculator() {
   function handleNumberClick(number) {
     const proverka = display.includes(".");
 
-    if (display.length >= 50) return; // Проверка на максимальную длину ввода
+    if (display.length >= 33) return; // Проверка на максимальную длину ввода
 
     if (display === "0" && number === ".") {
       setDisplay("0.");
@@ -234,16 +215,17 @@ function Calculator() {
       operator === ""
     ) {
       const newResult = currentValue + number;
-      // if (newResult.length >= 16) return; // Проверка на максимальную длину ввода
+      if (newResult.length >= 16) return; // Проверка на максимальную длину ввода
       setCurrentValue(newResult);
       setDisplay(
         `${formatNumber(newResult).replace(/\B(?=(\d{3})+(?!\d))/g, " ")}`
       );
     } else if (previousValue !== null) {
       const newResult = currentValue + number;
+      if (newResult.length >= 16) return; // Проверка на максимальную длину ввода
       setCurrentValue(newResult);
       setDisplay(
-        `${previousValue} ${operator} ${formatNumber(newResult).replace(
+        `${previousValue.replace(/\B(?=(\d{3})+(?!\d))/g, " ")} ${operator} ${formatNumber(newResult).replace(
           /\B(?=(\d{3})+(?!\d))/g,
           " "
         )}`

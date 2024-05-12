@@ -42,8 +42,8 @@
   font-size: 40px;
   padding: 10px;
   border-bottom: 1px solid #ccc;
-  margin: 0 30px 0 30px;
-  /* margin: -14px 30px 0 30px; */
+  /* margin: 0 30px 0 30px; */
+  margin: -14px 30px 0 30px;
   height: 53px;
 }
 
@@ -58,15 +58,23 @@
 
 .small-font {
   font-size: 35px;
+  margin-top: -4px;
+  height: 45px;
 }
 .smaller-font {
   font-size: 32px;
+  margin-top: 4px;
+  height: 40px;
 }
 .extra-small-font {
   font-size: 27px;
+  margin-top: 10px;
+  height: 32px;
 }
 .sMOLL {
   font-size: 22px;
+  margin-top: 15px;
+  height: 24px;
 }
 
 .generalBtn {

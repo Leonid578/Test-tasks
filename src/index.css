@@ -1,3 +1,16 @@
+:root {
+  /* --accent-dark: #3ca654;
+  --accent-light: #4b66eb;
+  --bg-dark: #060606;
+  --bg-light: #fff; */
+
+
+  --numbers-dark: rgba(154, 154, 154, 1);
+  --accentLight-dark: white;
+  --background-dark: rgba(15, 23, 42, 1);
+  --numbers-dark: ;
+}
+
 body {
   margin: 0;
   /* padding-top: 92px; */
