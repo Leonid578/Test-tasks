@@ -1,3 +1,4 @@
+import React from "react";
 import { useState } from "react";
 import "./Calculator.style.css";
 // import { Container, Display, Buttons, Button, Zero } from "./Calculator.style";
@@ -8,7 +9,8 @@ import toothDark from "../image/png/tooth.png";
 import moonSun from "../image/png/moon.png";
 import toothSun from "../image/png/tooth.png";
 import questionSun from "../image/png/question.png";
-
+import useTheme from "../hooks/useTheme";
+import cn from "classnames";
 
 // import { number } from "prop-types";
 
@@ -22,7 +24,8 @@ function Calculator() {
   const [history, setHistory] = useState([]); // Состояние для хранения истории
   const [isHistoryVisible, setIsHistoryVisible] = useState(false); // Состояние для отображения истории
   const limitedHistory = history.slice(0, 5);
-  const [theme, setTheme] = useState(true); // Состояние для хранения истории
+
+  const { isDark, setIsDark } = useTheme();
 
   function addToHistory(entry) {
     // Функция для добавления записи в историю
@@ -230,7 +233,10 @@ function Calculator() {
       if (newResult.length >= 16) return; // Проверка на максимальную длину ввода
       setCurrentValue(newResult);
       setDisplay(
-        `${previousValue.replace(/\B(?=(\d{3})+(?!\d))/g, " ")} ${operator} ${formatNumber(newResult).replace(
+        `${previousValue.replace(
+          /\B(?=(\d{3})+(?!\d))/g,
+          " "
+        )} ${operator} ${formatNumber(newResult).replace(
           /\B(?=(\d{3})+(?!\d))/g,
           " "
         )}`
@@ -329,29 +335,72 @@ function Calculator() {
     }
   }
 
-  function switchTheme() {
-    setTheme(false)
-    return
-  }
-
-
   return (
-    <div className="calculator">
-      <div className="generalBtn">
+    <div
+      className={cn(
+        "layout",
+        {
+          dark: isDark,
+        },
+        "calculator"
+      )}
+    >
+      <div
+        className={cn(
+          "layout",
+          {
+            dark: isDark,
+          },
+          "generalBtn"
+        )}
+      >
         <div className="btn">
-          <img src={theme ? questionDark : questionSun} alt="Question" />
+          <img
+            src={isDark ? questionSun : questionDark}
+            alt="Question"
+            width={22}
+            height={22}
+          />
         </div>
-        <div className="btn" onClick={switchTheme}>
-          <img src={theme ? sunDark : moonSun} alt="Sun" />
+        <div
+          className={cn(
+            "layout",
+            {
+              dark: isDark,
+            },
+            "btn"
+          )}
+          onClick={() => setIsDark(!isDark)}
+        >
+          <img
+            src={isDark ? moonSun : sunDark}
+            alt="Sun"
+            width={22}
+            height={22}
+          />
         </div>
         <div className="btn">
-          <img src={theme ? toothDark : toothSun} alt="Tooth" />
+          <img
+            src={isDark ? toothSun : toothDark}
+            alt="Tooth"
+            width={22}
+            height={22}
+          />
         </div>
       </div>
       <div className="containerHistory">
         <div className="history">
           {isHistoryVisible && (
-            <ul className="history-list">
+            <ul
+              className={cn(
+                "layout",
+                {
+                  dark: isDark,
+                },
+                "history-list"
+              )}
+              id="history"
+            >
               {limitedHistory.reverse().map((entry, index) => (
                 <li
                   key={index}
@@ -364,79 +413,259 @@ function Calculator() {
           )}
         </div>
       </div>
-      <div className={`display ${getFontSizeClass(display.length)}`}>
+      <div
+        className={cn(
+          "layout",
+          {
+            dark: isDark,
+          },
+          `display ${getFontSizeClass(display.length)}`
+        )}
+      >
         {display}
       </div>
       <div className="buttons">
         <div className="row">
-          <button className="clear operator" onClick={handleClearClick}>
+          <button
+            className={cn(
+              "layout",
+              {
+                dark: isDark,
+              },
+              "clear operator"
+            )}
+            onClick={handleClearClick}
+          >
             AC
           </button>
 
-          <button className="operator" onClick={deleteLastDigit}>
+          <button
+            className={cn(
+              "layout",
+              {
+                dark: isDark,
+              },
+              "operator"
+            )}
+            onClick={deleteLastDigit}
+          >
             <IoArrowBack />
           </button>
 
-          <button className="operator" onClick={() => handleOperatorClick("/")}>
+          <button
+            className={cn(
+              "layout",
+              {
+                dark: isDark,
+              },
+              "operator"
+            )}
+            onClick={() => handleOperatorClick("/")}
+          >
             /
           </button>
-          <button className="operator" onClick={() => handleOperatorClick("*")}>
+          <button
+            className={cn(
+              "layout",
+              {
+                dark: isDark,
+              },
+              "operator"
+            )}
+            onClick={() => handleOperatorClick("*")}
+          >
             x
           </button>
         </div>
         <div className="row">
-          <button className="button" onClick={() => handleNumberClick("7")}>
+          <button
+            className={cn(
+              "layout",
+              {
+                dark: isDark,
+              },
+              "button"
+            )}
+            onClick={() => handleNumberClick("7")}
+          >
             7
           </button>
-          <button className="button" onClick={() => handleNumberClick("8")}>
+          <button
+            className={cn(
+              "layout",
+              {
+                dark: isDark,
+              },
+              "button"
+            )}
+            onClick={() => handleNumberClick("8")}
+          >
             8
           </button>
-          <button className="button" onClick={() => handleNumberClick("9")}>
+          <button
+            className={cn(
+              "layout",
+              {
+                dark: isDark,
+              },
+              "button"
+            )}
+            onClick={() => handleNumberClick("9")}
+          >
             9
           </button>
-          <button className="operator" onClick={() => handleOperatorClick("-")}>
+          <button
+            className={cn(
+              "layout",
+              {
+                dark: isDark,
+              },
+              "operator"
+            )}
+            onClick={() => handleOperatorClick("-")}
+          >
             -
           </button>
         </div>
 
         <div className="row">
-          <button className="button" onClick={() => handleNumberClick("4")}>
+          <button
+            className={cn(
+              "layout",
+              {
+                dark: isDark,
+              },
+              "button"
+            )}
+            onClick={() => handleNumberClick("4")}
+          >
             4
           </button>
-          <button className="button" onClick={() => handleNumberClick("5")}>
+          <button
+            className={cn(
+              "layout",
+              {
+                dark: isDark,
+              },
+              "button"
+            )}
+            onClick={() => handleNumberClick("5")}
+          >
             5
           </button>
-          <button className="button" onClick={() => handleNumberClick("6")}>
+          <button
+            className={cn(
+              "layout",
+              {
+                dark: isDark,
+              },
+              "button"
+            )}
+            onClick={() => handleNumberClick("6")}
+          >
             6
           </button>
-          <button className="operator" onClick={() => handleOperatorClick("+")}>
+          <button
+            className={cn(
+              "layout",
+              {
+                dark: isDark,
+              },
+              "operator"
+            )}
+            onClick={() => handleOperatorClick("+")}
+          >
             +
           </button>
         </div>
         <div className="container">
           <div>
             <div className="row">
-              <button className="button" onClick={() => handleNumberClick("1")}>
+              <button
+                className={cn(
+                  "layout",
+                  {
+                    dark: isDark,
+                  },
+                  "button"
+                )}
+                onClick={() => handleNumberClick("1")}
+              >
                 1
               </button>
-              <button className="button" onClick={() => handleNumberClick("2")}>
+              <button
+                className={cn(
+                  "layout",
+                  {
+                    dark: isDark,
+                  },
+                  "button"
+                )}
+                onClick={() => handleNumberClick("2")}
+              >
                 2
               </button>
-              <button className="button" onClick={() => handleNumberClick("3")}>
+              <button
+                className={cn(
+                  "layout",
+                  {
+                    dark: isDark,
+                  },
+                  "button"
+                )}
+                onClick={() => handleNumberClick("3")}
+              >
                 3
               </button>
             </div>
             <div className="row">
-              <button className="operator">%</button>
-              <button className="button" onClick={() => handleNumberClick("0")}>
+              <button
+                className={cn(
+                  "layout",
+                  {
+                    dark: isDark,
+                  },
+                  "operator"
+                )}
+              >
+                %
+              </button>
+              <button
+                className={cn(
+                  "layout",
+                  {
+                    dark: isDark,
+                  },
+                  "button"
+                )}
+                onClick={() => handleNumberClick("0")}
+              >
                 0
               </button>
-              <button className="button" onClick={() => handleNumberClick(".")}>
+              <button
+                className={cn(
+                  "layout",
+                  {
+                    dark: isDark,
+                  },
+                  "button"
+                )}
+                onClick={() => handleNumberClick(".")}
+              >
                 .
               </button>
             </div>
           </div>
-          <button className="calculate" onClick={handleEqualsClick}>
+          <button
+            className={cn(
+              "layout",
+              {
+                dark: isDark,
+              },
+              "calculate"
+            )}
+            onClick={handleEqualsClick}
+          >
             =
           </button>
         </div>

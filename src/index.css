@@ -1,26 +1,24 @@
 :root {
   --numbers-dark: rgba(154, 154, 154, 1);
   --bgNumbers-dark: linear-gradient(180deg, #0f172a 0%, #334155 100%);
-  --accentLight-dark: white;
+  --accentLight-dark: rgba(247, 247, 248, 1);
   --background-dark: rgba(15, 23, 42, 1);
-  
 
   --numbers-light: rgba(0, 0, 0, 1);
-  --bgNumbers-light: linear-gradient(180deg, #FFFFFF 0%, #C4C4C4 100%);
-  --accentdark-light: black;
+  --bgNumbers-light: linear-gradient(180deg, #ffffff 0%, #c4c4c4 100%);
+  --accentdark-light: rgba(15, 23, 42, 1);
   --background-light: rgba(247, 247, 248, 1);
 }
 
-.layout {
-  background-color: var(--bg-light);
-  color: #222;
-  height: 100%;
+/* .layout {
+  background-color: var(--bgNumbers-light);
+  color: var(--numbers-light);
 }
 
 .layout.dark {
-  background-color: var(--bg-dark);
-  color: #fff;
-}
+  background-color: var(--accentLight-dark);
+  color: var(--numbers-dark);  
+} */
 
 body {
   margin: 0;
@@ -32,7 +30,7 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
