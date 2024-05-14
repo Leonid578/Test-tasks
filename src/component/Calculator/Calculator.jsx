@@ -57,17 +57,14 @@ function Calculator() {
 
       case "-":
         if (currentValue === "" && accumulator === null) {
-          console.log("currentValue ", currentValue);
           return;
         } else if (currentValue === "" && accumulator !== null) {
-          console.log("currentValue ", currentValue);
           result = +accumulator - +previousValue;
         } else if (
           previousValue !== 0 &&
           currentValue !== 0 &&
           accumulator !== null
         ) {
-          console.log("currentValue ", currentValue);
           result = parseFloat(+accumulator - +currentValue);
         } else {
           result = +previousValue - +currentValue;
@@ -87,7 +84,6 @@ function Calculator() {
           result = parseFloat(+accumulator * +currentValue);
           setAccumulator(result);
         } else {
-          console.log("hshs");
           result = +previousValue * +currentValue;
           setAccumulator(currentValue);
         }
@@ -311,17 +307,56 @@ function Calculator() {
   }
 
   const deleteLastDigit = () => {
-    setCurrentValue(currentValue.slice(0, -1)); // Удаляем последний символ
-    setDisplay((prevDisplay) => {
-      const newDisplay = currentValue.slice(0, -1);
-      if (newDisplay === "") {
-        return "0";
-      }
-      return newDisplay;
-    });
+    // Выводим текущие значения для отладки
+    console.log("currentValue", currentValue);
+    console.log("operator", operator);
+    console.log("previousValue", previousValue);
+    console.log("accumulator", accumulator);
+  
+    if (currentValue !== "" && currentValue === accumulator) {
+      console.log("выходим парни");
+      return; // Возвращаемся, если currentValue равно аккумулятору
+    } else if (accumulator !== null && currentValue === "") {
+      console.log("выходим парни");
+      return; // Возвращаемся, если accumulator не равно null и currentValue пустая строка
+    } else if (currentValue === "" && operator !== "") {
+      console.log("выходим парни!");
+      return; // Возвращаемся, если currentValue пустое и установлен оператор
+    } else if (display === "0") {
+      console.log("выходим парни!!");
+      return; // Возвращаемся, если текущее отображение равно "0"
+    } else if (currentValue !== "0" && operator === "") {
+      console.log("1");
+      // Удаляем последний символ из currentValue
+      setCurrentValue(currentValue.slice(0, -1));
+      // Обновляем отображение
+      setDisplay((prevDisplay) => {
+        const newDisplay = currentValue.slice(0, -1);
+        if (newDisplay === "") {
+          return "0";
+        }
+        return newDisplay;
+      });
+    } else if (previousValue !== null && operator !== "") {
+      console.log("12");
+      // Удаляем последний символ из currentValue
+      setCurrentValue(currentValue.slice(0, -1));
+      // Обновляем отображение
+      setDisplay((prevDisplay) => {
+        const newDisplay = currentValue.slice(0, -1);
+        return `${previousValue} ${operator} ${newDisplay}`;
+      });
+    } else {
+      console.log("error");
+      return; // Возвращаемся в случае ошибки или непредвиденного состояния
+    }
   };
 
   function getFontSizeClass(textLength) {
+    if (typeof textLength === "undefined") {
+      return ""; // Если textLength не определено, возвращаем пустую строку
+    }
+
     if (textLength > 20) {
       return "sMOLL ";
     } else if (textLength > 16) {
