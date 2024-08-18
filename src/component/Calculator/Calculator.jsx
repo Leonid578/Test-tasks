@@ -195,22 +195,42 @@ function Calculator() {
 
   function handleNumberClick(number) {
     const proverka = display.includes(".");
-
+    // console.log("currentValue", currentValue);
+    // console.log("previousValue", previousValue);
     if (display.length >= 33) return; // Проверка на максимальную длину ввода
 
     if (display === "0" && number === ".") {
       setDisplay("0.");
       setCurrentValue("0.");
-    } else if (previousValue !== "" && number === ".") {
-      const newResult = 0 + currentValue + number;
-      setDisplay(`${previousValue} ${operator} ${0 + number}`);
-      setCurrentValue(newResult);
-      return;
-    } else if (proverka && currentValue !== "0" && number === ".") {
-      return;
-    } else if (proverka && currentValue === "0" && number === ".") {
-      setDisplay("хмммммм");
-      return;
+    } else if (
+      currentValue !== "" &&
+      number === "." &&
+      previousValue === null
+    ) {
+      if (proverka === false) {
+        const newResult = currentValue + number;
+        setDisplay(newResult);
+        setCurrentValue(newResult);
+        return;
+      } else if (proverka === true) {
+        return;
+      }
+    } else if (
+      previousValue !== null &&
+      currentValue !== null &&
+      number === "."
+    ) {
+      const proverka2 = currentValue.includes(".");
+      if (proverka2 === false) {
+        const newResult = `${previousValue} ${operator} ${
+          currentValue + number
+        }`;
+        setDisplay(newResult);
+        setCurrentValue(currentValue + number);
+        return;
+      } else if (proverka2 === true) {
+        return;
+      }
     } else if (display === "0" || currentValue === "0") {
       setDisplay(number);
       setCurrentValue(number);
@@ -232,13 +252,16 @@ function Calculator() {
         `${previousValue.replace(
           /\B(?=(\d{3})+(?!\d))/g,
           " "
-        )} ${operator} ${formatNumber(newResult).replace(
+        )} ${operator} ${newResult.replace(
           /\B(?=(\d{3})+(?!\d))/g,
           " "
         )}`
       );
+      // console.log("previousValue ", previousValue);
+      // console.log("currentValue ", currentValue);
+      // console.log("number ", number);
+      // console.log("newResult ", newResult);
     } else if (currentValue !== "") {
-      console.log("currentValue ", currentValue);
       const newResult = currentValue + number;
       setCurrentValue(newResult);
       setDisplay(
@@ -312,7 +335,7 @@ function Calculator() {
     console.log("operator", operator);
     console.log("previousValue", previousValue);
     console.log("accumulator", accumulator);
-  
+
     if (currentValue !== "" && currentValue === accumulator) {
       console.log("выходим парни");
       return; // Возвращаемся, если currentValue равно аккумулятору
