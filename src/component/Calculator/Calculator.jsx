@@ -12,6 +12,8 @@ import questionSun from "../image/png/question.png";
 import useTheme from "../hooks/useTheme";
 import cn from "classnames";
 
+import Decimal from "decimal.js";
+
 // import { number } from "prop-types";
 
 function Calculator() {
@@ -101,17 +103,17 @@ function Calculator() {
         if (currentValue === "" && accumulator === null) {
           return;
         } else if (currentValue === "" && accumulator !== null) {
-          const roundedNumber = +accumulator / +previousValue;
-          result = Math.round(roundedNumber * 1e4) / 1e4;
+          const roundedNumber = new Decimal(accumulator).div(previousValue);
+          result = roundedNumber.toNumber();
         } else if (
           previousValue !== 0 &&
           currentValue !== 0 &&
           accumulator !== null
         ) {
-          const roundedNumber = +accumulator / +currentValue;
-          setAccumulator(roundedNumber);
+          result = new Decimal(accumulator).div(currentValue).toNumber();
+          setAccumulator(result);
         } else {
-          const roundedNumber = +previousValue / +currentValue;
+          result = new Decimal(previousValue).div(currentValue).toNumber();
           setAccumulator(currentValue);
         }
         break;
@@ -119,6 +121,11 @@ function Calculator() {
       default:
         return;
     }
+
+    console.log("previousValue ", previousValue);
+    console.log("currentValue ", currentValue);
+    console.log("accum ", accumulator);
+    // console.log("newResult ", newResult);
 
     if (!isNaN(result)) {
       // Если результат - число, отображаем его в виде строки
@@ -129,11 +136,10 @@ function Calculator() {
         result = +result;
       } else {
         // Если результат - дробное число, форматируем его, чтобы убрать конечный ноль
-        result = result
-          .toString()
-          .replace(/\B(?=(\d{3})+(?!\d))/g, " ")
-          .replace(/(\.\d*?)0+$/, "$1")
-          .replace(/\.$/, "");
+        result = result.toString();
+        // .replace(/\B(?=(\d{3})+(?!\d))/g, " ")
+        // .replace(/(\.\d*?)0+$/, "$1")
+        // .replace(/\.$/, "");
       }
     } else {
       setDisplay("результат не является числом");
@@ -252,10 +258,7 @@ function Calculator() {
         `${previousValue.replace(
           /\B(?=(\d{3})+(?!\d))/g,
           " "
-        )} ${operator} ${newResult.replace(
-          /\B(?=(\d{3})+(?!\d))/g,
-          " "
-        )}`
+        )} ${operator} ${newResult.replace(/\B(?=(\d{3})+(?!\d))/g, " ")}`
       );
       // console.log("previousValue ", previousValue);
       // console.log("currentValue ", currentValue);
@@ -280,6 +283,25 @@ function Calculator() {
       return;
     }
   }
+
+  function handlePercentClick() {
+    let result;
+    if (currentValue === "") return;
+  
+    if (operator === "+" || operator === "-") {
+      result = (previousValue * currentValue) / 100;
+    } else if (operator === "*" || operator === "/") {
+      result = (currentValue / 100) * previousValue;
+    } else {
+      result = currentValue / 100;
+    }
+  
+    setCurrentValue(result);
+    setDisplay(
+      `${previousValue ? previousValue : ""} ${operator ? operator : ""} ${result}`
+    );
+  }
+  
 
   function handleOperatorClick(operatorValue) {
     if (operator === "") {
@@ -685,6 +707,7 @@ function Calculator() {
                   },
                   "operator"
                 )}
+                onClick={handlePercentClick}
               >
                 %
               </button>
