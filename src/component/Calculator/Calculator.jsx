@@ -191,7 +191,9 @@ function Calculator() {
       return;
     }
 
-    setDisplay(result.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " "));
+    setDisplay(result.toString()
+    // .replace(/\B(?=(\d{3})+(?!\d))/g, " ")
+  );
 
     setAccumulator(result);
 
@@ -347,11 +349,7 @@ function Calculator() {
   }
 
   function handleOperatorClick(operatorValue) {
-    console.log("previousValue ", previousValue);
-      console.log("currentValue ", currentValue);
-      console.log("accumulator ", accumulator);
-      // console.log("number ", number);
-      // console.log("newResult ", newResult);
+
     if (operator === "") {
       // первая операция, установили оператор
       setOperator(operatorValue);
@@ -364,14 +362,43 @@ function Calculator() {
       }
     } else if (
       operatorValue !== null &&
-      currentValue !== null
+      currentValue !== null &&
+      accumulator === null
     ) {
-      const newResult = calculateResult(); // Рассчитываем новый результат на основе текущего и предыдущего значений
+       console.log("error1");
+      // result = +previousValue - +currentValue;
+      calculateResult(); // Рассчитываем и устанавливаем новый результат
 
-        setAccumulator(newResult); // Устанавливаем новый результат как аккумулятор
-        setOperator(operatorValue); // Устанавливаем новый оператор
-        setDisplay(`${newResult} ${operatorValue}`); // Обновляем отображение
-    } else if (operatorValue !== operator) {
+      // Теперь предполагаем, что calculateResult обновит accumulator
+      setOperator(operatorValue); // Устанавливаем новый оператор
+
+      // Обновляем отображение, используя новое значение аккумулятора
+      // setDisplay(`${accumulator} ${operatorValue}`);
+    } 
+    // ======================
+    // else if (
+    //   operatorValue !== null &&
+    //   accumulator !== null &&
+    //   currentValue !== null
+    // ) {
+    //   console.log("previousValue ", previousValue);
+    //   console.log("currentValue ", currentValue);
+    //   console.log("accumulator ", accumulator);
+    //   // console.log("number ", number);
+    //   // console.log("newResult ", newResult);
+    //   setOperator(operatorValue);
+    //   console.log("error2");
+    //   // result = +previousValue - +currentValue;
+    //   calculateResult(); // Рассчитываем и устанавливаем новый результат
+
+    //   // Теперь предполагаем, что calculateResult обновит accumulator
+    //   // setOperator(operatorValue); // Устанавливаем новый оператор
+
+    //   // Обновляем отображение, используя новое значение аккумулятора
+    //   // setDisplay(`${accumulator} ${operatorValue}`);
+    // }
+    // ==========================
+    else if (operatorValue !== operator) {
       // Если новый оператор отличается от предыдущего:
       setOperator(operatorValue);
       if (accumulator !== null) {
@@ -379,7 +406,8 @@ function Calculator() {
       } else {
         setDisplay(`${previousValue} ${operatorValue}`);
       }
-    } else if (operatorValue === operator) {
+    } 
+    else if (operatorValue === operator) {
       if (accumulator !== null) {
         setDisplay(`${accumulator} ${operatorValue}`);
       } else {
