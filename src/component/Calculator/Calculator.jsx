@@ -38,22 +38,70 @@ function Calculator() {
   function calculateResult() {
     let result = "0";
     switch (operator) {
+      // case "+":
+      //   if (currentValue === "" && accumulator === null) {
+      //     console.log("currentValue ", currentValue);
+      //     return;
+      //   } else if (currentValue === "" && accumulator !== null) {
+      //     console.log("currentValue ", currentValue);
+      //     result = +accumulator + +previousValue;
+      //   } else if (
+      //     previousValue !== 0 &&
+      //     currentValue !== 0 &&
+      //     accumulator !== null
+      //   ) {
+      //     console.log("currentValue ", currentValue);
+      //     result = parseFloat(+accumulator + +currentValue);
+      //   } else {
+      //     result = +previousValue + +currentValue;
+      //   }
+      //   break;
+
+      // case "-":
+      //   if (currentValue === "" && accumulator === null) {
+      //     return;
+      //   } else if (currentValue === "" && accumulator !== null) {
+      //     result = +accumulator - +previousValue;
+      //   } else if (
+      //     previousValue !== 0 &&
+      //     currentValue !== 0 &&
+      //     accumulator !== null
+      //   ) {
+      //     result = parseFloat(+accumulator - +currentValue);
+      //   } else {
+      //     result = +previousValue - +currentValue;
+      //   }
+      //   break;
+
+      // case "*":
+      //   if (currentValue === "" && accumulator === null) {
+      //     return;
+      //   } else if (currentValue === "" && accumulator !== null) {
+      //     result = +accumulator * +previousValue;
+      //   } else if (
+      //     previousValue !== 0 &&
+      //     currentValue !== 0 &&
+      //     accumulator !== null
+      //   ) {
+      //     result = parseFloat(+accumulator * +currentValue);
+      //     setAccumulator(result);
+      //   } else {
+      //     result = +previousValue * +currentValue;
+      //     setAccumulator(currentValue);
+      //   }
+      //   break;
+
       case "+":
         if (currentValue === "" && accumulator === null) {
-          console.log("currentValue ", currentValue);
           return;
         } else if (currentValue === "" && accumulator !== null) {
-          console.log("currentValue ", currentValue);
-          result = +accumulator + +previousValue;
-        } else if (
-          previousValue !== 0 &&
-          currentValue !== 0 &&
-          accumulator !== null
-        ) {
-          console.log("currentValue ", currentValue);
-          result = parseFloat(+accumulator + +currentValue);
+          result = new Decimal(accumulator).plus(previousValue).toNumber();
+        } else if (accumulator !== null) {
+          result = new Decimal(accumulator).plus(currentValue).toNumber();
+          setAccumulator(result);
         } else {
-          result = +previousValue + +currentValue;
+          result = new Decimal(previousValue).plus(currentValue).toNumber();
+          setAccumulator(currentValue);
         }
         break;
 
@@ -61,15 +109,13 @@ function Calculator() {
         if (currentValue === "" && accumulator === null) {
           return;
         } else if (currentValue === "" && accumulator !== null) {
-          result = +accumulator - +previousValue;
-        } else if (
-          previousValue !== 0 &&
-          currentValue !== 0 &&
-          accumulator !== null
-        ) {
-          result = parseFloat(+accumulator - +currentValue);
+          result = new Decimal(accumulator).minus(previousValue).toNumber();
+        } else if (accumulator !== null) {
+          result = new Decimal(accumulator).minus(currentValue).toNumber();
+          setAccumulator(result);
         } else {
-          result = +previousValue - +currentValue;
+          result = new Decimal(previousValue).minus(currentValue).toNumber();
+          setAccumulator(currentValue);
         }
         break;
 
@@ -77,16 +123,12 @@ function Calculator() {
         if (currentValue === "" && accumulator === null) {
           return;
         } else if (currentValue === "" && accumulator !== null) {
-          result = +accumulator * +previousValue;
-        } else if (
-          previousValue !== 0 &&
-          currentValue !== 0 &&
-          accumulator !== null
-        ) {
-          result = parseFloat(+accumulator * +currentValue);
+          result = new Decimal(accumulator).times(previousValue).toNumber();
+        } else if (accumulator !== null) {
+          result = new Decimal(accumulator).times(currentValue).toNumber();
           setAccumulator(result);
         } else {
-          result = +previousValue * +currentValue;
+          result = new Decimal(previousValue).times(currentValue).toNumber();
           setAccumulator(currentValue);
         }
         break;
@@ -287,7 +329,7 @@ function Calculator() {
   function handlePercentClick() {
     let result;
     if (currentValue === "") return;
-  
+
     if (operator === "+" || operator === "-") {
       result = (previousValue * currentValue) / 100;
     } else if (operator === "*" || operator === "/") {
@@ -295,15 +337,21 @@ function Calculator() {
     } else {
       result = currentValue / 100;
     }
-  
+
     setCurrentValue(result);
     setDisplay(
-      `${previousValue ? previousValue : ""} ${operator ? operator : ""} ${result}`
+      `${previousValue ? previousValue : ""} ${
+        operator ? operator : ""
+      } ${result}`
     );
   }
-  
 
   function handleOperatorClick(operatorValue) {
+    console.log("previousValue ", previousValue);
+      console.log("currentValue ", currentValue);
+      console.log("accumulator ", accumulator);
+      // console.log("number ", number);
+      // console.log("newResult ", newResult);
     if (operator === "") {
       // первая операция, установили оператор
       setOperator(operatorValue);
@@ -314,6 +362,15 @@ function Calculator() {
       if (currentValue !== "") {
         setDisplay(`${currentValue} ${operatorValue}`);
       }
+    } else if (
+      operatorValue !== null &&
+      currentValue !== null
+    ) {
+      const newResult = calculateResult(); // Рассчитываем новый результат на основе текущего и предыдущего значений
+
+        setAccumulator(newResult); // Устанавливаем новый результат как аккумулятор
+        setOperator(operatorValue); // Устанавливаем новый оператор
+        setDisplay(`${newResult} ${operatorValue}`); // Обновляем отображение
     } else if (operatorValue !== operator) {
       // Если новый оператор отличается от предыдущего:
       setOperator(operatorValue);
