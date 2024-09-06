@@ -307,6 +307,7 @@ function Calculator() {
     if (resultCalculated) {
       console.log("resultCalculated", resultCalculated);
       setOperator(operatorValue);
+      setCurrentValue(null)
       if (accumulator !== null) {
         setDisplay(`${accumulator} ${operatorValue}`);
       } else {
@@ -403,7 +404,7 @@ function Calculator() {
         setDisplay(`${result + operatorValue}`);
         setOperator(operatorValue);
       } else {
-        console.log("result", result, "result", currentValue)
+        console.log("result", result, "currentValue", currentValue)
         calculateResult();
         setDisplay(`${result + operatorValue}`);
         setOperator(operatorValue);
