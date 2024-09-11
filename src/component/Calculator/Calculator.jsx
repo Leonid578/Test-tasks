@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import "./Calculator.style.css";
 // import { Container, Display, Buttons, Button, Zero } from "./Calculator.style";
-import { IoArrowBack } from "react-icons/io5";
+import { IoArrowBack, IoTerminal } from "react-icons/io5";
 import questionDark from "../image/png/question.png";
 import sunDark from "../image/png/sun.png";
 import toothDark from "../image/png/tooth.png";
@@ -194,8 +194,8 @@ function Calculator() {
   function handleNumberClick(number) {
     const proverka = display.includes(".");
     // console.log("currentValue", currentValue);
-    // console.log("previousValue", previousValue); 
-    if (display.length >= 33) return; 
+    // console.log("previousValue", previousValue);
+    if (display.length >= 33) return;
     if (display === "0" && number === ".") {
       console.log("currentValue ", currentValue);
       setDisplay("0.");
@@ -219,7 +219,7 @@ function Calculator() {
       currentValue !== null &&
       number === "."
     ) {
-      // console.log("currentValue ", currentValue);
+      console.log("currentValue ", currentValue);
       const proverka2 = currentValue.includes(".");
       if (proverka2 === false) {
         const newResult = `${previousValue} ${operator} ${
@@ -235,7 +235,7 @@ function Calculator() {
       setDisplay(number);
       setCurrentValue(number);
     } else if (
-      (previousValue === null || previousValue === "") &&
+      (previousValue === null || previousValue === null) &&
       operator === ""
     ) {
       // console.log("currentValue ", currentValue);
@@ -254,7 +254,7 @@ function Calculator() {
         newResult = number;
       }
 
-      if (newResult.length >= 16) return; 
+      if (newResult.length >= 16) return;
       setCurrentValue(newResult);
       setDisplay(
         `${previousValue.replace(
@@ -263,7 +263,7 @@ function Calculator() {
         )} ${operator} ${newResult.replace(/\B(?=(\d{3})+(?!\d))/g, " ")}`
       );
     } else if (currentValue !== null) {
-      // console.log("currentValue ", currentValue);
+      console.log("currentValue ", currentValue);
       const newResult = currentValue + number;
       setCurrentValue(newResult);
       setDisplay(
@@ -273,7 +273,7 @@ function Calculator() {
         }`
       );
     } else if (currentValue === null) {
-      // console.log("currentValue ", currentValue);
+      console.log("accumulator ", accumulator);
       setCurrentValue(number);
       setDisplay(`${accumulator} ${operator} ${number}`);
       return;
@@ -283,9 +283,197 @@ function Calculator() {
     }
   }
 
-  function handlePercentClick() {
+  function handleOperatorClick(operatorValue) {
+
+    if (resultCalculated) {
+      console.log("resultCalculated", resultCalculated);
+      setOperator(operatorValue);
+      setCurrentValue(null);
+      if (accumulator !== null) {
+        setDisplay(`${accumulator} ${operatorValue}`);
+      } else {
+        setDisplay(`${previousValue} ${operatorValue}`);
+      }
+      setResultCalculated(false)
+      return;
+    }
+
+    const currentNumber = +currentValue;
+    const previousNumber = +previousValue;
+    // console.log("currentValue", currentValue);
+    // console.log("previousValue", previousValue);
     let result;
+
+    if(operator !== ""){
+      console.log("operator !== '' ", previousValue);
+      if (operator === "+") {
+        if (currentValue === null && accumulator === null) {
+          return;
+        } else if (currentValue === null && accumulator !== null && previousValue !== null) {
+          result = new Decimal(accumulator).plus(previousValue).toNumber();
+          return;
+        } else if (accumulator !== null && currentValue !== null) {
+          result = new Decimal(accumulator).plus(currentValue).toNumber();
+          setAccumulator(result);
+        }
+        else if (previousValue !== null && currentValue !== null) {
+          result = new Decimal(previousValue).plus(currentValue).toNumber();
+          setAccumulator(result);
+        } else {
+          console.log("error")
+          return
+        }
+      } else if (operator === "-") {
+        if (currentValue === null && accumulator === null) {
+          return;
+        } else if (currentValue === null && accumulator !== null && previousValue !== null) {
+          result = new Decimal(accumulator).minus(previousValue).toNumber();
+        } else if (accumulator !== null && currentValue !== null) {
+          result = new Decimal(accumulator).minus(currentValue).toNumber();
+          setAccumulator(result);
+        }
+        else if (previousValue !== null && currentValue !== null) {
+          result = new Decimal(previousValue).minus(currentValue).toNumber();
+          setAccumulator(currentValue);
+        }  else {
+          console.log("error")
+          return
+        }
+      } else if (operator === "*") {
+        result = previousNumber * currentNumber;
+      } else if (operator === "/") {
+        if (currentValue === "0") {
+          setDisplay("Ошибка");
+          setCurrentValue("");
+          setPreviousValue("");
+          setOperator("");
+          return;
+        }
+        result = previousNumber / currentNumber;
+      }
+    }
+
+    if (operator === "") {
+      setPreviousValue(currentValue);
+      setCurrentValue(null);
+
+      if (currentValue !== null) {
+        setOperator(operatorValue);
+        setDisplay(`${currentValue} ${operatorValue}`);
+      } else {
+        return;
+      }
+    } else if (
+      operatorValue !== operator &&
+      currentValue === null &&
+      (previousValue !== null || accumulator !== null)
+    ) {
+      console.log("operatorValue !== operator");
+      setOperator(operatorValue);
+      if (accumulator !== null) {
+        setDisplay(`${accumulator} ${operatorValue}`);
+      } else {
+        setDisplay(`${previousValue} ${operatorValue}`);
+      }
+    } else if (
+      operatorValue === operator &&
+      currentValue === null &&
+      (previousValue !== null || accumulator !== null)
+    ) {
+      console.log("operatorValue === operator");
+      if (accumulator !== null) {
+        setDisplay(`${accumulator} ${operatorValue}`);
+      } else {
+        setDisplay(`${previousValue} ${operatorValue}`);
+      }
+    } else if (operator !== null && currentValue !== null) {
+      if (accumulator === null) {
+        console.log("result", result);
+        calculateResult();
+        setDisplay(`${result + operatorValue}`);
+        setOperator(operatorValue);
+      } else {
+        console.log("result", result, "currentValue", currentValue);
+        calculateResult();
+        setDisplay(`${result + operatorValue}`);
+        setOperator(operatorValue);
+      }
+    } else {
+      console.log("error, парни! все сюда", operator);
+    }
+    setCurrentValue(null);
+    return;
+  }
+
+  function handleClearClick() {
+    setDisplay("0");
+    setCurrentValue(null);
+    setOperator("");
+    setPreviousValue(null);
+    setAccumulator(null);
+    setIsHistoryVisible(false);
+    setHistory([]);
+    setResultCalculated(false);
+  }
+
+  function handleEqualsClick() {
+    // console.log("accumL ", accumulator);
+    // console.log("operator", operator);
+    // console.log("currentValue", currentValue);
+    // console.log("previousValue", previousValue);
+
+    if (currentValue === null) {
+      // console.log(
+      //   "первое событие",
+      //   accumulator,
+      //   operator,
+      //   currentValue,
+      //   previousValue
+      // );
+      return;
+    } else if (currentValue !== null && operator === "") {
+      // console.log(
+      //   "второе событие",
+      //   accumulator,
+      //   operator,
+      //   currentValue,
+      //   previousValue
+      // );
+      return;
+    } else {
+      // console.log(
+      //   "третье событие",
+      //   accumulator,
+      //   operator,
+      //   currentValue,
+      //   previousValue
+      // );
+      calculateResult();
+      setResultCalculated(true);
+    }
+  }
+
+  function handlePercentClick() {
+    console.log("accumL ", accumulator);
+    console.log("currentValue", currentValue);
+    console.log("previousValue", previousValue);
+
+    let result;
+
     if (currentValue === null) return;
+
+    // Проверка: если оператор не задан и предыдущего значения нет, выводим ошибку
+    if (!previousValue && !operator) {
+      setDisplay("Ошибка");
+      setCurrentValue(null);
+      setOperator("");
+      setPreviousValue(null);
+      setAccumulator(null);
+      setIsHistoryVisible(false);
+      setHistory([]);
+      setResultCalculated(false);
+      return;
+    }
 
     if (operator === "+" || operator === "-") {
       result = (previousValue * currentValue) / 100;
@@ -303,134 +491,22 @@ function Calculator() {
     );
   }
 
-  function handleOperatorClick(operatorValue) {
-    if (resultCalculated) {
-      console.log("resultCalculated", resultCalculated);
-      setOperator(operatorValue);
-      setCurrentValue(null)
-      if (accumulator !== null) {
-        setDisplay(`${accumulator} ${operatorValue}`);
-      } else {
-        setDisplay(`${previousValue} ${operatorValue}`);
-      }
-      // setResultCalculated(false); // Сбрасываем состояние, чтобы снова можно было считать
-      return;
+  function getFontSizeClass(textLength) {
+    if (typeof textLength === "undefined") {
+      return ""; // Если textLength не определено, возвращаем пустую строку
     }
 
-    if (operator === "") {
-      setPreviousValue(currentValue);
-      setCurrentValue(null);
-
-      if (currentValue !== null) {
-        setOperator(operatorValue);
-        setDisplay(`${currentValue} ${operatorValue}`);
-      } else {
-        return;
-      }
-    } else if (operatorValue !== operator && currentValue === null && (previousValue !== null || accumulator !== null)) {
-      console.log("operatorValue !== operator");
-      setOperator(operatorValue);
-      if (accumulator !== null) {
-        setDisplay(`${accumulator} ${operatorValue}`);
-      } else {
-        setDisplay(`${previousValue} ${operatorValue}`);
-      }
-    } else if (operatorValue === operator && currentValue === null && (previousValue !== null || accumulator !== null)) {
-      console.log("operatorValue === operator");
-      if (accumulator !== null) {
-        setDisplay(`${accumulator} ${operatorValue}`);
-      } else {
-        setDisplay(`${previousValue} ${operatorValue}`);
-      }
+    if (textLength > 20) {
+      return "sMOLL ";
+    } else if (textLength > 16) {
+      return "extra-small-font";
+    } else if (textLength > 14) {
+      return "smaller-font";
+    } else if (textLength > 12) {
+      return "small-font";
+    } else {
+      return ""; // Базовый размер шрифта
     }
-    else if (operatorValue !== null && currentValue !== null) {
-      // setOperator(operatorValue);
-      // console.log("accumL ", accumulator);
-      // console.log("currentValue", currentValue);
-      // console.log("previousValue", previousValue);
-
-      const currentNumber = +currentValue;
-      const previousNumber = +previousValue;
-
-      let result;
-
-      if (operator === "+") {
-        if (currentValue === null && accumulator === null) {
-          console.log("абоба1", currentValue)
-          return;
-        } else if (currentValue === null && accumulator !== null) {
-          console.log("абоба1", currentValue)
-          result = new Decimal(accumulator).plus(previousValue).toNumber();
-          return;
-        } else if (accumulator !== null) {
-          result = new Decimal(accumulator).plus(currentValue).toNumber();
-          console.log("абоба1", currentValue)
-                    setAccumulator(result);
-        } else {
-          result = new Decimal(previousValue).plus(currentValue).toNumber();
-          console.log("абоба1", currentValue)
-          setAccumulator(currentValue);
-        }
-        
-      } else if (operator === "-") {
-        if (currentValue === null && accumulator === null) {
-          return;
-        } else if (currentValue === null && accumulator !== null) {
-          result = new Decimal(accumulator).minus(previousValue).toNumber();
-        } else if (accumulator !== null) {
-          result = new Decimal(accumulator).minus(currentValue).toNumber();
-          setAccumulator(result);
-        } else {
-          result = new Decimal(previousValue).minus(currentValue).toNumber();
-          setAccumulator(currentValue);
-        }
-        console.log("абоба2")
-      } else if (operator === "*") {
-        result = previousNumber * currentNumber;
-      } else if (operator === "/") {
-        if (currentValue === "0") {
-          setDisplay("Ошибка");
-          setCurrentValue("");
-          setPreviousValue("");
-          setOperator("");
-          return;
-        }
-        result = previousNumber / currentNumber;
-      }
-
-      if (accumulator === null) {
-        console.log("result", result)
-        calculateResult();
-        setDisplay(`${result + operatorValue}`);
-        setOperator(operatorValue);
-      } else {
-        console.log("result", result, "currentValue", currentValue)
-        calculateResult();
-        setDisplay(`${result + operatorValue}`);
-        setOperator(operatorValue);
-      }
-    }
-
-    else {
-      console.log("error, парни! все сюда", operator);
-    }
-    setCurrentValue(null);
-    return;
-  }
-
-  function handleClearClick() {
-    setDisplay("0");
-    setCurrentValue(null);
-    setOperator("");
-    setPreviousValue(null);
-    setAccumulator(null);
-    setIsHistoryVisible(false);
-    setHistory([]);
-  }
-
-  function handleEqualsClick() {
-    calculateResult();
-    setResultCalculated(true); 
   }
 
   const deleteLastDigit = () => {
@@ -478,24 +554,6 @@ function Calculator() {
       return; // Возвращаемся в случае ошибки или непредвиденного состояния
     }
   };
-
-  function getFontSizeClass(textLength) {
-    if (typeof textLength === "undefined") {
-      return ""; // Если textLength не определено, возвращаем пустую строку
-    }
-
-    if (textLength > 20) {
-      return "sMOLL ";
-    } else if (textLength > 16) {
-      return "extra-small-font";
-    } else if (textLength > 14) {
-      return "smaller-font";
-    } else if (textLength > 12) {
-      return "small-font";
-    } else {
-      return ""; // Базовый размер шрифта
-    }
-  }
 
   return (
     <div
