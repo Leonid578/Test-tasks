@@ -192,6 +192,13 @@ function Calculator() {
   }
 
   function handleNumberClick(number) {
+    if (resultCalculated) {
+      console.log("resultCalculated2", resultCalculated);
+      setCurrentValue(null);
+      setOperator("");
+      setResultCalculated(false)
+      return;
+    }
     const proverka = display.includes(".");
     // console.log("currentValue", currentValue);
     // console.log("previousValue", previousValue);
@@ -284,7 +291,6 @@ function Calculator() {
   }
 
   function handleOperatorClick(operatorValue) {
-
     if (resultCalculated) {
       console.log("resultCalculated", resultCalculated);
       setOperator(operatorValue);
@@ -320,7 +326,9 @@ function Calculator() {
           result = new Decimal(previousValue).plus(currentValue).toNumber();
           setAccumulator(result);
         } else {
-          console.log("error")
+          setOperator(operatorValue)
+          setDisplay(`${accumulator} ${operatorValue}`);
+          console.log("error?")
           return
         }
       } else if (operator === "-") {
@@ -336,7 +344,9 @@ function Calculator() {
           result = new Decimal(previousValue).minus(currentValue).toNumber();
           setAccumulator(currentValue);
         }  else {
-          console.log("error")
+          setOperator(operatorValue)
+          setDisplay(`${accumulator} ${operatorValue}`);
+          console.log("error?")
           return
         }
       } else if (operator === "*") {
@@ -392,11 +402,13 @@ function Calculator() {
         calculateResult();
         setDisplay(`${result + operatorValue}`);
         setOperator(operatorValue);
+        console.log("setOperator", operatorValue);
       } else {
         console.log("result", result, "currentValue", currentValue);
         calculateResult();
         setDisplay(`${result + operatorValue}`);
         setOperator(operatorValue);
+        console.log("setOperator", operatorValue);
       }
     } else {
       console.log("error, парни! все сюда", operator);
@@ -454,9 +466,9 @@ function Calculator() {
   }
 
   function handlePercentClick() {
-    console.log("accumL ", accumulator);
-    console.log("currentValue", currentValue);
-    console.log("previousValue", previousValue);
+    // console.log("accumL ", accumulator);
+    // console.log("currentValue", currentValue);
+    // console.log("previousValue", previousValue);
 
     let result;
 
