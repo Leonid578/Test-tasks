@@ -188,7 +188,6 @@ function Calculator() {
       setCurrentValue(null);
       setOperator("");
       setResultCalculated(false);
-      return;
     }
     const proverka = display.includes(".");
     if (display.length >= 33) return;
@@ -217,14 +216,9 @@ function Calculator() {
         setCurrentValue(newResult);
         return;
       } else if (proverka === true && accumulator !== null) {
-        const proverka3 = accumulator.includes(".");
-
-        const newResult = `${accumulator} ${operator} ${currentValue + number}`;
-        setDisplay(newResult);
-        setCurrentValue(currentValue + number);
-        // console.log("accumulator ", accumulator);
-        // console.log("proverka3 ", proverka3);
-        console.log("number ", number);
+        // const newResult = `${accumulator} ${operator} ${currentValue + number}`;
+        // setDisplay(newResult);
+        // setCurrentValue(currentValue + number);
         return;
       }
     } else if (
@@ -248,11 +242,11 @@ function Calculator() {
       setDisplay(number);
       setCurrentValue(number);
     } else if (
-      accumulator === null && previousValue === null &&
+      accumulator === null &&
+      previousValue === null &&
       operator === ""
     ) {
-    
-      console.log("aba")
+      console.log("aba");
 
       const newResult = currentValue + number;
       if (newResult.length >= 16) return;
@@ -288,13 +282,16 @@ function Calculator() {
       setDisplay(`${accumulator} ${operator} ${number}`);
       return;
     } else {
+      console.log("accumulator ", accumulator);
+      console.log("currentValue ", currentValue);
+      console.log("previousValue ", previousValue);
+      console.log("operator ", operator);
       console.log("error");
       return;
     }
   }
 
   function handleOperatorClick(operatorValue) {
-    
     if (resultCalculated) {
       console.log("resultCalculated", resultCalculated);
       setOperator(operatorValue);
@@ -453,10 +450,10 @@ function Calculator() {
   }
 
   function handleEqualsClick() {
-    // console.log("accumL ", accumulator);
-    // console.log("operator", operator);
-    // console.log("currentValue", currentValue);
-    // console.log("previousValue", previousValue);
+    console.log("accumL ", accumulator);
+    console.log("operator", operator);
+    console.log("currentValue", currentValue);
+    console.log("previousValue", previousValue);
 
     if (currentValue === null) {
       // console.log(
@@ -476,6 +473,33 @@ function Calculator() {
       //   previousValue
       // );
       return;
+    } else if (
+      previousValue !== null &&
+      operator !== "" &&
+      currentValue.toString().includes(".")
+    ) {
+      console.log("Нет символов: ", currentValue);
+      setAccumulator(previousValue);
+      setDisplay(previousValue);
+      setOperator("");
+      setCurrentValue(null);
+      setPreviousValue(null);
+      return;
+    } else if (accumulator !== null && currentValue.toString().includes(".")) {
+      const parts = currentValue.split(".");
+      console.log("currentValue содержит точку: ", currentValue);
+      if (parts[0] === "" && parts[1] === "") {
+        console.log("Нет символов до или после точки: ", currentValue);
+
+      setAccumulator(accumulator);
+      setDisplay(accumulator  );
+      setOperator("");
+      setCurrentValue(null);
+      setPreviousValue(null);
+
+        return;
+      } else calculateResult();
+      setResultCalculated(true);
     } else {
       // console.log(
       //   "третье событие",
