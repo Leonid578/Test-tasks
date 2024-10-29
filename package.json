@@ -24,6 +24,8 @@
     "styled-components": "^6.0.7",
     "web-vitals": "^2.1.4"
   },
+
+  "homepage": "https://Leonid578.github.io/Test-tasks",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
