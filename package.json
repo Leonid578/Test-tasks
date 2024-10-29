@@ -28,7 +28,7 @@
   "homepage": "https://Leonid578.github.io/Test-tasks",
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "parcel build src/*.html --public-url /Test-tasks/",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
