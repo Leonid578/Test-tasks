@@ -1,7 +1,6 @@
 import React from "react";
 import { useState } from "react";
 import "./Calculator.style.css";
-// import { Container, Display, Buttons, Button, Zero } from "./Calculator.style";
 import { IoArrowBack, IoTerminal } from "react-icons/io5";
 import questionDark from "../image/png/question.png";
 import sunDark from "../image/png/sun.png";
@@ -11,9 +10,9 @@ import toothSun from "../image/png/tooth.png";
 import questionSun from "../image/png/question.png";
 import useTheme from "../hooks/useTheme";
 import cn from "classnames";
-
 import Decimal from "decimal.js";
 
+// import { Container, Display, Buttons, Button, Zero } from "./Calculator.style";
 // import { number } from "prop-types";
 
 function Calculator() {
