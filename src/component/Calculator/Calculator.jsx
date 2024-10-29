@@ -38,13 +38,17 @@ function Calculator() {
     switch (operator) {
       case "+":
         if (currentValue === null && accumulator === null) {
+          console.log("currentValue ", currentValue);
           return;
         } else if (currentValue === null && accumulator !== null) {
+          console.log("currentValue ", currentValue);
           result = new Decimal(accumulator).plus(previousValue).toNumber();
         } else if (accumulator !== null) {
+          console.log("currentValue ", currentValue);
           result = new Decimal(accumulator).plus(currentValue).toNumber();
           setAccumulator(result);
         } else {
+          console.log("currentValue ", currentValue);
           result = new Decimal(previousValue).plus(currentValue).toNumber();
           setAccumulator(currentValue);
         }
@@ -219,8 +223,23 @@ function Calculator() {
         setCurrentValue(newResult);
         return;
       } else if (proverka === true && accumulator !== null) {
-        return;
+        const proverka3 = currentValue.includes(".");
+
+        if (proverka3 === false) {
+          if (accumulator !== null) {
+            const newResult = `${accumulator} ${operator} ${
+              currentValue + number
+            }`;
+            setDisplay(newResult);
+            setCurrentValue(currentValue + number);
+            console.log("accumulator !== null ", accumulator);
+            return;
+          }
+        } else if (proverka3 === true) {
+          return;
+        }
       }
+      return;
     } else if (
       previousValue !== null &&
       currentValue !== null &&
@@ -483,9 +502,9 @@ function Calculator() {
     // console.log("currentValue", currentValue);
     // console.log("previousValue", previousValue);
 
-    if (currentValue === null) {
+    if (currentValue === null && accumulator === null) {
       // console.log(
-      //   "первое событие",
+      //   "первое событие, выходим парни!...",
       //   accumulator,
       //   operator,
       //   currentValue,
@@ -494,48 +513,33 @@ function Calculator() {
       return;
     } else if (currentValue !== null && operator === "") {
       // console.log(
-      //   "второе событие",
+      //   "второе событие, выходим парни!...",
       //   accumulator,
       //   operator,
       //   currentValue,
       //   previousValue
       // );
       return;
-    } else if (
-      previousValue !== null &&
-      operator !== "" &&
-      currentValue.toString().includes(".")
-    ) {
-      console.log("Нет символов: ", currentValue);
-      setAccumulator(previousValue);
-      setDisplay(previousValue);
-      setOperator("");
-      setCurrentValue(null);
-      setPreviousValue(null);
-      return;
-    } else if (accumulator !== null && currentValue.toString().includes(".")) {
-      const parts = currentValue.split(".");
-      console.log("currentValue содержит точку: ", currentValue);
-      if (parts[0] === "" && parts[1] === "") {
-        console.log("Нет символов до или после точки: ", currentValue);
+    } else if (previousValue !== null && operator !== "") {
+      console.log("Есть точка в currentValue: ", currentValue);
 
-        setAccumulator(accumulator);
-        setDisplay(accumulator);
-        setOperator("");
-        setCurrentValue(null);
-        setPreviousValue(null);
+      // setAccumulator(previousValue);
+      // setDisplay(previousValue);
+      // setOperator("");
+      // setCurrentValue(null);
+      // setPreviousValue(null);
 
-        return;
-      } else calculateResult();
+      calculateResult();
       setResultCalculated(true);
+      return;
     } else {
-      // console.log(
-      //   "третье событие",
-      //   accumulator,
-      //   operator,
-      //   currentValue,
-      //   previousValue
-      // );
+      console.log(
+        "третье событие, работаем парни!...",
+        accumulator,
+        operator,
+        currentValue,
+        previousValue
+      );
       calculateResult();
       setResultCalculated(true);
     }
