@@ -41,7 +41,7 @@ export const Buttons = styled.div`
 `;
 
 export const Button = styled.div`
-display:block;
+  display: block;
   min-width: 60px;
   height: 60px;
   font-size: 18px;
@@ -50,7 +50,7 @@ display:block;
   cursor: pointer;
   background-color: #eee;
   margin: 5px 0;
-  border-radius:50%;
+  border-radius: 50%;
 `;
 
 export const Zero = styled(Button)`
@@ -61,5 +61,5 @@ export const Zero = styled(Button)`
   // outline: none;
   // cursor: pointer;
   // background-color: #eee;
-  border-radius:40px;
+  border-radius: 40px;
 `;

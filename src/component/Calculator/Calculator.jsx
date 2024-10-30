@@ -25,6 +25,7 @@ function Calculator() {
   const [isHistoryVisible, setIsHistoryVisible] = useState(false); // Состояние для отображения истории
   const limitedHistory = history.slice(0, 5);
   const { isDark, setIsDark } = useTheme();
+  const [setting, setSetting] = useState(false);
   const [resultCalculated, setResultCalculated] = useState(false); // новое состояние
 
   function addToHistory(entry) {
@@ -683,6 +684,13 @@ function Calculator() {
         "calculator"
       )}
     >
+      {setting && (
+        <div className="settings">
+          <button onClick={() => setSetting(!setting)}>close</button>
+          <h2>Settings</h2>
+        </div>
+      )}
+      
       <div
         className={cn(
           "layout",
@@ -717,7 +725,7 @@ function Calculator() {
             height={22}
           />
         </div>
-        <div className="btn">
+        <div className="btn" onClick={() => setSetting(!setting)}>
           <img
             src={isDark ? toothSun : toothDark}
             alt="Tooth"

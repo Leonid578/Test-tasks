@@ -10,6 +10,25 @@
   color: rgba(255, 255, 255, 1);
   height: 667px;
   width: 375px;
+  position: relative;
+}
+
+.settings {
+  z-index: 102;
+  position: absolute;
+
+  display: flex;
+  min-height: 667px;
+  width: 375px;
+  background: white;
+}
+
+.settings button{
+  z-index: 103;
+  width: 80px;
+  height: 50px;
+  background-color: #212121;
+  color: white;
 }
 
 .calculator.dark {
