@@ -11,7 +11,7 @@ import questionSun from "../image/png/question.png";
 import useTheme from "../hooks/useTheme";
 import cn from "classnames";
 import Decimal from "decimal.js";
-
+import arrowLeft from "../image/svg/arrow-left.svg";
 // import { Container, Display, Buttons, Button, Zero } from "./Calculator.style";
 // import { number } from "prop-types";
 
@@ -686,11 +686,11 @@ function Calculator() {
     >
       {setting && (
         <div className="settings">
-          <button onClick={() => setSetting(!setting)}>close</button>
+          <img src={arrowLeft} alt="arrowLeft" width={24} height={24} onClick={() => setSetting(!setting)}/>
           <h2>Settings</h2>
         </div>
       )}
-      
+
       <div
         className={cn(
           "layout",
