@@ -11,7 +11,10 @@ import questionSun from "../image/png/question.png";
 import useTheme from "../hooks/useTheme";
 import cn from "classnames";
 import Decimal from "decimal.js";
+
 import arrowLeft from "../image/svg/arrow-left.svg";
+import cross from "../image/svg/cross.svg";
+
 // import { Container, Display, Buttons, Button, Zero } from "./Calculator.style";
 // import { number } from "prop-types";
 
@@ -25,8 +28,10 @@ function Calculator() {
   const [isHistoryVisible, setIsHistoryVisible] = useState(false); // Состояние для отображения истории
   const limitedHistory = history.slice(0, 5);
   const { isDark, setIsDark } = useTheme();
-  const [setting, setSetting] = useState(false);
   const [resultCalculated, setResultCalculated] = useState(false); // новое состояние
+
+  const [activePage, setActivePage] = useState("main"); // Управляем отображением страниц
+  const [setting, setSetting] = useState(false);
 
   function addToHistory(entry) {
     setHistory([entry, ...history]);
@@ -686,8 +691,91 @@ function Calculator() {
     >
       {setting && (
         <div className="settings">
-          <img src={arrowLeft} alt="arrowLeft" width={24} height={24} onClick={() => setSetting(!setting)}/>
-          <h2>Settings</h2>
+          {activePage === "main" && (
+            <div>
+              <button
+                onClick={() => setSetting(!setting)}
+                className="settingsButton settingsCross"
+              >
+                <img src={cross} alt="cross" width={24} height={24} />
+              </button>
+
+              <ul>
+                <li onClick={() => setActivePage("theme")}>
+                  {" "}
+                  <h3>Other Theme</h3>{" "}
+                </li>
+                <li onClick={() => setActivePage("help")}>
+                  <h3>Help</h3>
+                </li>
+                <li onClick={() => setActivePage("about")}>
+                  <h3>About us</h3>
+                </li>
+              </ul>
+            </div>
+          )}
+          {activePage === "theme" && (
+            <div className="themePage">
+              <button
+                onClick={() => setActivePage("main")}
+                className="settingsArrowLeft settingsButton"
+              >
+                <img src={arrowLeft} alt="arrowLeft" width={24} height={24} />
+              </button>
+              <button
+                  onClick={() => {
+                    setSetting(!setting);
+                    setActivePage("main");
+                  }}
+                className="settingsCross settingsButton"
+              >
+                <img src={cross} alt="cross" width={24} height={24} />
+              </button>
+              <h2 className="settingsTitle">Theme Options</h2>
+            </div>
+          )}
+
+          {activePage === "help" && (
+            <div className="helpPage">
+              <button
+                onClick={() => setActivePage("main")}
+                className="settingsArrowLeft settingsButton"
+              >
+                <img src={arrowLeft} alt="arrowLeft" width={24} height={24} />
+              </button>
+              <button
+                  onClick={() => {
+                setSetting(!setting);
+                setActivePage("main");
+              }}
+                className="settingsCross settingsButton"
+              >
+                <img src={cross} alt="cross" width={24} height={24} />
+              </button>
+              <h2 className="settingsTitle">Help Options</h2>
+            </div>
+          )}
+
+          {activePage === "about" && (
+            <div className="aboutPage">
+              <button
+                onClick={() => setActivePage("main")}
+                className="settingsArrowLeft settingsButton"
+              >
+                <img src={arrowLeft} alt="arrowLeft" width={24} height={24} />
+              </button>
+              <button
+               onClick={() => {
+                setSetting(!setting);
+                setActivePage("main");
+              }}
+                className="settingsCross settingsButton"
+              >
+                <img src={cross} alt="cross" width={24} height={24} />
+              </button>
+              <h2 className="settingsTitle">About Us</h2>
+            </div>
+          )}
         </div>
       )}
 
@@ -700,7 +788,7 @@ function Calculator() {
           "generalBtn"
         )}
       >
-        <div className="btn">
+        <div className="btnOperator">
           <img
             src={isDark ? questionSun : questionDark}
             alt="Question"
@@ -714,7 +802,7 @@ function Calculator() {
             {
               dark: isDark,
             },
-            "btn"
+            "btnOperator"
           )}
           onClick={() => setIsDark(!isDark)}
         >
@@ -725,7 +813,7 @@ function Calculator() {
             height={22}
           />
         </div>
-        <div className="btn" onClick={() => setSetting(!setting)}>
+        <div className="btnOperator" onClick={() => setSetting(!setting)}>
           <img
             src={isDark ? toothSun : toothDark}
             alt="Tooth"
@@ -778,7 +866,7 @@ function Calculator() {
               {
                 dark: isDark,
               },
-              "clear operator"
+              "clear buttonsNumber operator"
             )}
             onClick={handleClearClick}
           >
@@ -791,7 +879,7 @@ function Calculator() {
               {
                 dark: isDark,
               },
-              "operator"
+              "buttonsNumber operator"
             )}
             onClick={deleteLastDigit}
           >
@@ -804,7 +892,7 @@ function Calculator() {
               {
                 dark: isDark,
               },
-              "operator"
+              "buttonsNumber operator"
             )}
             onClick={() => handleOperatorClick("/")}
           >
@@ -816,7 +904,7 @@ function Calculator() {
               {
                 dark: isDark,
               },
-              "operator"
+              "buttonsNumber operator"
             )}
             onClick={() => handleOperatorClick("*")}
           >
@@ -830,7 +918,7 @@ function Calculator() {
               {
                 dark: isDark,
               },
-              "button"
+              "buttonsNumber"
             )}
             onClick={() => handleNumberClick("7")}
           >
@@ -842,7 +930,7 @@ function Calculator() {
               {
                 dark: isDark,
               },
-              "button"
+              "buttonsNumber"
             )}
             onClick={() => handleNumberClick("8")}
           >
@@ -854,7 +942,7 @@ function Calculator() {
               {
                 dark: isDark,
               },
-              "button"
+              "buttonsNumber"
             )}
             onClick={() => handleNumberClick("9")}
           >
@@ -866,7 +954,7 @@ function Calculator() {
               {
                 dark: isDark,
               },
-              "operator"
+              "operator buttonsNumber"
             )}
             onClick={() => handleOperatorClick("-")}
           >
@@ -881,7 +969,7 @@ function Calculator() {
               {
                 dark: isDark,
               },
-              "button"
+              "buttonsNumber"
             )}
             onClick={() => handleNumberClick("4")}
           >
@@ -893,7 +981,7 @@ function Calculator() {
               {
                 dark: isDark,
               },
-              "button"
+              "buttonsNumber"
             )}
             onClick={() => handleNumberClick("5")}
           >
@@ -905,7 +993,7 @@ function Calculator() {
               {
                 dark: isDark,
               },
-              "button"
+              "buttonsNumber"
             )}
             onClick={() => handleNumberClick("6")}
           >
@@ -917,7 +1005,7 @@ function Calculator() {
               {
                 dark: isDark,
               },
-              "operator"
+              "operator buttonsNumber"
             )}
             onClick={() => handleOperatorClick("+")}
           >
@@ -933,7 +1021,7 @@ function Calculator() {
                   {
                     dark: isDark,
                   },
-                  "button"
+                  "buttonsNumber"
                 )}
                 onClick={() => handleNumberClick("1")}
               >
@@ -945,7 +1033,7 @@ function Calculator() {
                   {
                     dark: isDark,
                   },
-                  "button"
+                  "buttonsNumber"
                 )}
                 onClick={() => handleNumberClick("2")}
               >
@@ -957,7 +1045,7 @@ function Calculator() {
                   {
                     dark: isDark,
                   },
-                  "button"
+                  "buttonsNumber"
                 )}
                 onClick={() => handleNumberClick("3")}
               >
@@ -971,7 +1059,7 @@ function Calculator() {
                   {
                     dark: isDark,
                   },
-                  "operator"
+                  "operator buttonsNumber"
                 )}
                 onClick={handlePercentClick}
               >
@@ -983,7 +1071,7 @@ function Calculator() {
                   {
                     dark: isDark,
                   },
-                  "button"
+                  "buttonsNumber"
                 )}
                 onClick={() => handleNumberClick("0")}
               >
@@ -995,7 +1083,7 @@ function Calculator() {
                   {
                     dark: isDark,
                   },
-                  "button"
+                  "buttonsNumber"
                 )}
                 onClick={() => handleNumberClick(".")}
               >
@@ -1009,7 +1097,7 @@ function Calculator() {
               {
                 dark: isDark,
               },
-              "calculate"
+              "calculate buttonsNumber"
             )}
             onClick={handleEqualsClick}
           >

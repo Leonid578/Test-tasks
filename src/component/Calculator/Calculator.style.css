@@ -18,17 +18,66 @@
   position: absolute;
 
   display: flex;
+  justify-content: center;
+  align-items: center;
+
   min-height: 667px;
   width: 375px;
   background: white;
+  color: black;
+}
+.settings li {
+  margin-bottom: 20px;
+  font-family: Inter;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  text-align: center;
+  cursor: pointer;
 }
 
-.settings button{
+.settings li:last-child {
+  margin-bottom: 0;
+}
+
+.settingsTitle {
+  position: absolute;
+  top: 20px; 
+  left: 50%;
+  transform: translateX(-50%); 
+  color: black;
+  height: 30px;
+  text-align: center;
+  margin: 0;
+}
+
+.settingsButton {
+  border: none;
+  background-color: white;
+}
+
+.settingsArrowLeft {
+  left: 20px;
+  top: 20px;
+  position: absolute;
   z-index: 103;
-  width: 80px;
-  height: 50px;
-  background-color: #212121;
-  color: white;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.settingsCross {
+  right: 20px;
+  top: 20px;
+  position: absolute;
+  z-index: 103;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.settings div {
+  transition: opacity 0.3s ease;
 }
 
 .calculator.dark {
@@ -70,7 +119,6 @@
   font-size: 40px;
   padding: 10px;
   border-bottom: 1px solid #ccc;
-  /* margin: 0 30px 0 30px; */
   margin: -14px 30px 0 30px;
   height: 53px;
 }
@@ -118,7 +166,7 @@
   color: white;
 }
 
-.btn {
+.btnOperator {
   display: flex;
   cursor: pointer;
   margin-left: 5px;
@@ -144,11 +192,11 @@
   justify-content: space-between;
 }
 
-.button:hover {
+.buttonsNumber:hover {
   background-color: #b4b4b4da;
 }
 
-button {
+.buttonsNumber {
   width: 69px;
   height: 49px;
   box-shadow: 1px 3px 4px 0px rgba(0, 0, 0, 1);
@@ -162,7 +210,7 @@ button {
   margin: 10px 10px;
 }
 
-.button.dark {
+.buttonsNumber.dark {
   background: var(--bgNumbers-light);
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.06);
   color: var(--numbers-light);
