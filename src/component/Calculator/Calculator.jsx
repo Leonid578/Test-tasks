@@ -15,9 +15,6 @@ import Decimal from "decimal.js";
 import arrowLeft from "../image/svg/arrow-left.svg";
 import cross from "../image/svg/cross.svg";
 
-// import { Container, Display, Buttons, Button, Zero } from "./Calculator.style";
-// import { number } from "prop-types";
-
 function Calculator() {
   const [display, setDisplay] = useState("0");
   const [currentValue, setCurrentValue] = useState(null); // второй символ
@@ -43,17 +40,13 @@ function Calculator() {
     switch (operator) {
       case "+":
         if (currentValue === null && accumulator === null) {
-          console.log("currentValue ", currentValue);
           return;
         } else if (currentValue === null && accumulator !== null) {
-          console.log("currentValue ", currentValue);
           result = new Decimal(accumulator).plus(previousValue).toNumber();
         } else if (accumulator !== null) {
-          console.log("currentValue ", currentValue);
           result = new Decimal(accumulator).plus(currentValue).toNumber();
           setAccumulator(result);
         } else {
-          console.log("currentValue ", currentValue);
           result = new Decimal(previousValue).plus(currentValue).toNumber();
           setAccumulator(currentValue);
         }
@@ -119,16 +112,10 @@ function Calculator() {
     }
 
     if (!isNaN(result)) {
-      // Если результат - число, отображаем его в виде строки
-      // result = result.toFixed(6).toString()
-      // .replace(/\.?0+$/, "");
-
       if (Number.isInteger(+result)) {
         result = +result;
       } else {
-        // Если результат - дробное число, форматируем его, чтобы убрать конечный ноль
         result = result.toString();
-        // .replace(/\B(?=(\d{3})+(?!\d))/g, " ")
       }
     } else {
       setDisplay("результат не является числом");
@@ -138,10 +125,7 @@ function Calculator() {
       return;
     }
 
-    setDisplay(
-      result.toString()
-      // .replace(/\B(?=(\d{3})+(?!\d))/g, " ")
-    );
+    setDisplay(result.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " "));
 
     setAccumulator(result);
 
@@ -162,32 +146,16 @@ function Calculator() {
     let integerPart = parts[0];
     const decimalPart = parts[1] ? "." + parts[1] : "";
 
-    // console.log("parts[1]", parts[1]);
-    // console.log("parts[0]", parts[0]);
-    // Форматируем целую часть
     if (integerPart.includes("-")) {
-      // Если целая часть содержит знак минуса, удаляем его и помечаем, что число отрицательное
       integerPart = integerPart.replace("-", "");
       isNegative = true;
     } else {
       isNegative = false;
     }
-    // // Если абсолютное значение целой части больше или равно 1000, добавляем пробелы между каждыми тремя цифрами
-    // if (Math.abs(parseInt(integerPart)) >= 1000) {
-    //   integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-    // }
-
-    // Собираем число с учетом знака и дробной части
     let formattedNumber = (isNegative ? "-" : "") + integerPart + decimalPart;
     const returnFormattedNumber = parseFloat(formattedNumber)
       .toFixed(6)
       .replace(/\.?0+$/, "");
-
-    // Округляем до 4 знаков после запятой только если количество знаков превышает 4
-    // if (decimalPart.length > 4) {
-    //   formattedNumber = (Math.round(parseFloat(formattedNumber) * 1e4) / 1e4).toFixed(4);
-    // }
-
     return returnFormattedNumber;
   }
 
@@ -195,15 +163,17 @@ function Calculator() {
     const proverka = display.includes(".");
 
     if (resultCalculated) {
-      console.log("resultCalculated1", resultCalculated);
       setCurrentValue(null);
       setOperator("");
       return;
     }
-    if (display.length >= 33) return;
-
+    if (
+      (currentValue && currentValue.toString().length >= 19) ||
+      (previousValue && previousValue.toString().length >= 19) ||
+      display.length >= 41
+    )
+      return;
     if (display === "0" && number === ".") {
-      console.log("currentValue ", currentValue);
       setDisplay("0.");
       setCurrentValue("0.");
     } else if (
@@ -211,7 +181,6 @@ function Calculator() {
       number === "." &&
       previousValue === null
     ) {
-      console.log("currentValue ", currentValue);
       if (proverka === false) {
         if (accumulator !== null) {
           const newResult = `${accumulator} ${operator} ${
@@ -219,10 +188,8 @@ function Calculator() {
           }`;
           setDisplay(newResult);
           setCurrentValue(currentValue + number);
-          console.log("accumulator !== null ", accumulator);
           return;
         }
-        console.log("accumulator === null ", accumulator);
         const newResult = currentValue + number;
         setDisplay(newResult);
         setCurrentValue(newResult);
@@ -237,7 +204,6 @@ function Calculator() {
             }`;
             setDisplay(newResult);
             setCurrentValue(currentValue + number);
-            console.log("accumulator !== null ", accumulator);
             return;
           }
         } else if (proverka3 === true) {
@@ -250,7 +216,6 @@ function Calculator() {
       currentValue !== null &&
       number === "."
     ) {
-      console.log("currentValue ", currentValue);
       const proverka2 = currentValue.includes(".");
       if (proverka2 === false) {
         const newResult = `${previousValue} ${operator} ${
@@ -270,8 +235,6 @@ function Calculator() {
       previousValue === null &&
       operator === ""
     ) {
-      console.log("aba");
-
       const newResult = currentValue + number;
       if (newResult.length >= 16) return;
       setCurrentValue(newResult);
@@ -279,7 +242,6 @@ function Calculator() {
         `${formatNumber(newResult).replace(/\B(?=(\d{3})+(?!\d))/g, " ")}`
       );
     } else if (previousValue !== null) {
-      console.log("currentValue ", currentValue);
       let newResult;
       if (currentValue !== null) {
         newResult = currentValue + number;
@@ -296,7 +258,6 @@ function Calculator() {
         )} ${operator} ${newResult.replace(/\B(?=(\d{3})+(?!\d))/g, " ")}`
       );
     } else if (currentValue !== null && operator !== "") {
-      console.log("currentValue ", currentValue);
       const newResult = currentValue + number;
       setCurrentValue(newResult);
       setDisplay(`${accumulator} ${operator} ${newResult}`);
@@ -305,23 +266,21 @@ function Calculator() {
       operator !== "" &&
       accumulator !== null
     ) {
-      console.log("accumulator ", accumulator);
       setCurrentValue(number);
       setDisplay(`${accumulator} ${operator} ${number}`);
       return;
     } else {
-      console.log("accumulator ", accumulator);
-      console.log("currentValue ", currentValue);
-      console.log("previousValue ", previousValue);
-      console.log("operator ", operator);
       console.log("error");
       return;
     }
   }
 
   function handleOperatorClick(operatorValue) {
+    const currentNumber = +currentValue;
+    const previousNumber = +previousValue;
+    let result;
+
     if (resultCalculated) {
-      console.log("resultCalculated", resultCalculated);
       setOperator(operatorValue);
       setCurrentValue(null);
       if (accumulator !== null) {
@@ -333,17 +292,9 @@ function Calculator() {
       return;
     }
 
-    const currentNumber = +currentValue;
-    const previousNumber = +previousValue;
-    let result;
-
     if (operator !== "") {
-      console.log("operator !== '' ", previousValue);
       if (operator === "+") {
-        console.log("accumulator ", accumulator);
-        console.log("currentValue ", currentValue);
-        console.log("previousValue ", previousValue);
-        console.log("operator ", operator);
+        console.log("currentValue :", currentValue);
         if (currentValue === null && accumulator === null) {
           setDisplay(operatorValue);
           setOperator(operatorValue);
@@ -353,30 +304,25 @@ function Calculator() {
           accumulator !== null &&
           previousValue !== null
         ) {
+          console.log("currentValue :", currentValue);
           result = new Decimal(accumulator).plus(previousValue).toNumber();
           return;
         } else if (accumulator !== null && currentValue !== null) {
-          console.log("accumulator ", accumulator);
-          console.log("currentValue ", currentValue);
-          console.log("previousValue ", previousValue);
-          console.log("operator ", operator);
+          console.log("currentValue :", currentValue);
           result = new Decimal(accumulator).plus(currentValue).toNumber();
           setAccumulator(result);
         } else if (previousValue !== null && currentValue !== null) {
-          console.log("accumulator ", accumulator);
-          console.log("currentValue ", currentValue);
-          console.log("previousValue ", previousValue);
-          console.log("operator ", operator);
+          console.log("currentValue :", currentValue);
           result = new Decimal(previousValue).plus(currentValue).toNumber();
           setAccumulator(result);
         } else {
-          console.log("accumulator ", accumulator);
-          console.log("currentValue ", currentValue);
-          console.log("previousValue ", previousValue);
-          console.log("operator ", operator);
+          console.log("currentValue :", currentValue);
+          console.log("operator :", operator);
+          let formattedAccumulator = accumulator
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, " ");
           setOperator(operatorValue);
-          setDisplay(`${accumulator} ${operatorValue}`);
-          console.log("error?");
+          setDisplay(`${formattedAccumulator} ${operatorValue}`);
           return;
         }
       } else if (operator === "-") {
@@ -397,9 +343,11 @@ function Calculator() {
           result = new Decimal(previousValue).minus(currentValue).toNumber();
           setAccumulator(currentValue);
         } else {
+          let formattedAccumulator = accumulator
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, " ");
           setOperator(operatorValue);
-          setDisplay(`${accumulator} ${operatorValue}`);
-          console.log("error?");
+          setDisplay(`${formattedAccumulator} ${operatorValue}`);
           return;
         }
       } else if (operator === "*") {
@@ -427,22 +375,25 @@ function Calculator() {
     }
 
     if (operator === "" && (previousValue || currentValue) === null) {
+      console.log("currentValue :", currentValue);
       setOperator(operatorValue);
       setDisplay(`${operatorValue}`);
       setCurrentValue("0");
-      // setPreviousValue(0)
-      console.log(
-        "operator === '' && (previousValue || currentValue ) === null"
-      );
     }
 
     if (operator === "") {
+      console.log("currentValue :", currentValue);
       setPreviousValue(currentValue);
       setCurrentValue(null);
 
       if (currentValue !== null) {
         setOperator(operatorValue);
-        setDisplay(`${currentValue} ${operatorValue}`);
+        setDisplay(
+          `${currentValue.replace(
+            /\B(?=(\d{3})+(?!\d))/g,
+            " "
+          )} ${operatorValue}`
+        );
       } else {
         return;
       }
@@ -451,37 +402,54 @@ function Calculator() {
       currentValue === null &&
       (previousValue !== null || accumulator !== null)
     ) {
-      console.log("operatorValue !== operator");
+      console.log("currentValue :", currentValue);
       setOperator(operatorValue);
       if (accumulator !== null) {
-        setDisplay(`${accumulator} ${operatorValue}`);
+        setDisplay(
+          `${accumulator
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, " ")} ${operatorValue}`
+        );
       } else {
-        setDisplay(`${previousValue} ${operatorValue}`);
+        console.log("currentValue :", currentValue);
+        setDisplay(
+          `${previousValue
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, " ")} ${operatorValue}`
+        );
       }
     } else if (
       operatorValue === operator &&
       currentValue === null &&
       (previousValue !== null || accumulator !== null)
     ) {
-      console.log("operatorValue === operator");
+      console.log("currentValue :", currentValue);
       if (accumulator !== null) {
-        setDisplay(`${accumulator} ${operatorValue}`);
+        console.log("currentValue :", currentValue);
+        setDisplay(
+          `${accumulator
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, " ")} ${operatorValue}`
+        );
       } else {
-        setDisplay(`${previousValue} ${operatorValue}`);
+        console.log("currentValue :", currentValue);
+        setDisplay(
+          `${previousValue
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, " ")} ${operatorValue}`
+        );
       }
     } else if (operator !== null && currentValue !== null) {
+      console.log("currentValue :", currentValue);
       if (accumulator === null) {
-        console.log("result", result);
         calculateResult();
         setDisplay(`${result + operatorValue}`);
         setOperator(operatorValue);
-        console.log("setOperator", operatorValue);
       } else {
-        console.log("result", result, "currentValue", currentValue);
+        console.log("currentValue :", currentValue);
         calculateResult();
         setDisplay(`${result + operatorValue}`);
         setOperator(operatorValue);
-        console.log("setOperator", operatorValue);
       }
     } else {
       console.log("error, парни! все сюда", operator);
@@ -502,11 +470,6 @@ function Calculator() {
   }
 
   function handleEqualsClick() {
-    // console.log("accumL ", accumulator);
-    // console.log("operator", operator);
-    // console.log("currentValue", currentValue);
-    // console.log("previousValue", previousValue);
-
     if (currentValue === null && accumulator === null) {
       // console.log(
       //   "первое событие, выходим парни!...",
@@ -525,9 +488,16 @@ function Calculator() {
       //   previousValue
       // );
       return;
-    } else if (previousValue !== null && operator !== "") {
-      console.log("Есть точка в currentValue: ", currentValue);
-
+    } else if ((accumulator !== null && currentValue === null) && operator !== "") {
+      // console.log(
+      //   "второе событие, выходим парни!...",
+      //   accumulator,
+      //   operator,
+      //   currentValue,
+      //   previousValue
+      // );
+      return;
+    }else if (previousValue !== null && operator !== "") {
       // setAccumulator(previousValue);
       // setDisplay(previousValue);
       // setOperator("");
@@ -538,27 +508,23 @@ function Calculator() {
       setResultCalculated(true);
       return;
     } else {
-      console.log(
-        "третье событие, работаем парни!...",
-        accumulator,
-        operator,
-        currentValue,
-        previousValue
-      );
+      // console.log(
+      //   "третье событие, работаем парни!...",
+      //   accumulator,
+      //   operator,
+      //   currentValue,
+      //   previousValue
+      // );
       calculateResult();
       setResultCalculated(true);
     }
   }
 
   function handlePercentClick() {
-    // console.log("accumL ", accumulator);
-    // console.log("currentValue", currentValue);
-    // console.log("previousValue", previousValue);
-
     let result;
+
     if (currentValue === null) return;
 
-    // Проверка: если оператор не задан и предыдущего значения нет, выводим ошибку
     if ((!previousValue || !accumulator) && !operator) {
       setDisplay("Ошибка");
       setCurrentValue(null);
@@ -583,9 +549,7 @@ function Calculator() {
       result = currentValue / 100;
       console.log("error");
     }
-    // console.log("result ", result);
-    // console.log("operator", operator);
-    // console.log("previousValue", previousValue);
+
     setCurrentValue(result);
     setDisplay(
       `${previousValue ? previousValue : accumulator} ${
@@ -596,11 +560,13 @@ function Calculator() {
 
   function getFontSizeClass(textLength) {
     if (typeof textLength === "undefined") {
-      return ""; // Если textLength не определено, возвращаем пустую строку
+      return "";
     }
 
-    if (textLength > 20) {
-      return "sMOLL ";
+    if (textLength > 26) {
+      return "sMOLLExtra ";
+    } else if (textLength > 20) {
+      return "sMOLL";
     } else if (textLength > 16) {
       return "extra-small-font";
     } else if (textLength > 14) {
@@ -608,7 +574,7 @@ function Calculator() {
     } else if (textLength > 12) {
       return "small-font";
     } else {
-      return ""; // Базовый размер шрифта
+      return "";
     }
   }
 
@@ -650,8 +616,6 @@ function Calculator() {
           return "0";
         }
         setCurrentValue(currentValue.slice(0, -1));
-        console.log("currentValue", currentValue);
-        console.log("newDisplay", newDisplay);
         return newDisplay;
       });
     } else if (previousValue !== null && operator !== "") {
@@ -671,8 +635,6 @@ function Calculator() {
       } else {
         return;
       }
-
-      console.log("currentValue", currentValue);
     } else {
       console.log("error");
       return;
@@ -723,10 +685,10 @@ function Calculator() {
                 <img src={arrowLeft} alt="arrowLeft" width={24} height={24} />
               </button>
               <button
-                  onClick={() => {
-                    setSetting(!setting);
-                    setActivePage("main");
-                  }}
+                onClick={() => {
+                  setSetting(!setting);
+                  setActivePage("main");
+                }}
                 className="settingsCross settingsButton"
               >
                 <img src={cross} alt="cross" width={24} height={24} />
@@ -744,10 +706,10 @@ function Calculator() {
                 <img src={arrowLeft} alt="arrowLeft" width={24} height={24} />
               </button>
               <button
-                  onClick={() => {
-                setSetting(!setting);
-                setActivePage("main");
-              }}
+                onClick={() => {
+                  setSetting(!setting);
+                  setActivePage("main");
+                }}
                 className="settingsCross settingsButton"
               >
                 <img src={cross} alt="cross" width={24} height={24} />
@@ -765,10 +727,10 @@ function Calculator() {
                 <img src={arrowLeft} alt="arrowLeft" width={24} height={24} />
               </button>
               <button
-               onClick={() => {
-                setSetting(!setting);
-                setActivePage("main");
-              }}
+                onClick={() => {
+                  setSetting(!setting);
+                  setActivePage("main");
+                }}
                 className="settingsCross settingsButton"
               >
                 <img src={cross} alt="cross" width={24} height={24} />
