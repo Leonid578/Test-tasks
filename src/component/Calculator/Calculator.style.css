@@ -1,3 +1,5 @@
+/*   .toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")   */
+
 .calculator {
   margin: 100px auto;
   border: 2px solid #ccc;

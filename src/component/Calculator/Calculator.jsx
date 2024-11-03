@@ -112,7 +112,9 @@ function Calculator() {
     }
 
     if (!isNaN(result)) {
-      if (Number.isInteger(+result)) {
+      if (result.toString().length > 16) {
+        result = result.toExponential(10); // Преобразует в научную нотацию с 10 знаками после запятой
+      } else if (Number.isInteger(+result)) {
         result = +result;
       } else {
         result = result.toString();
@@ -124,11 +126,8 @@ function Calculator() {
       setOperator(null);
       return;
     }
-
     setDisplay(result.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " "));
-
     setAccumulator(result);
-
     addToHistory({
       expression: `${
         accumulator ? accumulator : previousValue
@@ -167,12 +166,14 @@ function Calculator() {
       setOperator("");
       return;
     }
+
     if (
       (currentValue && currentValue.toString().length >= 19) ||
       (previousValue && previousValue.toString().length >= 19) ||
       display.length >= 41
     )
       return;
+
     if (display === "0" && number === ".") {
       setDisplay("0.");
       setCurrentValue("0.");
@@ -243,6 +244,7 @@ function Calculator() {
       );
     } else if (previousValue !== null) {
       let newResult;
+
       if (currentValue !== null) {
         newResult = currentValue + number;
       } else {
@@ -260,14 +262,24 @@ function Calculator() {
     } else if (currentValue !== null && operator !== "") {
       const newResult = currentValue + number;
       setCurrentValue(newResult);
-      setDisplay(`${accumulator} ${operator} ${newResult}`);
+      setDisplay(
+        `${accumulator
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, " ")} ${operator} ${newResult
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, " ")}`
+      );
     } else if (
       currentValue === null &&
       operator !== "" &&
       accumulator !== null
     ) {
       setCurrentValue(number);
-      setDisplay(`${accumulator} ${operator} ${number}`);
+      setDisplay(
+        `${accumulator
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, " ")} ${operator} ${number}`
+      );
       return;
     } else {
       console.log("error");
@@ -284,9 +296,17 @@ function Calculator() {
       setOperator(operatorValue);
       setCurrentValue(null);
       if (accumulator !== null) {
-        setDisplay(`${accumulator} ${operatorValue}`);
+        setDisplay(
+          `${accumulator
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, " ")} ${operatorValue}`
+        );
       } else {
-        setDisplay(`${previousValue} ${operatorValue}`);
+        setDisplay(
+          `${previousValue
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, " ")} ${operatorValue}`
+        );
       }
       setResultCalculated(false);
       return;
@@ -295,7 +315,7 @@ function Calculator() {
     if (operator !== "") {
       if (operator === "+") {
         console.log("currentValue :", currentValue);
-        if (currentValue === null && accumulator === null) {
+        if (currentValue === null && accumulator === null ) {
           setDisplay(operatorValue);
           setOperator(operatorValue);
           return;
@@ -382,7 +402,6 @@ function Calculator() {
     }
 
     if (operator === "") {
-      console.log("currentValue :", currentValue);
       setPreviousValue(currentValue);
       setCurrentValue(null);
 
@@ -402,7 +421,6 @@ function Calculator() {
       currentValue === null &&
       (previousValue !== null || accumulator !== null)
     ) {
-      console.log("currentValue :", currentValue);
       setOperator(operatorValue);
       if (accumulator !== null) {
         setDisplay(
@@ -411,7 +429,6 @@ function Calculator() {
             .replace(/\B(?=(\d{3})+(?!\d))/g, " ")} ${operatorValue}`
         );
       } else {
-        console.log("currentValue :", currentValue);
         setDisplay(
           `${previousValue
             .toString()
@@ -488,7 +505,11 @@ function Calculator() {
       //   previousValue
       // );
       return;
-    } else if ((accumulator !== null && currentValue === null) && operator !== "") {
+    } else if (
+      accumulator !== null &&
+      currentValue === null &&
+      operator !== ""
+    ) {
       // console.log(
       //   "второе событие, выходим парни!...",
       //   accumulator,
@@ -497,7 +518,7 @@ function Calculator() {
       //   previousValue
       // );
       return;
-    }else if (previousValue !== null && operator !== "") {
+    } else if (previousValue !== null && operator !== "") {
       // setAccumulator(previousValue);
       // setDisplay(previousValue);
       // setOperator("");
@@ -525,29 +546,18 @@ function Calculator() {
 
     if (currentValue === null) return;
 
-    if ((!previousValue || !accumulator) && !operator) {
-      setDisplay("Ошибка");
-      setCurrentValue(null);
-      setOperator("");
-      setPreviousValue(null);
-      setAccumulator(null);
-      setIsHistoryVisible(false);
-      setHistory([]);
-      setResultCalculated(false);
-      return;
-    }
-
     if (operator === "+" || operator === "-") {
       if (accumulator) {
         result = (accumulator * currentValue) / 100;
       } else result = (previousValue * currentValue) / 100;
     } else if (operator === "*" || operator === "/") {
-      if (accumulator) {
-        result = (currentValue / 100) * accumulator;
-      } else result = (currentValue / 100) * previousValue;
+      result = currentValue / 100;
     } else {
       result = currentValue / 100;
-      console.log("error");
+      console.log("error", currentValue);
+      setCurrentValue(result.toString());
+      setDisplay(result.toString());
+      return
     }
 
     setCurrentValue(result);
