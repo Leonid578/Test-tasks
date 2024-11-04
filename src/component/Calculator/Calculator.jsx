@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useState } from "react";
 import "./Calculator.style.css";
-import { IoArrowBack, IoTerminal } from "react-icons/io5";
+import { IoArrowBack} from "react-icons/io5";
 import questionDark from "../image/png/question.png";
 import sunDark from "../image/png/sun.png";
 import toothDark from "../image/png/tooth.png";
@@ -14,6 +14,8 @@ import Decimal from "decimal.js";
 
 import arrowLeft from "../image/svg/arrow-left.svg";
 import cross from "../image/svg/cross.svg";
+
+import { ThemeContext } from '../providers/ThemeProvider';
 
 function Calculator() {
   const [display, setDisplay] = useState("0");
@@ -29,6 +31,8 @@ function Calculator() {
 
   const [activePage, setActivePage] = useState("main"); // Управляем отображением страниц
   const [setting, setSetting] = useState(false);
+
+  const { setTheme } = useContext(ThemeContext);
 
   function addToHistory(entry) {
     setHistory([entry, ...history]);
@@ -138,10 +142,8 @@ function Calculator() {
   }
 
   function formatNumber(newResult) {
-    // Преобразуем число в строку и разделяем его на целую и дробную части
     let isNegative;
     const parts = newResult.toString().split(".");
-    // Получаем целую и дробную части
     let integerPart = parts[0];
     const decimalPart = parts[1] ? "." + parts[1] : "";
 
@@ -315,7 +317,7 @@ function Calculator() {
     if (operator !== "") {
       if (operator === "+") {
         console.log("currentValue :", currentValue);
-        if (currentValue === null && accumulator === null ) {
+        if (currentValue === null && accumulator === null) {
           setDisplay(operatorValue);
           setOperator(operatorValue);
           return;
@@ -488,54 +490,20 @@ function Calculator() {
 
   function handleEqualsClick() {
     if (currentValue === null && accumulator === null) {
-      // console.log(
-      //   "первое событие, выходим парни!...",
-      //   accumulator,
-      //   operator,
-      //   currentValue,
-      //   previousValue
-      // );
       return;
     } else if (currentValue !== null && operator === "") {
-      // console.log(
-      //   "второе событие, выходим парни!...",
-      //   accumulator,
-      //   operator,
-      //   currentValue,
-      //   previousValue
-      // );
       return;
     } else if (
       accumulator !== null &&
       currentValue === null &&
       operator !== ""
     ) {
-      // console.log(
-      //   "второе событие, выходим парни!...",
-      //   accumulator,
-      //   operator,
-      //   currentValue,
-      //   previousValue
-      // );
       return;
     } else if (previousValue !== null && operator !== "") {
-      // setAccumulator(previousValue);
-      // setDisplay(previousValue);
-      // setOperator("");
-      // setCurrentValue(null);
-      // setPreviousValue(null);
-
       calculateResult();
       setResultCalculated(true);
       return;
     } else {
-      // console.log(
-      //   "третье событие, работаем парни!...",
-      //   accumulator,
-      //   operator,
-      //   currentValue,
-      //   previousValue
-      // );
       calculateResult();
       setResultCalculated(true);
     }
@@ -557,7 +525,7 @@ function Calculator() {
       console.log("error", currentValue);
       setCurrentValue(result.toString());
       setDisplay(result.toString());
-      return
+      return;
     }
 
     setCurrentValue(result);
@@ -686,6 +654,7 @@ function Calculator() {
               </ul>
             </div>
           )}
+
           {activePage === "theme" && (
             <div className="themePage">
               <button
@@ -704,6 +673,50 @@ function Calculator() {
                 <img src={cross} alt="cross" width={24} height={24} />
               </button>
               <h2 className="settingsTitle">Theme Options</h2>
+
+              <div className="themeButtons">
+                <button
+                  className="themeButton theme-button-1"
+                  onClick={() => setTheme("rosy")}
+                >
+                  <span className="themeLabel">Rosy</span>
+                </button>
+
+                <button
+                  className="themeButton theme-button-2"
+                  onClick={() => setTheme("purple")}
+                >
+                  <span className="themeLabel">Purple</span>
+                </button>
+
+                <button
+                  className="themeButton theme-button-3"
+                  onClick={() => setTheme("green")}
+                >
+                  <span className="themeLabel">Green</span>
+                </button>
+
+                <button
+                  className="themeButton theme-button-4"
+                  onClick={() => setTheme("cyan")}
+                >
+                  <span className="themeLabel">Cyan</span>
+                </button>
+
+                <button
+                  className="themeButton theme-button-5"
+                  onClick={() => setTheme("white")}
+                >
+                  <span className="themeLabel">White</span>
+                </button>
+
+                <button
+                  className="themeButton theme-button-6"
+                  onClick={() => setTheme("black")}
+                >
+                  <span className="themeLabel">Black</span>
+                </button>
+              </div>
             </div>
           )}
 
@@ -746,6 +759,16 @@ function Calculator() {
                 <img src={cross} alt="cross" width={24} height={24} />
               </button>
               <h2 className="settingsTitle">About Us</h2>
+
+              <p className="SettingsAboutMeText">
+                Наш калькулятор — это удобный инструмент для точных расчетов,
+                поддерживающий основные операции: сложение, вычитание,
+                умножение, деление и проценты. Уникальная функция позволяет
+                вернуть последний введенный символ, что упрощает исправление
+                ошибок. Интерфейс интуитивен, а высокая точность сохраняется
+                даже при больших значениях. Этот калькулятор подходит как для
+                работы, так и для учебы.
+              </p>
             </div>
           )}
         </div>
