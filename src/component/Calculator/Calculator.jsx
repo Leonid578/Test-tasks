@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { useState } from "react";
 import "./Calculator.style.css";
-import { IoArrowBack} from "react-icons/io5";
+import { IoArrowBack } from "react-icons/io5";
 import questionDark from "../image/png/question.png";
 import sunDark from "../image/png/sun.png";
 import toothDark from "../image/png/tooth.png";
@@ -15,7 +15,7 @@ import Decimal from "decimal.js";
 import arrowLeft from "../image/svg/arrow-left.svg";
 import cross from "../image/svg/cross.svg";
 
-import { ThemeContext } from '../providers/ThemeProvider';
+import { ThemeContext } from "../providers/ThemeProvider";
 
 function Calculator() {
   const [display, setDisplay] = useState("0");
@@ -316,9 +316,9 @@ function Calculator() {
 
     if (operator !== "") {
       if (operator === "+") {
-        console.log("currentValue :", currentValue);
         if (currentValue === null && accumulator === null) {
-          setDisplay(operatorValue);
+          setPreviousValue((0).toString());
+          setDisplay(`0 ${operatorValue}`);
           setOperator(operatorValue);
           return;
         } else if (
@@ -326,7 +326,6 @@ function Calculator() {
           accumulator !== null &&
           previousValue !== null
         ) {
-          console.log("currentValue :", currentValue);
           result = new Decimal(accumulator).plus(previousValue).toNumber();
           return;
         } else if (accumulator !== null && currentValue !== null) {
@@ -349,7 +348,8 @@ function Calculator() {
         }
       } else if (operator === "-") {
         if (currentValue === null && accumulator === null) {
-          setDisplay(operatorValue);
+          setPreviousValue((0).toString());
+          setDisplay(`0 ${operatorValue}`);
           setOperator(operatorValue);
           return;
         } else if (
@@ -374,7 +374,8 @@ function Calculator() {
         }
       } else if (operator === "*") {
         if (currentValue === null && accumulator === null) {
-          setDisplay(operatorValue);
+          setPreviousValue((0).toString());
+          setDisplay(`0 ${operatorValue}`);
           setOperator(operatorValue);
           return;
         }
@@ -388,7 +389,8 @@ function Calculator() {
           return;
         }
         if (currentValue === null && accumulator === null) {
-          setDisplay(operatorValue);
+          setPreviousValue((0).toString());
+          setDisplay(`0 ${operatorValue}`);
           setOperator(operatorValue);
           return;
         }
@@ -461,13 +463,19 @@ function Calculator() {
     } else if (operator !== null && currentValue !== null) {
       console.log("currentValue :", currentValue);
       if (accumulator === null) {
+        let formattedAccumulator = result
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, " ");
         calculateResult();
-        setDisplay(`${result + operatorValue}`);
+        setDisplay(`${formattedAccumulator} ${operatorValue}`);
         setOperator(operatorValue);
       } else {
+        let formattedAccumulator = result
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, " ");
         console.log("currentValue :", currentValue);
         calculateResult();
-        setDisplay(`${result + operatorValue}`);
+        setDisplay(`${formattedAccumulator} ${operatorValue}`);
         setOperator(operatorValue);
       }
     } else {
