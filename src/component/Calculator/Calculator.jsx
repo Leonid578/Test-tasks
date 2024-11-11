@@ -25,10 +25,9 @@ function Calculator() {
   const [history, setHistory] = useState([]);
   const [isHistoryVisible, setIsHistoryVisible] = useState(false);
   const limitedHistory = history.slice(0, 5);
+  const [resultCalculated, setResultCalculated] = useState(false);
 
   const { themeColor, setThemeColor } = useTheme();
-
-  const [resultCalculated, setResultCalculated] = useState(false);
 
   const [activePage, setActivePage] = useState("main");
   const [setting, setSetting] = useState(false);
@@ -648,14 +647,20 @@ function Calculator() {
               </button>
 
               <ul>
-                <li onClick={() => setActivePage("theme")}>
+                <li className={cn(
+                  `theme-background-${themeColor}`
+                )} onClick={() => setActivePage("theme")}>
                   {" "}
                   <h3>Other Theme</h3>{" "}
                 </li>
-                <li onClick={() => setActivePage("help")}>
+                <li className={cn(
+                  `theme-background-${themeColor}`
+                )} onClick={() => setActivePage("help")}>
                   <h3>Help</h3>
                 </li>
-                <li onClick={() => setActivePage("about")}>
+                <li className={cn(
+                  `theme-background-${themeColor}`
+                )} onClick={() => setActivePage("about")}>
                   <h3>About us</h3>
                 </li>
               </ul>
@@ -687,49 +692,61 @@ function Calculator() {
               >
                 <img src={cross} alt="cross" width={24} height={24} />
               </button>
-              <h2 className="settingsTitle">Theme Options</h2>
+              <h2 className={cn(`${themeColor}`, "settingsTitle")}>Theme Options</h2>
 
               <div className="themeButtons">
                 <button
                   onClick={() => setThemeColor("rosy")}
                   className="themeButton theme-button-1"
                 >
-                  <span className="themeLabel">Rosy</span>
+                  <span className={cn(`${themeColor}`, "themeLabel")}>
+                    Rosy
+                  </span>
                 </button>
 
                 <button
                   onClick={() => setThemeColor("purple")}
                   className="themeButton theme-button-2"
                 >
-                  <span className="themeLabel">Purple</span>
+                  <span className={cn(`${themeColor}`, "themeLabel")}>
+                    Purple
+                  </span>
                 </button>
 
                 <button
                   className="themeButton theme-button-3"
                   onClick={() => setThemeColor("green")}
                 >
-                  <span className="themeLabel">Green</span>
+                  <span className={cn(`${themeColor}`, "themeLabel")}>
+                    Green
+                  </span>
                 </button>
 
                 <button
                   className="themeButton theme-button-4"
                   onClick={() => setThemeColor("cyan")}
                 >
-                  <span className="themeLabel">Cyan</span>
+                  <span className={cn(`${themeColor}`, "themeLabel")}>
+                    Cyan
+                  </span>
                 </button>
 
                 <button
                   className="themeButton theme-button-5"
                   onClick={() => setThemeColor("white")}
                 >
-                  <span className="themeLabel">White</span>
+                  <span className={cn(`${themeColor}`, "themeLabel")}>
+                    White
+                  </span>
                 </button>
 
                 <button
                   className="themeButton theme-button-6"
                   onClick={() => setThemeColor("black")}
                 >
-                  <span className="themeLabel">Black</span>
+                  <span className={cn(`${themeColor}`, "themeLabel")}>
+                    Black
+                  </span>
                 </button>
               </div>
             </div>
@@ -739,7 +756,11 @@ function Calculator() {
             <div className="helpPage">
               <button
                 onClick={() => setActivePage("main")}
-                className="settingsArrowLeft settingsButton"
+                className={cn(
+                  `theme-background-${themeColor}`,
+                  "settingsButton",
+                  "settingsArrowLeft"
+                )}
               >
                 <img src={arrowLeft} alt="arrowLeft" width={24} height={24} />
               </button>
@@ -748,7 +769,11 @@ function Calculator() {
                   setSetting(!setting);
                   setActivePage("main");
                 }}
-                className="settingsCross settingsButton"
+                className={cn(
+                  `theme-background-${themeColor}`,
+                  "settingsCross",
+                  "settingsButton"
+                )}
               >
                 <img src={cross} alt="cross" width={24} height={24} />
               </button>
@@ -760,7 +785,11 @@ function Calculator() {
             <div className="aboutPage">
               <button
                 onClick={() => setActivePage("main")}
-                className="settingsArrowLeft settingsButton"
+                className={cn(
+                  `theme-background-${themeColor}`,
+                  "settingsButton",
+                  "settingsArrowLeft"
+                )}
               >
                 <img src={arrowLeft} alt="arrowLeft" width={24} height={24} />
               </button>
@@ -769,7 +798,11 @@ function Calculator() {
                   setSetting(!setting);
                   setActivePage("main");
                 }}
-                className="settingsCross settingsButton"
+                className={cn(
+                  `theme-background-${themeColor}`,
+                  "settingsCross",
+                  "settingsButton"
+                )}
               >
                 <img src={cross} alt="cross" width={24} height={24} />
               </button>
@@ -800,7 +833,9 @@ function Calculator() {
         </div>
         <div
           className={cn("btnOperator")}
-          onClick={() => setThemeColor(themeColor)}
+          onClick={() =>
+            setThemeColor(themeColor === "black" ? "white" : "black")
+          }
         >
           <img
             src={themeColor !== "black" ? moonSun : sunDark}
@@ -837,7 +872,7 @@ function Calculator() {
       <div
         className={cn(
           `${themeColor}`,
-          `theme-Result-${themeColor}`,
+          `theme-background-${themeColor}`,
           `display ${getFontSizeClass(display.length)}`
         )}
       >
@@ -850,7 +885,7 @@ function Calculator() {
               "clear",
               "buttonsNumber",
               "operator",
-              `theme-Result-${themeColor}`
+              `theme-button-${themeColor}`
             )}
             onClick={handleClearClick}
           >
@@ -862,7 +897,7 @@ function Calculator() {
               "clear",
               "buttonsNumber",
               "operator",
-              `theme-Result-${themeColor}`
+              `theme-button-${themeColor}`
             )}
             onClick={deleteLastDigit}
           >
@@ -874,7 +909,7 @@ function Calculator() {
               "clear",
               "buttonsNumber",
               "operator",
-              `theme-Result-${themeColor}`
+              `theme-button-${themeColor}`
             )}
             onClick={() => handleOperatorClick("/")}
           >
@@ -885,7 +920,7 @@ function Calculator() {
               "clear",
               "buttonsNumber",
               "operator",
-              `theme-Result-${themeColor}`
+              `theme-button-${themeColor}`
             )}
             onClick={() => handleOperatorClick("*")}
           >
@@ -898,7 +933,7 @@ function Calculator() {
               "clear",
               "buttonsNumber",
               "operator",
-              `theme-Result-${themeColor}`
+              `theme-button-${themeColor}`
             )}
             onClick={() => handleNumberClick("7")}
           >
@@ -909,7 +944,7 @@ function Calculator() {
               "clear",
               "buttonsNumber",
               "operator",
-              `theme-Result-${themeColor}`
+              `theme-button-${themeColor}`
             )}
             onClick={() => handleNumberClick("8")}
           >
@@ -920,7 +955,7 @@ function Calculator() {
               "clear",
               "buttonsNumber",
               "operator",
-              `theme-Result-${themeColor}`
+              `theme-button-${themeColor}`
             )}
             onClick={() => handleNumberClick("9")}
           >
@@ -931,7 +966,7 @@ function Calculator() {
               "clear",
               "buttonsNumber",
               "operator",
-              `theme-Result-${themeColor}`
+              `theme-button-${themeColor}`
             )}
             onClick={() => handleOperatorClick("-")}
           >
@@ -945,7 +980,7 @@ function Calculator() {
               "clear",
               "buttonsNumber",
               "operator",
-              `theme-Result-${themeColor}`
+              `theme-button-${themeColor}`
             )}
             onClick={() => handleNumberClick("4")}
           >
@@ -956,7 +991,7 @@ function Calculator() {
               "clear",
               "buttonsNumber",
               "operator",
-              `theme-Result-${themeColor}`
+              `theme-button-${themeColor}`
             )}
             onClick={() => handleNumberClick("5")}
           >
@@ -967,7 +1002,7 @@ function Calculator() {
               "clear",
               "buttonsNumber",
               "operator",
-              `theme-Result-${themeColor}`
+              `theme-button-${themeColor}`
             )}
             onClick={() => handleNumberClick("6")}
           >
@@ -978,7 +1013,7 @@ function Calculator() {
               "clear",
               "buttonsNumber",
               "operator",
-              `theme-Result-${themeColor}`
+              `theme-button-${themeColor}`
             )}
             onClick={() => handleOperatorClick("+")}
           >
@@ -993,7 +1028,7 @@ function Calculator() {
                   "clear",
                   "buttonsNumber",
                   "operator",
-                  `theme-Result-${themeColor}`
+                  `theme-button-${themeColor}`
                 )}
                 onClick={() => handleNumberClick("1")}
               >
@@ -1004,7 +1039,7 @@ function Calculator() {
                   "clear",
                   "buttonsNumber",
                   "operator",
-                  `theme-Result-${themeColor}`
+                  `theme-button-${themeColor}`
                 )}
                 onClick={() => handleNumberClick("2")}
               >
@@ -1015,7 +1050,7 @@ function Calculator() {
                   "clear",
                   "buttonsNumber",
                   "operator",
-                  `theme-Result-${themeColor}`
+                  `theme-button-${themeColor}`
                 )}
                 onClick={() => handleNumberClick("3")}
               >
@@ -1028,7 +1063,7 @@ function Calculator() {
                   "clear",
                   "buttonsNumber",
                   "operator",
-                  `theme-Result-${themeColor}`
+                  `theme-button-${themeColor}`
                 )}
                 onClick={handlePercentClick}
               >
@@ -1039,7 +1074,7 @@ function Calculator() {
                   "clear",
                   "buttonsNumber",
                   "operator",
-                  `theme-Result-${themeColor}`
+                  `theme-button-${themeColor}`
                 )}
                 onClick={() => handleNumberClick("0")}
               >
@@ -1050,7 +1085,7 @@ function Calculator() {
                   "clear",
                   "buttonsNumber",
                   "operator",
-                  `theme-Result-${themeColor}`
+                  `theme-button-${themeColor}`
                 )}
                 onClick={() => handleNumberClick(".")}
               >
