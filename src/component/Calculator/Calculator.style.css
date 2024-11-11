@@ -6,7 +6,7 @@
   display: flex;
   flex-direction: column;
 
-  background: rgba(15, 23, 42, 1);
+  /* background: rgba(15, 23, 42, 1); */
   /* color: rgba(255, 255, 255, 1); */
   height: 667px;
   width: 375px;
@@ -133,6 +133,32 @@
   background: var(--bgNumbers-dark);
   color: var(--numbers-dark);
 }
+
+.theme-background-rosy {
+  background-color: #e9d5ff;
+}
+
+.theme-background-purple {
+  background-color: #fecdd3;
+}
+
+.theme-background-green {
+  background-color: #bbf7d0;
+}
+
+.theme-background-cyan {
+  background-color: #a5f3fc;
+}
+
+.theme-background-white {
+  background-color: rgb(255, 255, 255);
+}
+
+.theme-background-black {
+  background-color: #0f172a;
+}
+
+
 .settings {
   z-index: 102;
   position: absolute;
@@ -256,10 +282,10 @@
   height: 53px;
 }
 
-/* .display.dark {
-  color: var(--numbers-light);
-  border-bottom: 1px solid var(--numbers-light);
-} */
+.display.dark {
+  color: var(--accentLight-dark);
+  border-bottom: 1px solid var(--numbers-dark);
+}
 
 .display input {
   width: 100%;

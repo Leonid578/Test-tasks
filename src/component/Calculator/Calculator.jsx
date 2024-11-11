@@ -13,7 +13,6 @@ import Decimal from "decimal.js";
 import arrowLeft from "../image/svg/arrow-left.svg";
 import cross from "../image/svg/cross.svg";
 import "./Calculator.style.css";
-
 import useTheme from "../hooks/useTheme";
 
 function Calculator() {
@@ -23,7 +22,7 @@ function Calculator() {
   const [operator, setOperator] = useState("");
   const [accumulator, setAccumulator] = useState(null);
   const [history, setHistory] = useState([]);
-  const [isHistoryVisible, setIsHistoryVisible] = useState(false); 
+  const [isHistoryVisible, setIsHistoryVisible] = useState(false);
   const limitedHistory = history.slice(0, 5);
 
   const { isDark, setIsDark, themeColor, setThemeColor } = useTheme();
@@ -33,8 +32,7 @@ function Calculator() {
   const [activePage, setActivePage] = useState("main");
   const [setting, setSetting] = useState(false);
 
-  // const { setTheme } = useContext(ThemeContext);
-
+  console.log("themeColor", themeColor);
   function addToHistory(entry) {
     setHistory([entry, ...history]);
     setIsHistoryVisible(true);
@@ -632,19 +630,18 @@ function Calculator() {
   };
 
   return (
-    <div
-      className={cn("calculator", { dark: isDark }, `theme-background-${themeColor}`)}
-    >
+    <div className={cn("calculator", `theme-background-${themeColor}`)}>
       {setting && (
-        <div className={cn(`theme-background-${themeColor}`, "settings")}
-        //  className="settings "
-         >
+        <div className={cn(`theme-background-${themeColor}`, "settings")}>
           {activePage === "main" && (
-            <div >
+            <div>
               <button
                 onClick={() => setSetting(!setting)}
-                // className="settingsButton settingsCross"
-                className={cn(`theme-background-${themeColor}`, "settingsButton", "settingsCross")}
+                className={cn(
+                  `theme-background-${themeColor}`,
+                  "settingsButton",
+                  "settingsCross"
+                )}
               >
                 <img src={cross} alt="cross" width={24} height={24} />
               </button>
@@ -668,7 +665,11 @@ function Calculator() {
             <div className="themePage">
               <button
                 onClick={() => setActivePage("main")}
-                className={cn(`background-color:${themeColor}`, "settingsArrowLeft", "settingsButton")}
+                className={cn(
+                  `theme-background-${themeColor}`,
+                  "settingsArrowLeft",
+                  "settingsButton"
+                )}
               >
                 <img src={arrowLeft} alt="arrowLeft" width={24} height={24} />
               </button>
@@ -677,7 +678,11 @@ function Calculator() {
                   setSetting(!setting);
                   setActivePage("main");
                 }}
-                className="settingsCross settingsButton"
+                className={cn(
+                  `theme-background-${themeColor}`,
+                  "settingsCross",
+                  "settingsButton"
+                )}
               >
                 <img src={cross} alt="cross" width={24} height={24} />
               </button>
@@ -685,13 +690,15 @@ function Calculator() {
 
               <div className="themeButtons">
                 <button
-                  onClick={() => setThemeColor("rosy")} className="themeButton theme-button-1"
+                  onClick={() => setThemeColor("rosy")}
+                  className="themeButton theme-button-1"
                 >
                   <span className="themeLabel">Rosy</span>
                 </button>
 
                 <button
-                  onClick={() => setThemeColor("purple")} className="themeButton theme-button-2"
+                  onClick={() => setThemeColor("purple")}
+                  className="themeButton theme-button-2"
                 >
                   <span className="themeLabel">Purple</span>
                 </button>
@@ -781,15 +788,7 @@ function Calculator() {
         </div>
       )}
 
-      <div
-        className={cn(
-          "layout",
-          {
-            dark: isDark,
-          },
-          "generalBtn"
-        )}
-      >
+      <div className={cn("layout", "generalBtn")}>
         <div className="btnOperator">
           <img
             src={isDark ? questionSun : questionDark}
@@ -799,17 +798,11 @@ function Calculator() {
           />
         </div>
         <div
-          className={cn(
-            "layout",
-            {
-              dark: isDark,
-            },
-            "btnOperator"
-          )}
+          className={cn("layout", "btnOperator")}
           onClick={() => setIsDark(!isDark)}
         >
           <img
-            src={isDark ? moonSun : sunDark}
+            src={themeColor !== "black" ? sunDark : moonSun}
             alt="Sun"
             width={22}
             height={22}
@@ -817,7 +810,7 @@ function Calculator() {
         </div>
         <div className="btnOperator" onClick={() => setSetting(!setting)}>
           <img
-            src={isDark ? toothSun : toothDark}
+            src={themeColor !== "black" ? toothDark : toothSun}
             alt="Tooth"
             width={22}
             height={22}
@@ -849,11 +842,11 @@ function Calculator() {
           )}
         </div>
       </div>
-      <div className={cn(
-              { dark: isDark },
-              // `theme-Result-${themeColor}`,
+      <div
+        className={cn(
+          `${themeColor}`,
           `display ${getFontSizeClass(display.length)}`
-            )}
+        )}
       >
         {display}
       </div>
@@ -864,7 +857,6 @@ function Calculator() {
               "clear",
               "buttonsNumber",
               "operator",
-              { dark: isDark },
               `theme-Result-${themeColor}`
             )}
             onClick={handleClearClick}
@@ -873,11 +865,10 @@ function Calculator() {
           </button>
 
           <button
-             className={cn(
+            className={cn(
               "clear",
               "buttonsNumber",
               "operator",
-              { dark: isDark },
               `theme-Result-${themeColor}`
             )}
             onClick={deleteLastDigit}
@@ -886,11 +877,10 @@ function Calculator() {
           </button>
 
           <button
-             className={cn(
+            className={cn(
               "clear",
               "buttonsNumber",
               "operator",
-              { dark: isDark },
               `theme-Result-${themeColor}`
             )}
             onClick={() => handleOperatorClick("/")}
@@ -898,11 +888,10 @@ function Calculator() {
             /
           </button>
           <button
-             className={cn(
+            className={cn(
               "clear",
               "buttonsNumber",
               "operator",
-              { dark: isDark },
               `theme-Result-${themeColor}`
             )}
             onClick={() => handleOperatorClick("*")}
@@ -916,7 +905,6 @@ function Calculator() {
               "clear",
               "buttonsNumber",
               "operator",
-              { dark: isDark },
               `theme-Result-${themeColor}`
             )}
             onClick={() => handleNumberClick("7")}
@@ -928,7 +916,6 @@ function Calculator() {
               "clear",
               "buttonsNumber",
               "operator",
-              { dark: isDark },
               `theme-Result-${themeColor}`
             )}
             onClick={() => handleNumberClick("8")}
@@ -936,13 +923,12 @@ function Calculator() {
             8
           </button>
           <button
-           className={cn(
-            "clear",
-            "buttonsNumber",
-            "operator",
-            { dark: isDark },
-            `theme-Result-${themeColor}`
-          )}
+            className={cn(
+              "clear",
+              "buttonsNumber",
+              "operator",
+              `theme-Result-${themeColor}`
+            )}
             onClick={() => handleNumberClick("9")}
           >
             9
@@ -952,7 +938,6 @@ function Calculator() {
               "clear",
               "buttonsNumber",
               "operator",
-              { dark: isDark },
               `theme-Result-${themeColor}`
             )}
             onClick={() => handleOperatorClick("-")}
@@ -967,7 +952,6 @@ function Calculator() {
               "clear",
               "buttonsNumber",
               "operator",
-              { dark: isDark },
               `theme-Result-${themeColor}`
             )}
             onClick={() => handleNumberClick("4")}
@@ -975,13 +959,12 @@ function Calculator() {
             4
           </button>
           <button
-          className={cn(
-            "clear",
-            "buttonsNumber",
-            "operator",
-            { dark: isDark },
-            `theme-Result-${themeColor}`
-          )}
+            className={cn(
+              "clear",
+              "buttonsNumber",
+              "operator",
+              `theme-Result-${themeColor}`
+            )}
             onClick={() => handleNumberClick("5")}
           >
             5
@@ -991,7 +974,6 @@ function Calculator() {
               "clear",
               "buttonsNumber",
               "operator",
-              { dark: isDark },
               `theme-Result-${themeColor}`
             )}
             onClick={() => handleNumberClick("6")}
@@ -1003,7 +985,6 @@ function Calculator() {
               "clear",
               "buttonsNumber",
               "operator",
-              { dark: isDark },
               `theme-Result-${themeColor}`
             )}
             onClick={() => handleOperatorClick("+")}
@@ -1019,7 +1000,6 @@ function Calculator() {
                   "clear",
                   "buttonsNumber",
                   "operator",
-                  { dark: isDark },
                   `theme-Result-${themeColor}`
                 )}
                 onClick={() => handleNumberClick("1")}
@@ -1031,7 +1011,6 @@ function Calculator() {
                   "clear",
                   "buttonsNumber",
                   "operator",
-                  { dark: isDark },
                   `theme-Result-${themeColor}`
                 )}
                 onClick={() => handleNumberClick("2")}
@@ -1043,7 +1022,6 @@ function Calculator() {
                   "clear",
                   "buttonsNumber",
                   "operator",
-                  { dark: isDark },
                   `theme-Result-${themeColor}`
                 )}
                 onClick={() => handleNumberClick("3")}
@@ -1057,7 +1035,6 @@ function Calculator() {
                   "clear",
                   "buttonsNumber",
                   "operator",
-                  { dark: isDark },
                   `theme-Result-${themeColor}`
                 )}
                 onClick={handlePercentClick}
@@ -1065,13 +1042,12 @@ function Calculator() {
                 %
               </button>
               <button
-               className={cn(
-                "clear",
-                "buttonsNumber",
-                "operator",
-                { dark: isDark },
-                `theme-Result-${themeColor}`
-              )}
+                className={cn(
+                  "clear",
+                  "buttonsNumber",
+                  "operator",
+                  `theme-Result-${themeColor}`
+                )}
                 onClick={() => handleNumberClick("0")}
               >
                 0
@@ -1081,7 +1057,6 @@ function Calculator() {
                   "clear",
                   "buttonsNumber",
                   "operator",
-                  { dark: isDark },
                   `theme-Result-${themeColor}`
                 )}
                 onClick={() => handleNumberClick(".")}
@@ -1091,11 +1066,10 @@ function Calculator() {
             </div>
           </div>
           <button
-          className={cn(
+            className={cn(
               "calculate",
               "buttonsNumber",
               "operator",
-              { dark: isDark },
               `theme-Result-${themeColor}`
             )}
             onClick={handleEqualsClick}
