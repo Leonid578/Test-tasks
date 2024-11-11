@@ -1,19 +1,20 @@
 import React, { useContext } from "react";
-import { ThemeContext } from "../providers/ThemeProvider";
+// import { ThemeContext } from "../providers/ThemeProvider";
 import { useState } from "react";
 import { IoArrowBack } from "react-icons/io5";
-import questionDark from "../image/png/question.png";
 import sunDark from "../image/png/sun.png";
 import toothDark from "../image/png/tooth.png";
 import moonSun from "../image/png/moon.png";
 import toothSun from "../image/png/tooth.png";
-import questionSun from "../image/png/question.png";
 import cn from "classnames";
 import Decimal from "decimal.js";
 import arrowLeft from "../image/svg/arrow-left.svg";
 import cross from "../image/svg/cross.svg";
 import "./Calculator.style.css";
 import useTheme from "../hooks/useTheme";
+
+import questionDark from "../image/png/question.png";
+import questionSun from "../image/png/question.png";
 
 function Calculator() {
   const [display, setDisplay] = useState("0");
@@ -25,7 +26,7 @@ function Calculator() {
   const [isHistoryVisible, setIsHistoryVisible] = useState(false);
   const limitedHistory = history.slice(0, 5);
 
-  const { isDark, setIsDark, themeColor, setThemeColor } = useTheme();
+  const { themeColor, setThemeColor } = useTheme();
 
   const [resultCalculated, setResultCalculated] = useState(false);
 
@@ -788,21 +789,21 @@ function Calculator() {
         </div>
       )}
 
-      <div className={cn("layout", "generalBtn")}>
+      <div className={cn("generalBtn")}>
         <div className="btnOperator">
           <img
-            src={isDark ? questionSun : questionDark}
+            src={themeColor !== "black" ? questionSun : questionDark}
             alt="Question"
             width={22}
             height={22}
           />
         </div>
         <div
-          className={cn("layout", "btnOperator")}
-          onClick={() => setIsDark(!isDark)}
+          className={cn("btnOperator")}
+          onClick={() => setThemeColor(themeColor)}
         >
           <img
-            src={themeColor !== "black" ? sunDark : moonSun}
+            src={themeColor !== "black" ? moonSun : sunDark}
             alt="Sun"
             width={22}
             height={22}
@@ -820,16 +821,7 @@ function Calculator() {
       <div className="containerHistory">
         <div className="history">
           {isHistoryVisible && (
-            <ul
-              className={cn(
-                "layout",
-                {
-                  dark: isDark,
-                },
-                "history-list"
-              )}
-              id="history"
-            >
+            <ul className={cn("history-list")} id="history">
               {limitedHistory.reverse().map((entry, index) => (
                 <li
                   key={index}
@@ -845,6 +837,7 @@ function Calculator() {
       <div
         className={cn(
           `${themeColor}`,
+          `theme-Result-${themeColor}`,
           `display ${getFontSizeClass(display.length)}`
         )}
       >

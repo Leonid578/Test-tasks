@@ -10,16 +10,6 @@
   --background-light: rgba(247, 247, 248, 1);
 }
 
-/* .layout {
-  background-color: var(--bgNumbers-light);
-  color: var(--numbers-light);
-}
-
-.layout.dark {
-  background-color: var(--accentLight-dark);
-  color: var(--numbers-dark);  
-} */
-
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
