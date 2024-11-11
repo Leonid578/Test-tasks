@@ -5,9 +5,6 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
-
-  /* background: rgba(15, 23, 42, 1); */
-  /* color: rgba(255, 255, 255, 1); */
   height: 667px;
   width: 375px;
   position: relative;
@@ -16,7 +13,7 @@
 .themeButtons {
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* Выровнять кнопки и текст по левому краю */
+  align-items: flex-start;
   gap: 10px;
   margin-top: 20px;
 }
@@ -24,7 +21,7 @@
 .themeButton {
   display: flex;
   align-items: center;
-  gap: 10px; /* Расстояние между кнопкой и текстом */
+  gap: 10px;
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -36,7 +33,7 @@
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: currentColor; /* Использовать цвет кнопки */
+  background: currentColor;
   transition: transform 0.2s ease;
 }
 
@@ -162,14 +159,11 @@
 .settings {
   z-index: 102;
   position: absolute;
-
   display: flex;
   justify-content: center;
   align-items: center;
-
   min-height: 667px;
   width: 375px;
-  /* background: white; */
   color: black;
 }
 .settings li {
@@ -199,7 +193,6 @@
 
 .settingsButton {
   border: none;
-  /* background-color: white; */
 }
 
 .SettingsAboutMeText {
@@ -236,11 +229,6 @@
   transition: opacity 0.3s ease;
 }
 
-/* .calculator.dark {
-  background: var(--accentLight-dark);
-  color: var(--numbers-light);
-} */
-
 .history {
   height: 160px;
   position: relative;
@@ -255,10 +243,6 @@
   color: rgba(148, 163, 184, 1);
   margin: 0 30px 14px 0;
 }
-
-/* #history.dark li {
-  color: var(--numbers-light);
-} */
 
 .history-list {
   position: absolute;
@@ -365,9 +349,7 @@
   width: 69px;
   height: 49px;
   box-shadow: 1px 3px 4px 0px rgba(0, 0, 0, 1);
-  /* background: linear-gradient(180deg, #0f172a 0%, #334155 100%); */
   border-radius: 12px;
-  /* color: rgba(154, 154, 154, 1); */
   font-size: 16px;
   border: none;
   outline: none;
@@ -375,56 +357,27 @@
   margin: 10px 10px;
 }
 
-/* .buttonsNumber.dark {
-  background: var(--bgNumbers-light);
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.06);
-  color: var(--numbers-light);
-} */
-
 .operator {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-/* .operator.dark {
-  background: var(--bgNumbers-light);
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.06);
-  color: var(--numbers-light);
-} */
-
-/* .operator:hover {
-  background-color: #d15f13;
-} */
-
 .zero {
   width: 100px;
   border-radius: 23px;
 }
 
-/* .clear {
-  color: white;
-} */
-
 .calculate {
-  /* color: white; */
   width: 69px;
   height: 119px;
   border-radius: 12px;
-  font-size: 16px;
+  font-size: 28px;
   border: none;
   outline: none;
   cursor: pointer;
   box-shadow: 1px 3px 4px 0px rgba(0, 0, 0, 1);
-
-  font-size: 28px;
 }
-
-/* .calculate.dark {
-  background: linear-gradient(180deg, #9a9a9a 0%, #c4c4c4 100%);
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.06);
-  color: var(--accentdark-light);
-} */
 
 .calculate:hover {
   background-color: #005500;
