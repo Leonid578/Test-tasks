@@ -33,7 +33,6 @@ function Calculator() {
   const [activePage, setActivePage] = useState("main");
   const [setting, setSetting] = useState(false);
 
-  console.log("themeColor", themeColor);
   function addToHistory(entry) {
     setHistory([entry, ...history]);
     setIsHistoryVisible(true);
@@ -648,20 +647,23 @@ function Calculator() {
               </button>
 
               <ul>
-                <li className={cn(
-                  `theme-background-${themeColor}`
-                )} onClick={() => setActivePage("theme")}>
+                <li
+                  className={cn(`theme-background-${themeColor}`)}
+                  onClick={() => setActivePage("theme")}
+                >
                   {" "}
                   <h3>Other Theme</h3>{" "}
                 </li>
-                <li className={cn(
-                  `theme-background-${themeColor}`
-                )} onClick={() => setActivePage("help")}>
+                <li
+                  className={cn(`theme-background-${themeColor}`)}
+                  onClick={() => setActivePage("help")}
+                >
                   <h3>Help</h3>
                 </li>
-                <li className={cn(
-                  `theme-background-${themeColor}`
-                )} onClick={() => setActivePage("about")}>
+                <li
+                  className={cn(`theme-background-${themeColor}`)}
+                  onClick={() => setActivePage("about")}
+                >
                   <h3>About us</h3>
                 </li>
               </ul>
@@ -678,7 +680,12 @@ function Calculator() {
                   "settingsButton"
                 )}
               >
-                <img src={arrowLeft} alt="arrowLeft" width={24} height={24} />
+                <img
+                  src={themeColor !== "black" ? arrowLeft : arrowLeftWhite}
+                  alt="arrowLeft"
+                  width={24}
+                  height={24}
+                />
               </button>
               <button
                 onClick={() => {
@@ -693,7 +700,9 @@ function Calculator() {
               >
                 <img src={cross} alt="cross" width={24} height={24} />
               </button>
-              <h2 className={cn(`${themeColor}`, "settingsTitle")}>Theme Options</h2>
+              <h2 className={cn(`${themeColor}`, "settingsTitle")}>
+                Theme Options
+              </h2>
 
               <div className="themeButtons">
                 <button
