@@ -9,6 +9,7 @@ import toothSun from "../image/png/tooth.png";
 import cn from "classnames";
 import Decimal from "decimal.js";
 import arrowLeft from "../image/svg/arrow-left.svg";
+import arrowLeftWhite from "../image/svg/arrow-left-white.svg";
 import cross from "../image/svg/cross.svg";
 import "./Calculator.style.css";
 import useTheme from "../hooks/useTheme";
