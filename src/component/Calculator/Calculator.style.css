@@ -303,7 +303,8 @@
 
 .display.theme-background-black {
   border-bottom: 1px solid #ccc;
-  color: rgba(154, 154, 154, 1);
+  /* color: rgba(154, 154, 154, 1); */
+  color:#ffffff;
 }
 
 /* .display.dark {

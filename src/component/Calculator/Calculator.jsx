@@ -319,7 +319,10 @@ function Calculator() {
           accumulator === null &&
           previousValue === null
         ) {
-          setPreviousValue((0).toString());
+          setPreviousValue(
+            (0).toNumber()
+            // .toString()
+          );
           setDisplay(`0 ${operatorValue}`);
           setOperator(operatorValue);
           return;
@@ -332,7 +335,7 @@ function Calculator() {
           return;
         } else if (accumulator !== null && currentValue !== null) {
           result = new Decimal(accumulator).plus(currentValue).toNumber();
-          setAccumulator(result);
+          setAccumulator(result); 
         } else if (previousValue !== null && currentValue !== null) {
           result = new Decimal(previousValue).plus(currentValue).toNumber();
           setAccumulator(result);
@@ -343,8 +346,6 @@ function Calculator() {
           setOperator(operatorValue);
           setDisplay(`${formattedAccumulator} ${operatorValue}`);
           return;
-        } else {
-          return;
         }
       } else if (operator === "-") {
         if (
@@ -352,7 +353,10 @@ function Calculator() {
           accumulator === null &&
           previousValue === null
         ) {
-          setPreviousValue((0).toString());
+          setPreviousValue(
+            (0).toNumber()
+            // .toString()
+          );
           setDisplay(`0 ${operatorValue}`);
           setOperator(operatorValue);
           return;
@@ -368,7 +372,7 @@ function Calculator() {
         } else if (previousValue !== null && currentValue !== null) {
           result = new Decimal(previousValue).minus(currentValue).toNumber();
           setAccumulator(currentValue);
-        } else {
+        } else if (accumulator !== null) {
           let formattedAccumulator = accumulator
             .toString()
             .replace(/\B(?=(\d{3})+(?!\d))/g, " ");
@@ -382,12 +386,16 @@ function Calculator() {
           accumulator === null &&
           previousValue === null
         ) {
-          setPreviousValue((0).toString());
+          setPreviousValue(
+            (0).toNumber()
+            // .toString()
+          );
           setDisplay(`0 ${operatorValue}`);
           setOperator(operatorValue);
           return;
         }
         result = previousNumber * currentNumber;
+        
       } else if (operator === "/") {
         if (currentValue === "0") {
           setDisplay("Ошибка");
@@ -401,12 +409,26 @@ function Calculator() {
           accumulator === null &&
           previousValue === null
         ) {
-          setPreviousValue((0).toString());
+          setPreviousValue(
+            (0).toNumber()
+            // .toString()
+          );
           setDisplay(`0 ${operatorValue}`);
           setOperator(operatorValue);
           return;
         }
-        result = previousNumber / currentNumber;
+        const currentDecimal = new Decimal(currentValue || 0);
+        const previousDecimal = new Decimal(previousValue || 0);
+
+        try {
+          result = previousDecimal.div(currentDecimal).toNumber();
+        } catch (error) {
+          setDisplay("Ошибка");
+          setCurrentValue("");
+          setPreviousValue("");
+          setOperator("");
+          return;
+        }
       }
     }
 
@@ -437,6 +459,7 @@ function Calculator() {
     ) {
       setOperator(operatorValue);
       if (accumulator !== null) {
+        console.log("operator", operator);
         setDisplay(
           `${accumulator
             .toString()
@@ -467,7 +490,7 @@ function Calculator() {
             .replace(/\B(?=(\d{3})+(?!\d))/g, " ")} ${operatorValue}`
         );
       }
-    } else if (operator !== null && currentValue !== null) {
+    } else if (operator !== "" && currentValue !== null) {
       if (accumulator === null) {
         let formattedAccumulator = result
           .toString()
@@ -475,6 +498,7 @@ function Calculator() {
         calculateResult();
         setDisplay(`${formattedAccumulator} ${operatorValue}`);
         setOperator(operatorValue);
+        console.log("смена оператора");
       } else {
         let formattedAccumulator = result
           .toString()
@@ -486,6 +510,7 @@ function Calculator() {
     } else {
     }
     setCurrentValue(null);
+
     return;
   }
 
@@ -523,6 +548,18 @@ function Calculator() {
 
   function handlePercentClick() {
     let result;
+    if (resultCalculated) {
+      setOperator("");
+      setCurrentValue(null);
+
+      result = accumulator / 100;
+
+      setCurrentValue(result.toString());
+      setDisplay(result.toString());
+
+      setResultCalculated(false);
+      return;
+    }
 
     if (currentValue === null) return;
 
@@ -568,6 +605,10 @@ function Calculator() {
   }
 
   const deleteLastDigit = () => {
+    if (resultCalculated) {
+      return;
+    }
+
     if (accumulator !== null) {
       if (operator === "") {
         return;
